@@ -1,3 +1,3 @@
 <?php
 
-echo 'Hi.';
+include_once( 'system/load.php' );
