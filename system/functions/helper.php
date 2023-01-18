@@ -154,8 +154,8 @@ function head_html(){
 
 ?><!DOCTYPE html>
 <!--
-  _________       __                    __   /\/\             
- /   _____/ ____ |  | _________   _____/  |__)/)/_______ 
+  _________       __                    __      /\/\             
+ /   _____/ ____ |  | _________   _____/  |____)/)/_____ 
  \_____  \_/ __ \|  |/ /\_  __ \_/ __ \   ____  \\_  __ \
  /        \  ___/|    <  |  | \/\  ___/|  | / __ \|  | \/
 /_______  /\___  >__|_ \ |__|    \___  >__|(____  /__|   
@@ -198,4 +198,14 @@ function foot_html(){
 </body>
 </html>
 <?php
+}
+
+
+function php_redirect( $path ) {
+	global $sekretaer;
+
+	$new_location = $sekretaer->baseurl.$path;
+
+	header( 'location:'.$new_location );
+	exit;
 }

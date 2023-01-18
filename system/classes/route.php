@@ -34,9 +34,9 @@ class Route {
 				} elseif( $action == 'login' ) {
 					$sekretaer->login( $_POST );
 
-					$redirect_path = 'dashboard';
+					$redirect_path = 'dashboard/';
 					if( ! empty($_POST['path']) ) {
-						$redirect_path = $_POST['path'];
+						$redirect_path = trailing_slash_it($_POST['path']);
 					}
 
 				}
@@ -102,13 +102,7 @@ class Route {
 	}
 
 	function redirect( $path ) {
-
-		global $sekretaer;
-
-		$new_location = trailing_slash_it($sekretaer->baseurl.$path);
-
-		header( 'location:'.$new_location );
-		exit;
+		php_redirect( $path );
 	}
 	
 }
