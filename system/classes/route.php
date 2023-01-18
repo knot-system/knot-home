@@ -4,6 +4,8 @@ class Route {
 
 	public $route;
 
+	public $request;
+
 	function __construct( $sekretaer ) {
 
 		$request = $_SERVER['REQUEST_URI'];
@@ -17,9 +19,70 @@ class Route {
 
 		$request = explode( '/', $request );
 
-		$this->route = array(
-			'template' => 'index'
-		);
+		$this->request = $request;
+
+
+		if( ! empty($request[0]) && $request[0] == 'action' ) {
+
+			if( ! empty($request[1]) ) {
+				$action = $request[1];
+
+				$redirect_path = '';
+
+				if( $action == 'logout' ) {
+					$sekretaer->logout();
+				} elseif( $action == 'login' ) {
+					$sekretaer->login( $_POST );
+
+					$redirect_path = 'dashboard';
+					if( ! empty($_POST['path']) ) {
+						$redirect_path = $_POST['path'];
+					}
+
+				}
+
+				$this->redirect( $redirect_path );
+
+			}
+
+			$this->route = array(
+				'template' => '404',
+			);
+
+			return $this; // always end here if an action is set
+		}
+
+
+		if( $sekretaer->authorized() ) {
+
+			if( empty($request[0]) ) {
+				
+				$this->redirect('dashboard');
+
+			} else {
+
+				$test_template = $request[0];
+
+				$template = '404';
+
+				if( file_exists($sekretaer->abspath.'system/site/'.$test_template.'.php') ) {
+					$template = $test_template;
+				}
+
+				$this->route = array(
+					'template' => $template
+				);
+
+			}
+
+			
+		} else {
+
+			$this->route = array(
+				'template' => 'login'
+			);
+	
+		}
 		
 		return $this;
 	}
@@ -36,6 +99,16 @@ class Route {
 		}
 
 		return $this->route;
+	}
+
+	function redirect( $path ) {
+
+		global $sekretaer;
+
+		$new_location = trailing_slash_it($sekretaer->baseurl.$path);
+
+		header( 'location:'.$new_location );
+		exit;
 	}
 	
 }

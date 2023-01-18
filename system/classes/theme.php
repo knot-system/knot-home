@@ -33,7 +33,7 @@ class Theme {
 
 		$this->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$sekretaer->version().'">' );
 
-		
+
 		// expand sekretaer config options:
 		$config_path = $sekretaer->abspath.'theme/'.$theme_name.'/config.php';
 		if( file_exists( $config_path ) ) {

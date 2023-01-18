@@ -4,6 +4,11 @@ if( ! $sekretaer ) exit;
 
 snippet( 'header' );
 
-echo 'Hi.';
+?>
+
+<h2>Dashboard</h2>
+
+
+<?php
 
 snippet( 'footer' );

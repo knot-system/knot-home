@@ -12,12 +12,15 @@ class Sekretaer {
 	public $log;
 	public $theme;
 
+	private $user;
+
 	public $route;
 
 	function __construct() {
 
 		global $sekretaer;
 		$sekretaer = $this;
+
 
 		$abspath = realpath(dirname(__FILE__)).'/';
 		$abspath = preg_replace( '/system\/classes\/$/', '', $abspath );
@@ -34,6 +37,10 @@ class Sekretaer {
 
 
 		$this->version = get_system_version( $abspath );
+
+
+		session_start();
+		$this->user = new User( $this );
 
 
 		$this->config = new Config( $this );
@@ -73,6 +80,27 @@ class Sekretaer {
 
 		include( $full_file_path );
 
+	}
+
+
+	function authorized() {
+		if( $this->user->authorized() ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	function login( $post ) {
+		$this->user->login( $post );
+
+		return $this;
+	}
+
+	function logout() {
+		$this->user->logout();
+
+		return $this;
 	}
 
 
