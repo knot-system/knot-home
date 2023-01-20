@@ -91,8 +91,14 @@ class Sekretaer {
 		return false;
 	}
 
-	function login( $post ) {
-		$this->user->login( $post );
+	function authorize( $post ) {
+		$this->user->authorize( $post );
+
+		return $this;
+	}
+
+	function login() {
+		$this->user->login();
 
 		return $this;
 	}

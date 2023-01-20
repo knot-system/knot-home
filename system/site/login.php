@@ -23,9 +23,9 @@ head_html();
 
 			<label><span style="display: inline-block; width: 60px;">URL:</span> <input type="url" name="url" placeholder="https://www.example.com" autofocus style="width: 250px;" required autocomplete="username"></label>
 
-			<label><span style="display: inline-block; width: 60px;">Scope:</span> <input type="text" name="scope" value="read create follow" style="width: 250px;" readonly disabled></label>
-
+<?php /* TODO
 			<span style="display: inline-block; width: 60px;"></span> <label style="display: inline-block"><input type="checkbox" name="autologin" value="true"> stay logged in (this sets a cookie)</label>
+*/ ?>
 
 			<br><br>
 

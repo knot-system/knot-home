@@ -30,14 +30,26 @@ class Route {
 				$redirect_path = '';
 
 				if( $action == 'logout' ) {
+
 					$sekretaer->logout();
+
 				} elseif( $action == 'login' ) {
-					$sekretaer->login( $_POST );
+
+					if( ! empty($_POST['path']) ) {
+						$_SESSION['login_redirect_path'] = trailing_slash_it($_POST['path']);
+					}
+
+					$sekretaer->authorize( $_POST );
+					exit;
+
+				} elseif( $action == 'redirect' ) {
 
 					$redirect_path = 'dashboard/';
-					if( ! empty($_POST['path']) ) {
-						$redirect_path = trailing_slash_it($_POST['path']);
+					if( isset($_SESSION['login_redirect_path']) ) {
+						$redirect_path = $_SESSION['login_redirect_path'];
 					}
+
+					$sekretaer->login();
 
 				}
 

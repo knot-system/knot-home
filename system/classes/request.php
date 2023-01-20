@@ -43,11 +43,33 @@ class Request {
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 			curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
 			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+			curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
 
 			$this->body = curl_exec( $ch );
 			curl_close( $ch );
 		}
 
+	}
+
+	function post( $url, $query = false, $headers = [] ) {
+
+		$ch = curl_init( $url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+		if( is_array($headers) && count($headers) ) curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+
+		curl_setopt( $ch, CURLOPT_POST, true );
+
+		if( $query ) curl_setopt( $ch, CURLOPT_POSTFIELDS, $query );
+
+		curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
+
+		$response = curl_exec($ch);
+
+		curl_close( $ch );
+
+		return $response;
 	}
 
 }

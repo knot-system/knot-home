@@ -8,4 +8,5 @@ return [
 	'debug' => false,
 	'logging' => false,
 	'theme' => 'default',
+	'scope' => array( 'read', 'create', 'follow' )
 ];
