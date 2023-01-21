@@ -209,3 +209,43 @@ function php_redirect( $path ) {
 	header( 'location:'.$new_location );
 	exit;
 }
+
+
+function get_navigation(){
+
+	global $sekretaer;
+
+	$template = $sekretaer->route->get('template');
+
+	$navigation = array();
+
+	$navigation[] = array(
+		'name' => 'Dashboard',
+		'url' => url(),
+		'active' => ( $template == 'dashboard' )
+	);
+
+	if( $sekretaer->config->get('microsub') ) {
+		$navigation[] = array(
+			'name' => 'Read',
+			'url' => url('microsub'),
+			'active' => ( $template == 'microsub' )
+		);
+	}
+
+	if( $sekretaer->config->get('micropub') ) {
+		$navigation[] = array(
+			'name' => 'Write',
+			'url' => url('micropub'),
+			'active' => ( $template == 'micropub' )
+		);
+	}
+
+	$navigation[] = array(
+		'name' => 'Logout',
+		'url' => url('action/logout'),
+		'active' => false
+	);
+
+	return $navigation;
+}

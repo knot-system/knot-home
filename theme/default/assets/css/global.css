@@ -88,6 +88,25 @@ header {
 	text-align: center;
 }
 
+	header nav {
+		list-style-type: none;
+		display: block;
+		text-align: center;
+	}
+
+		header nav li {
+			display: inline;
+		}
+		
+			header nav li + li {
+				margin-left: 1em;
+			}
+
+			header nav li.current-nav-item a {
+				color: var(--color-text);
+				text-decoration: none;
+			}
+
 main {
 	max-width: 800px;
 	margin: 0 auto;
