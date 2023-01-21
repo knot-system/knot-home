@@ -27,6 +27,8 @@ class Theme {
 		$this->path = 'theme/'.$theme_name.'/';
 		$this->url = url('theme/'.$theme_name.'/');
 
+		$this->add_stylesheet( 'css/sekretaer.css', 'global' );
+
 		$this->add_metatag( 'charset', '<meta charset="utf-8">' );
 		$this->add_metatag( 'viewport', '<meta name="viewport" content="width=device-width,initial-scale=1.0">' );
 		$this->add_metatag( 'title', '<title>Sekretär</title>' );

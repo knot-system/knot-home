@@ -212,3 +212,18 @@ main.login {
 		right: 0;
 		bottom: 0;
 	}
+
+ul.posts {
+	max-width: 600px;
+	list-style-type: none;
+	padding: 0;
+}
+
+	ul.posts > li + li {
+		margin-top: 4em;
+	}
+
+	ul.posts img {
+		max-width: 100%;
+		height: auto;
+	}
