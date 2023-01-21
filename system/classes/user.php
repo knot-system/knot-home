@@ -68,10 +68,16 @@ class User {
 		if( ! empty($response['response']['scope']) ) {
 			$_SESSION['scope'] = $response['response']['scope'];
 		}
+		if( ! empty($response['microsub_endpoint']) ) {
+			$_SESSION['microsub_endpoint'] = $response['microsub_endpoint'];
+		}
+		if( ! empty($response['micropub_endpoint']) ) {
+			$_SESSION['micropub_endpoint'] = $response['micropub_endpoint'];
+		}
 
 		$this->user_id = $response['me'];
 		$_SESSION['user_id'] = $response['me'];
-		
+
 		$_SESSION['me'] = $response['me'];
 		$_SESSION['name'] = $this->create_short_name( $response['me'] );
 

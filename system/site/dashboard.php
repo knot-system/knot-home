@@ -19,11 +19,11 @@ snippet( 'header' );
 	if( isset($_SESSION['scope']) ) {
 		echo '<li><strong>Scope:</strong> '.$_SESSION['scope'].'</li>';
 	}
-	if( isset($_SESSION['microsubEndpoint']) ) {
-		echo '<li><strong>Microsub Endpoint:</strong> '.$_SESSION['microsubEndpoint'].'</li>';
+	if( isset($_SESSION['microsub_endpoint']) ) {
+		echo '<li><strong>Microsub Endpoint:</strong> '.$_SESSION['microsub_endpoint'].'</li>';
 	}
-	if( isset($_SESSION['micropubEndpoint']) ) {
-		echo '<li><strong>Micropub Endpoint:</strong> '.$_SESSION['micropubEndpoint'].'</li>';
+	if( isset($_SESSION['micropub_endpoint']) ) {
+		echo '<li><strong>Micropub Endpoint:</strong> '.$_SESSION['micropub_endpoint'].'</li>';
 	}
 	?>
 </ul>

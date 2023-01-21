@@ -8,5 +8,7 @@ return [
 	'debug' => false,
 	'logging' => false,
 	'theme' => 'default',
-	'scope' => array( 'read', 'create', 'follow' )
+	'scope' => array( 'read', 'create', 'follow' ),
+	'microsub' => true,
+	'micropub' => true,
 ];

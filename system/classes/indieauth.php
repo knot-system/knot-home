@@ -42,8 +42,25 @@ class IndieAuth {
 			$this->token_endpoint = $token_endpoint;
 		}
 
+
 		global $sekretaer;
 
+
+		if( $sekretaer->config->get('microsub') ) {
+			$microsub_endpoint = $this->discover_endpoint( 'microsub', $url );
+			if( $microsub_endpoint ) {
+				$_SESSION['indieauth_microsub_endpoint'] = $microsub_endpoint;
+			}
+		}
+
+		if( $sekretaer->config->get('micropub') ) {
+			$micropub_endpoint = $this->discover_endpoint( 'micropub', $url );
+			if( $micropub_endpoint ) {
+				$_SESSION['indieauth_micropub_endpoint'] = $micropub_endpoint;
+			}
+		}
+
+		
 		$client_id = $this->client_id();
 		$redirect_uri = $this->redirect_uri();
 		$state = $this->generate_state_parameter();
@@ -113,13 +130,21 @@ class IndieAuth {
 			'code' => $params['code'],
 			'redirect_uri' => $this->redirect_uri(),
 			'client_id' => $this->client_id(),
-			'code_verifier' => $_SESSION['indieauth_code_verifier']
+			'code_verifier' => $_SESSION['indieauth_code_verifier'],
 		]);
 
+
+		if( ! empty($_SESSION['indieauth_microsub_endpoint']) ) {
+			$data['microsub_endpoint'] = $_SESSION['indieauth_microsub_endpoint'];
+		}
+		if( ! empty($_SESSION['indieauth_micropub_endpoint']) ) {
+			$data['micropub_endpoint'] = $_SESSION['indieauth_micropub_endpoint'];
+		}
 
 		if( ! isset($data['response']['me']) ) {
 			return $this->error( 'indieauth_error' );
 		}
+
 
 		// If the returned "me" is not the same as the entered "me", check that the authorization server linked to by the returned URL is the same as the one used
 		if( $_SESSION['indieauth_url'] != $data['response']['me'] ) {
@@ -271,6 +296,8 @@ class IndieAuth {
 		unset($_SESSION['indieauth_code_verifier']);
 		unset($_SESSION['indieauth_authorization_endpoint']);
 		unset($_SESSION['indieauth_token_endpoint']);
+		unset($_SESSION['indieauth_microsub_endpoint']);
+		unset($_SESSION['indieauth_micropub_endpoint']);
 	}
 
 	function exchange_authorization_code( $endpoint, $params ) {
