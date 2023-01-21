@@ -53,6 +53,10 @@ class Route {
 
 				}
 
+				if( isset($_SESSION['login_redirect_path']) ) {
+					unset($_SESSION['login_redirect_path']);
+				}
+				
 				$this->redirect( $redirect_path );
 
 			}

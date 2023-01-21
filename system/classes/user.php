@@ -62,23 +62,32 @@ class User {
 			exit;
 		}
 
-
-		if( ! empty($response['access_token']) ) {
-			$_SESSION['access_token'] = $response['access_token'];
+		if( ! empty($response['response']['access_token']) ) {
+			$_SESSION['access_token'] = $response['response']['access_token'];
 		}
-		if( ! empty($response['scope']) ) {
-			$_SESSION['scope'] = $response['scope'];
+		if( ! empty($response['response']['scope']) ) {
+			$_SESSION['scope'] = $response['response']['scope'];
 		}
-
-		$_SESSION['me'] = $response['me'];
-
-		$_SESSION['user_id'] = $response['me'];
 
 		$this->user_id = $response['me'];
+		$_SESSION['user_id'] = $response['me'];
+		
+		$_SESSION['me'] = $response['me'];
+		$_SESSION['name'] = $this->create_short_name( $response['me'] );
+
 
 		// TODO: set cookie, if we need one
 
 		return $this;
+	}
+
+
+	function create_short_name( $me ) {
+
+		$short_name = str_replace( array('http://www.', 'https://www.', 'http://', 'https://'), '', $me );
+		$short_name = trim( $short_name, '/' );
+
+		return $short_name;
 	}
 
 

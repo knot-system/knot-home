@@ -78,23 +78,23 @@ class IndieAuth {
 
 	function complete( $params ) {
 
-		$requiredSessionKeys = ['indieauth_url', 'indieauth_state', 'indieauth_authorization_endpoint'];
+		$requiredSessionKeys = [ 'indieauth_url', 'indieauth_state', 'indieauth_authorization_endpoint' ];
 
-		foreach($requiredSessionKeys as $key) {
+		foreach( $requiredSessionKeys as $key ) {
 			if( ! isset($_SESSION[$key]) ) {
 				return $this->error('invalid_session');
 			}
 		}
 
-		if( isset( $params['error']) ) {
+		if( isset($params['error']) ) {
 			return $this->error( $params['error'], $params['error_description'] );
 		}
 
-		if( ! isset( $params['code']) ) {
+		if( ! isset($params['code']) ) {
 			return $this->error( 'invalid_response' );
 		}
 
-		if( ! isset( $params['state']) ) {
+		if( ! isset($params['state']) ) {
 			return $this->error( 'missing_state' );
 		}
 
@@ -126,7 +126,7 @@ class IndieAuth {
 			// Go find the authorization endpoint that the returned "me" URL declares
 			$authorization_endpoint = $this->discover_endpoint( 'authorization_endpoint', $data['response']['me'] );
 
-			if($authorization_endpoint != $_SESSION['indieauth_authorization_endpoint']) {
+			if( $authorization_endpoint != $_SESSION['indieauth_authorization_endpoint'] ) {
 				return $this->error( 'invalid_authorization_endpoint' );
 			}
 		}
