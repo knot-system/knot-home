@@ -49,7 +49,7 @@ class Sekretaer {
 
 		$this->route = new Route( $this );
 
-		return $this;
+		$this->refresh_cache();
 	}
 
 	function debug( ...$messages ) {
@@ -114,6 +114,29 @@ class Sekretaer {
 	function version() {
 		return $this->version;
 	}
+
+
+	function refresh_cache() {
+		// NOTE: see system/classes/cache.php for general cache handling
+		// this function clears out old cache files.
+
+		$lifetime = $this->config->get( 'cache_lifetime' );
+
+		$folderpath = $this->abspath.'cache/';
+
+		$files = read_folder( $folderpath, true );
+
+		foreach( $files as $file ) {
+			$timestamp = filemtime($file);
+			
+			if( time()-$timestamp > $lifetime ) { // cachefile too old
+				@unlink($file); // delete old cache file; fail silently
+			}
+
+		}
+
+	}
+
 
 }
 

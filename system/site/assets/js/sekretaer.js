@@ -27,7 +27,25 @@ var Login = {
 			if( button ) button.disabled = true;
 
 			for( var input of inputs ) {
+
+				if( input.type == 'hidden' ) continue;
+
 				input.readOnly = true;
+
+				if( input.type == 'checkbox' ) {
+					// NOTE: input[type="checkbox"] can't have a readOnly attribute,
+					// so we need a 'disabled' attribute, but then the value will
+					// not be POSTed, so we need to add a additional hidden input:
+
+					var inputHidden = document.createElement('input');
+					inputHidden.type = 'hidden';
+					inputHidden.name = input.name;
+					inputHidden.value = input.checked;
+
+					form.appendChild(inputHidden);
+
+					input.disabled = true;
+				}
 			}
 
 		}, false );

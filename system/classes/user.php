@@ -46,6 +46,12 @@ class User {
 			exit;
 		}
 
+		$autologin = false;
+		if( ! empty($post['autologin']) && $post['autologin'] == 'true' ) {
+			$autologin = true;
+		}
+		$_SESSION['login_set_autologin'] = $autologin;
+
 		// Redirect user to their authorization endpoint, which will then redirect to the '/action/redirect/' URL
 		header( 'Location: '.$authorization_url );
 		exit;
@@ -56,6 +62,10 @@ class User {
 		$indieauth = new IndieAuth();
 
 		$response = $indieauth->complete( $_GET );
+
+		$autologin = $_SESSION['login_set_autologin'];
+		unset($_SESSION['login_set_autologin']);
+
 
 		if( ! empty($response['error']) ) {
 			php_redirect( '?error='.$response['error'] );
@@ -82,7 +92,23 @@ class User {
 		$_SESSION['name'] = $this->create_short_name( $response['me'] );
 
 
-		// TODO: set cookie, if we need one
+		if( $autologin ) {
+
+			$cookie_session_id = uniqid();
+
+			global $sekretaer;
+
+			$cookie = new Cache( 'session', $cookie_session_id, true );
+			$cookie->add_data( json_encode($_SESSION) );
+
+			$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+
+			setcookie( 'sekretaer-session', $cookie_session_id, array(
+				'expires' => time()+$cookie_lifetime,
+				'path' => '/'
+			));
+
+		}
 
 		return $this;
 	}
@@ -98,11 +124,22 @@ class User {
 
 
 	function logout() {
+
+		if( ! empty($_COOKIE['sekretaer-session']) ) {
+			$cookie_session_id = $_COOKIE['sekretaer-session'];
+
+			$cache = new Cache( 'session', $cookie_session_id, true );
+			$cache->remove();
+
+			setcookie( 'sekretaer-session', null, array(
+				'expires' => -1,
+				'path' => '/'
+			));
+		}
+
 		session_destroy();
 		
 		$this->user_id = false;
-
-		// TODO: delete cookie, if one is set
 
 		return $this;
 	}

@@ -19,13 +19,12 @@ head_html();
 		}
 		?>
 
+
 		<form id="login-form" action="<?= url('action/login') ?>" method="POST">
 
 			<label><span style="display: inline-block; width: 60px;">URL:</span> <input type="url" name="url" placeholder="https://www.example.com" autofocus style="width: 250px;" required autocomplete="username"></label>
 
-<?php /* TODO
 			<span style="display: inline-block; width: 60px;"></span> <label style="display: inline-block"><input type="checkbox" name="autologin" value="true"> stay logged in (this sets a cookie)</label>
-*/ ?>
 
 			<br><br>
 
@@ -36,6 +35,7 @@ head_html();
 			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is a alpha release. things may break.</span>
 
 		</form>
+
 
 	</section>
 
