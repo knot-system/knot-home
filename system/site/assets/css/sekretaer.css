@@ -27,3 +27,22 @@ ul.tag-selector {
 		ul.tag-selector li:hover {
 			background: #333;
 		}
+
+.loading {
+	display: inline-block;
+	opacity: 1;
+	background: url(../img/loading.svg) no-repeat center center / contain;
+	vertical-align: middle;
+	width: 2em;
+	height: 2em;
+	margin-left: 0.5em;
+
+	-webkit-transition: opacity 300ms ease-in-out;
+	-o-transition: opacity 300ms ease-in-out;
+	transition: opacity 300ms ease-in-out;
+}
+
+	.loading.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}

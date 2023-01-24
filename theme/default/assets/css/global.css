@@ -75,7 +75,7 @@ button {
 		transition: box-shadow 300ms ease-in-out;
 	}
 
-		button:hover {
+		button:not([disabled]):hover {
 			background: var(--color-box-background);
 			box-shadow: 2px 1px 5px var(--color-box-border);
 
@@ -83,6 +83,17 @@ button {
 			-o-transition: box-shadow 100ms ease-in-out;
 			transition: box-shadow 100ms ease-in-out;
 		}
+
+	input[disabled],
+	textarea[disabled],
+	select[disabled],
+	input[readonly],
+	textarea[readonly],
+	select[readonly],
+	button[disabled] {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
 
 header {
 	text-align: center;

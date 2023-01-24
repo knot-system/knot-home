@@ -19,7 +19,7 @@ head_html();
 		}
 		?>
 
-		<form action="<?= url('action/login') ?>" method="POST">
+		<form id="login-form" action="<?= url('action/login') ?>" method="POST">
 
 			<label><span style="display: inline-block; width: 60px;">URL:</span> <input type="url" name="url" placeholder="https://www.example.com" autofocus style="width: 250px;" required autocomplete="username"></label>
 
@@ -29,7 +29,7 @@ head_html();
 
 			<br><br>
 
-			<span style="display: inline-block; width: 60px;"></span> <button>Login</button>
+			<span style="display: inline-block; width: 60px;"></span> <button>Login</button> <span id="login-loader" class="loading hidden"></span>
 
 			<input type="hidden" name="path" value="<?= implode('/', $sekretaer->route->request) ?>">
 
