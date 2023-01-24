@@ -82,6 +82,15 @@ class Cache {
 	}
 
 
+	function touch() {
+		if( ! file_exists($this->cache_file) ) return $this;
+
+		touch( $this->cache_file );
+
+		return $this;
+	}
+
+
 	private function check_cache_folder(){
 		global $sekretaer;
 

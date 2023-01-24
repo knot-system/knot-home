@@ -138,7 +138,7 @@ class User {
 		}
 
 		session_destroy();
-		
+
 		$this->user_id = false;
 
 		return $this;

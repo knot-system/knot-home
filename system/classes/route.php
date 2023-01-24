@@ -22,6 +22,36 @@ class Route {
 		$this->request = $request;
 
 
+
+		// check if we want to auto-login
+		if( ! $sekretaer->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
+
+			$cookie_session_id = $_COOKIE['sekretaer-session'];
+
+			$cache = new Cache( 'session', $cookie_session_id, true );
+			$session_data = trim($cache->get_data());
+
+			if( $session_data ) {
+				$session_data = json_decode($session_data, true);
+
+				// reset session data:
+				$_SESSION = $session_data;
+
+				// refresh cookie lifetime:
+				$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+				setcookie( 'sekretaer-session', $cookie_session_id, array(
+					'expires' => time()+$cookie_lifetime,
+					'path' => '/'
+				));
+
+				// refresh cache lifetime:
+				$cache->touch();
+
+			}
+
+		}
+
+
 		if( ! empty($request[0]) && $request[0] == 'action' ) {
 
 			if( ! empty($request[1]) ) {

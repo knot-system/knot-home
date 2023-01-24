@@ -35,7 +35,7 @@ head_html();
 			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is a alpha release. things may break.</span>
 
 		</form>
-
+		
 
 	</section>
 
