@@ -224,6 +224,12 @@ main.login {
 		bottom: 0;
 	}
 
+	main.login .alpha-warning {
+		opacity: 0.5;
+		display: inline-block;
+		margin-top: 1em;
+	}
+
 ul.posts {
 	max-width: 600px;
 	list-style-type: none;

@@ -32,6 +32,8 @@ head_html();
 			<span style="display: inline-block; width: 60px;"></span> <button>Login</button> <span id="login-loader" class="loading hidden"></span>
 
 			<input type="hidden" name="path" value="<?= implode('/', $sekretaer->route->request) ?>">
+		
+			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is a alpha release. things may break.</span>
 
 		</form>
 
