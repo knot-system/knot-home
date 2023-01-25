@@ -8,12 +8,12 @@ class Route {
 
 	function __construct( $sekretaer ) {
 
-		$request = $_SERVER['REQUEST_URI'];
-		$request = preg_replace( '/^'.preg_quote($sekretaer->basefolder, '/').'/', '', $request );
+		$request_string = $_SERVER['REQUEST_URI'];
+		$request_string = preg_replace( '/^'.preg_quote($sekretaer->basefolder, '/').'/', '', $request_string );
 
 		$query_string = false;
 
-		$request = explode( '?', $request );
+		$request = explode( '?', $request_string );
 		if( count($request) > 1 ) $query_string = $request[1];
 		$request = $request[0];
 
@@ -34,7 +34,7 @@ class Route {
 			if( $session_data ) {
 				$session_data = json_decode($session_data, true);
 
-				// reset session data:
+				// restore session data:
 				$_SESSION = $session_data;
 
 				// refresh cookie lifetime:
@@ -48,6 +48,8 @@ class Route {
 				$cache->touch();
 
 			}
+
+			$this->redirect( $request_string );
 
 		}
 
