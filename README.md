@@ -97,7 +97,7 @@ If you want to reset the whole system, delete the following files and folders an
 
 You should routinely backup your content. To do so, copy these files & folders to a secure location:
 
-- the `config.php`. This contains things like the sitename and which theme you use and other settings
+- the `config.php`. This contains the theme you use and other settings
 - if you have a custom theme inside the `theme/` directory, make a backup of it as well. The `theme/default/` theme comes with the system, so no need to back it up
 
 When you want to restore a backup, delete the current folders & files from your webserver, and upload your backup. You should also delete the `cache/` folder, so everything gets re-cached and is up to date. If you also want to update or reset your system, see the *Update* section above.
