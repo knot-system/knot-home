@@ -108,7 +108,7 @@ function sanitize_string_for_url( $string ) {
 }
 
 
-function read_folder( $folderpath, $recursive = false ) {
+function read_folder( $folderpath, $recursive = false, $return_folderpath = true ) {
 
 	global $sekretaer;
 
@@ -127,13 +127,14 @@ function read_folder( $folderpath, $recursive = false ) {
 			if( is_dir($folderpath.$file) ) {
 
 				if( $recursive ) {
-					$files = array_merge( $files, read_folder($folderpath.$file.'/', $recursive));
+					$files = array_merge( $files, read_folder($folderpath.$file.'/', $recursive, $return_folderpath));
 				}
 
 				continue;
 			}
 
-			$files[] = $folderpath.$file;
+			if( $return_folderpath ) $files[] = $folderpath.$file;
+			else $files[] = $file;
 
 		}
 		closedir($handle);

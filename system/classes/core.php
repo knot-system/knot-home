@@ -117,23 +117,12 @@ class Sekretaer {
 
 
 	function refresh_cache() {
-		// NOTE: see system/classes/cache.php for general cache handling
-		// this function clears out old cache files.
+		
+		$sekretaer = $this;
 
-		$lifetime = $this->config->get( 'cache_lifetime' );
+		$cache = new Cache( false, false );
 
-		$folderpath = $this->abspath.'cache/';
-
-		$files = read_folder( $folderpath, true );
-
-		foreach( $files as $file ) {
-			$timestamp = filemtime($file);
-			
-			if( time()-$timestamp > $lifetime ) { // cachefile too old
-				@unlink($file); // delete old cache file; fail silently
-			}
-
-		}
+		$cache->clear_cache_folder();
 
 	}
 

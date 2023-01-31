@@ -13,13 +13,16 @@ class Cache {
 	public $hash;
 	public $cache_file_name;
 	public $filesize;
+	public $lifetime;
 	
-	function __construct( $type, $input, $use_hash = false ) {
+	function __construct( $type, $input, $use_hash = false, $lifetime = false ) {
 
 		// TODO: add config option to disable cache
 		// TODO: add method to force a cache refresh?
 
 		global $sekretaer;
+
+		if( ! $type && ! $input ) return;
 
 		if( $type == 'image' || $type == 'image-preview' ) {
 			$this->cache_folder .= 'images/';
@@ -47,9 +50,42 @@ class Cache {
 
 		}
 
-		$this->cache_file = $this->cache_folder.$this->hash;
-		$this->cache_file_name = $this->hash;
+		if( $lifetime ) { // lifetime is in seconds
+			$this->lifetime = $lifetime;
+		} else {
+			$this->lifetime = $sekretaer->config->get( 'cache_lifetime' );
+		}
 
+		$this->cache_file_name = $this->get_file_name();
+
+		$this->cache_file = $this->cache_folder.$this->cache_file_name;
+
+	}
+
+
+	function get_file_name(){
+
+		global $sekretaer;
+
+		$hash = $this->hash;
+
+		$folderpath = $sekretaer->abspath.$this->cache_folder;
+
+		$files = read_folder( $folderpath, false, false );
+
+		foreach( $files as $filename ) {
+			if( str_starts_with($filename, $hash) ) {
+				return $filename;
+			}
+		}
+
+		// no file yet, create new name:
+		
+		$target_timestamp = time() + $this->lifetime;
+
+		$filename = $this->hash.'_'.$target_timestamp;
+
+		return $filename;
 	}
 
 
@@ -101,6 +137,32 @@ class Cache {
 		}
 
 		return $this;
+	}
+
+
+	function clear_cache_folder(){
+		// this function clears out old cache files.
+
+		global $sekretaer;
+
+		$lifetime = $sekretaer->config->get( 'cache_lifetime' );
+
+		$folderpath = $sekretaer->abspath.'cache/';
+
+		$files = read_folder( $folderpath, true );
+
+		$current_timestamp = time();
+
+		foreach( $files as $file ) {
+
+			$file_explode = explode( '_', $file );
+			$expire_timestamp = (int) end($file_explode);
+
+			if( $expire_timestamp < $current_timestamp ) { // cachefile too old
+				@unlink($file); // delete old cache file; fail silently
+			}
+
+		}
 	}
 
 

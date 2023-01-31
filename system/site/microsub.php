@@ -131,9 +131,15 @@ if( isset($_GET['channel']) ) {
 function np_ms_api_get( $action, $args = array() ) {
 
 	$api_url = $_SESSION['microsub_endpoint'];
+
 	$authorization = 'Authorization: Bearer '.$_SESSION['access_token'];
 
 	$url = $api_url.'?action='.$action;
+
+	$cache = new Cache( 'microsub', $url, false, 60*3 ); // cache for 3 minutes
+
+	$data = $cache->get_data();
+	if( $data ) return json_decode($data);
 
 	if( count($args) ) {
 		foreach( $args as $key => $value ) {
@@ -157,6 +163,8 @@ function np_ms_api_get( $action, $args = array() ) {
 	if( isset($_REQUEST['debug']) ) {
 		echo '</code></pre>';
 	}
+
+	$cache->add_data( json_encode($json) );
 
 	return $json;
 }
