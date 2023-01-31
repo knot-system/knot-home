@@ -83,6 +83,7 @@ if( $step == 'check' ) {
 				?>
 				<h2>Release notes:</h2>
 				<?php
+				include_once($abspath.'system/classes/text.php');
 				$text = new Text( implode("\n\n\n", $release_notes) );
 				echo $text->auto_p()->get();
 			}
