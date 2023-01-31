@@ -8,6 +8,7 @@ return [
 	'debug' => false,
 	'logging' => false,
 	'theme' => 'default',
+	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue', 'green', 'red', 'lilac'
 	'scope' => array( 'read', 'create', 'follow' ),
 	'microsub' => true,
 	'micropub' => true,

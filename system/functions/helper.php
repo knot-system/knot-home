@@ -153,6 +153,9 @@ function head_html(){
 
 	$body_classes = array();
 
+	$color_scheme = $sekretaer->config->get('theme-color-scheme');
+	if( $color_scheme ) $body_classes[] = 'theme-color-scheme-'.$color_scheme;
+
 ?><!DOCTYPE html>
 <!--
   _________       __                    __      /\/\             

@@ -20,6 +20,55 @@
 
 }
 
+	body.theme-color-scheme-blue {
+		/* defaults to :root variables */
+	}
+
+	body.theme-color-scheme-green {
+
+		--color-global-background: #f9fff9;
+
+		--color-box-border: #8ed393;
+		--color-box-background: rgb(244,255,246);
+		--gradient-box-background: linear-gradient(127deg, rgba(244,255,246,1) 6%, rgba(242,249,230,1) 80%);
+
+		--color-text: #32480c;
+
+		--color-link: #0e8f1b;
+		--color-link-hover: #51b70b;
+		
+	}
+
+	body.theme-color-scheme-red {
+
+		--color-global-background: #fff9f9;
+
+		--color-box-border: #d3938e;
+		--color-box-background: rgb(255,246,244);
+		--gradient-box-background: linear-gradient(127deg, rgba(255,246,244,1) 6%, rgba(249,230,242,1) 80%);
+
+		--color-text: #480c0c;
+
+		--color-link: #8f0e0e;
+		--color-link-hover: #e60c0c;
+		
+	}
+
+	body.theme-color-scheme-lilac {
+
+		--color-global-background: #fdf9ff;
+
+		--color-box-border: #c18ed3;
+		--color-box-background: rgb(251,244,255);
+		--gradient-box-background: linear-gradient(127deg, rgba(251,244,255,1) 6%, rgba(251,230,255,1) 80%);
+
+		--color-text: #320c48;
+
+		--color-link: #850e8f;
+		--color-link-hover: #a06fd0;
+		
+	}
+
 body {
 	margin: 0;
 	padding: 0;
