@@ -249,3 +249,15 @@ function get_navigation(){
 
 	return $navigation;
 }
+
+
+function get_hash( $input ) {
+	// NOTE: this hash is for data validation, NOT cryptography!
+	// DO NOT USE FOR CRYPTOGRAPHIC PURPOSES
+
+
+	// TODO: check if we want to create the hash like this
+	$hash = hash( 'tiger128,3', $input );
+
+	return $hash;
+}
