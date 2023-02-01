@@ -86,7 +86,7 @@ if( isset($_GET['channel']) ) {
 					<?php if( ! empty($item->content->html) ) echo $item->content->html; ?>
 				</p>
 				<p><small><a href="<?= $item->author->url ?>" target="_blank" rel="noopener"><?= $item->author->name ?></a> @ <?= $item->published ?></small></p>
-				<p>[<a href="<?= $item->url ?>" target="_blank" rel="noopener">read full post</a>] [<a href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a>]</p>
+				<p><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
 			</li>
 			<?php
 		}
