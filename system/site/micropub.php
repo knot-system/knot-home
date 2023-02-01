@@ -142,7 +142,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 	$result = curl_exec($ch);
 	curl_close($ch);
 	$json = json_decode($result);
-	
+
 	if( isset($_REQUEST['debug']) ) {
 		echo '<p><strong>result:</strong></p>';
 		var_dump($result);
@@ -166,9 +166,10 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 
 		<p><label><strong>Status</strong>:<br><select name="status" required><option value="draft">Draft</option><option selected value="published">Publish</option></select></label></p>
 
-		<p><label><strong>Title</strong> <small>(optional)</small>:<br><input name="title" style="width: 500px;" placeholder="No Title"></label></p>
+		<p><label><strong>Title</strong> <small>(optional)</small>:<br><input name="title" style="width: 100%;" placeholder="No Title"></label></p>
 
-		<p><label><strong>Slug</strong> <small>(optional)</small>:<br><input name="slug" style="width: 500px;" placeholder="no-title"></label></p>
+		<p><label><strong>Slug</strong> <small>(optional)</small>:<br><input name="slug" style="width: 100%;" placeholder="no-title"></label></p>
+
 		<script type="text/javascript">
 			(function(){
 				var title = document.querySelector('input[name="title"]');
@@ -227,9 +228,9 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 			})();
 		</script>
 
-		<p><label><strong>Content</strong> <small>(required)</small>:<br><textarea name="content" style="width: 500px; height: 100px;" placeholder="Hello World!" autofocus required><?= $content ?></textarea></label></p>
+		<p><label><strong>Content</strong> <small>(required)</small>:<br><textarea name="content" style="width: 100%; height: 300px;" placeholder="Hello World!" autofocus required><?= $content ?></textarea></label></p>
 
-		<p><label><strong>Tags</strong> <small>(optional, durch Komma getrennt)</small>:<br><input name="tags" style="width: 500px;" placeholder="tag1, tag2"></label></p>
+		<p><label><strong>Tags</strong> <small>(optional, durch Komma getrennt)</small>:<br><input name="tags" style="width: 100%;" placeholder="tag1, tag2"></label></p>
 		<?php if( count($tags) ) : ?>
 			<ul class="tag-selector">
 				<?php foreach( $tags as $tag ) {
@@ -253,7 +254,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 			</script>
 		<?php endif; ?>
 
-		<p><label><strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br><input type="file" name="image" accept="image/jpeg,image/png"></label></p>
+		<p><label><strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br><input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;"></label></p>
 		<?php /* TODO: show preview image; TODO: limit max file size? depends on server receining the image */ ?>
 
 		<input type="hidden" name="action" value="post">
