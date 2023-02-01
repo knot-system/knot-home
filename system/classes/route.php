@@ -47,6 +47,14 @@ class Route {
 				// refresh cache lifetime:
 				$cache->touch();
 
+			} else {
+
+				// session expired, delete cookie
+				setcookie( 'sekretaer-session', false, array(
+					'expires' => -1,
+					'path' => '/'
+				));
+
 			}
 
 			$this->redirect( $request_string );
