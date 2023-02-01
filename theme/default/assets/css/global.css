@@ -88,6 +88,22 @@ body {
 
 	}
 
+a {
+	color: var(--color-link);
+
+	-webkit-transition: color 300ms ease-in-out;
+	-o-transition: color 300ms ease-in-out;
+	transition: color 300ms ease-in-out;
+}
+
+	a:hover {
+		color: var(--color-link-hover);
+
+		-webkit-transition: color 100ms ease-in-out;
+		-o-transition: color 100ms ease-in-out;
+		transition: color 100ms ease-in-out;
+	}
+
 form {
 
 }
@@ -99,7 +115,8 @@ form {
 input,
 textarea,
 select,
-button {
+button,
+.button {
 	font: inherit;
 	display: inline-block;
 	padding: 5px 10px;
@@ -107,9 +124,11 @@ button {
 	border: 1px solid var(--color-box-border);
 	background: var(--color-box-background);
 	border-radius: 4px;
+	text-decoration: none;
 }
 
-	button {
+	button,
+	.button {
 		cursor: pointer;
 		background: var(--color-box-background);
 		background: var(--gradient-box-background);
@@ -124,9 +143,11 @@ button {
 		transition: box-shadow 300ms ease-in-out;
 	}
 
-		button:not([disabled]):hover {
+		button:not([disabled]):hover,
+		.button:not(.disabled):hover {
 			background: var(--color-box-background);
 			box-shadow: 2px 1px 5px var(--color-box-border);
+			color: var(--color-text);
 
 			-webkit-transition: box-shadow 100ms ease-in-out;
 			-o-transition: box-shadow 100ms ease-in-out;
@@ -139,7 +160,8 @@ button {
 	input[readonly],
 	textarea[readonly],
 	select[readonly],
-	button[disabled] {
+	button[disabled],
+	.button.disabled {
 		opacity: 0.5;
 		cursor: not-allowed;
 	}
@@ -173,22 +195,6 @@ main {
 	box-sizing: border-box;
 	min-height: calc(100vh - 270px);
 }
-
-a {
-	color: var(--color-link);
-
-	-webkit-transition: color 300ms ease-in-out;
-	-o-transition: color 300ms ease-in-out;
-	transition: color 300ms ease-in-out;
-}
-
-	a:hover {
-		color: var(--color-link-hover);
-
-		-webkit-transition: color 100ms ease-in-out;
-		-o-transition: color 100ms ease-in-out;
-		transition: color 100ms ease-in-out;
-	}
 
 h1, h2, h3, h4, h5, h6 {
 	font-family: var(--font-headline-family);
