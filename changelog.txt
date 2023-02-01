@@ -1,3 +1,17 @@
+alpha.2
+
+you need to manually update to alpha.2 because of a bug in the auto-updater of alpha.1
+
+- bugfix for endless redirect, if autologin is active and the session cache file vanishes
+- short caching for microsub area (3 minutes, for now)
+- color schemes for default theme; add the 'theme-color-scheme' option to the config.php (see system/site/config.php for details)
+- micropub: style update
+- microsub: style update & small fixes
+- microsub: date & time format can be changed via the 'datetime_format' config option
+- micropub: hide debug information behind a toggle
+- autoupdater fix
+
+
 alpha.1
 
 - initial release
