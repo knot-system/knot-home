@@ -220,6 +220,12 @@ if( $step == 'check' ) {
 	@unlink( $abspath.'update.txt' );
 	@unlink( $abspath.'update' );
 
+	@session_destroy();
+	setcookie( 'sekretaer-session', false, array(
+		'expires' => -1,
+		'path' => '/'
+	));
+
 	deleteDirectory( $abspath.'cache/');
 	mkdir( $abspath.'cache/' );
 
