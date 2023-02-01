@@ -4,6 +4,9 @@ if( ! $sekretaer ) exit;
 
 snippet( 'header' );
 
+?>
+<h2>Write a new Post</h2>
+<?php
 
 // TODO: this is copied from the quick prototype. we need to rewrite this.
 
@@ -60,12 +63,6 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 
 	$url = $api_url;
 
-	echo '<h2>Request</h2>';
-	echo '<p><strong>Data:</strong>';
-	echo '<pre>'; var_dump($data); echo '</pre>';
-	echo '<p><strong>API request:</strong> '.$url.'</p>';
-	echo '<hr>';
-
 	$ch = curl_init( $url );
 
 	curl_setopt( $ch, CURLOPT_POST, true );
@@ -88,9 +85,6 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 
 	curl_close($ch);
 
-	echo '<h2>Answer</h2>';
-	echo '<p><strong>HTTP Status Code:</strong> '.$httpcode.'</p>';
-
 	$show_response = true;
 	if( $httpcode == 201 ) {
 		// HTTP 201 Created - success!
@@ -110,16 +104,26 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 	//	$show_response = false;
 	}
 
+	echo '<p>--> <a href="micropub.php">new post</a></p>';
+
 	if( $show_response ) {
-		echo '<p><strong>Server Response:</strong></p>';
-		echo '<pre><code>';
-		$body = substr($result, $curl_info['header_size']);
-		var_dump($result);
-		var_dump(json_decode($body));
-		echo '</code></pre>';
+		echo '<details><summary>Debug-Info</summary>';
+			echo '<h3>Request</h3>';
+			echo '<p><strong>Data:</strong>';
+			echo '<pre>'; var_dump($data); echo '</pre>';
+			echo '<p><strong>API request:</strong> '.$url.'</p>';
+			echo '<hr>';
+			echo '<h3>Answer</h3>';
+			echo '<p><strong>HTTP Status Code:</strong> '.$httpcode.'</p>';
+			echo '<p><strong>Server Response:</strong></p>';
+			echo '<pre><code>';
+			$body = substr($result, $curl_info['header_size']);
+			var_dump($result);
+			var_dump(json_decode($body));
+			echo '</code></pre>';
+		echo '</details>';
 	}
 
-	echo '<p>--> <a href="micropub.php">new post</a></p>';
 
 } else {
 	// form
@@ -130,6 +134,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 		echo '<p><strong>API request to:</strong> '.$url.'</p>';
 		echo '<pre><code>';
 	}
+
 	$ch = curl_init($url);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
 	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
@@ -137,6 +142,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 	$result = curl_exec($ch);
 	curl_close($ch);
 	$json = json_decode($result);
+	
 	if( isset($_REQUEST['debug']) ) {
 		echo '<p><strong>result:</strong></p>';
 		var_dump($result);
@@ -155,7 +161,6 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 	if( isset($_GET['content']) ) $content = urldecode($_GET['content']);
 
 	?>
-	<h2>Write a new Post</h2>
 	<p>(this will be posted to <a href="<?= $_SESSION['me'] ?>" target="_blank" rel="noopener"><?= $_SESSION['me'] ?></a>)</p>
 	<form action="micropub.php" method="post" enctype="multipart/form-data">
 
