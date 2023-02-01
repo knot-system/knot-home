@@ -156,7 +156,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 
 	?>
 	<h2>Write a new Post</h2>
-	<p>(this will be posted to <?= $_SESSION['me'] ?>)</p>
+	<p>(this will be posted to <a href="<?= $_SESSION['me'] ?>" target="_blank" rel="noopener"><?= $_SESSION['me'] ?></a>)</p>
 	<form action="micropub.php" method="post" enctype="multipart/form-data">
 
 		<p><label><strong>Status</strong>:<br><select name="status" required><option value="draft">Draft</option><option selected value="published">Publish</option></select></label></p>
