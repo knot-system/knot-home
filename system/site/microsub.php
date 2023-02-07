@@ -142,16 +142,18 @@ function np_ms_api_get( $action, $args = array() ) {
 
 	$url = $api_url.'?action='.$action;
 
-	$cache = new Cache( 'microsub', $url, false, 60*3 ); // cache for 3 minutes
-
-	$data = $cache->get_data();
-	if( $data ) return json_decode($data);
-
 	if( count($args) ) {
 		foreach( $args as $key => $value ) {
 			$url .= '&'.$key.'='.$value; // TODO: sanitize
 		}
 	}
+
+
+	$cache = new Cache( 'microsub', $url, false, 60*3 ); // cache for 3 minutes
+
+	$data = $cache->get_data();
+	if( $data ) return json_decode($data);
+
 
 	if( isset($_REQUEST['debug']) ) {
 		echo '<p><strong>API request to:</strong> '.$url.'</p>';
