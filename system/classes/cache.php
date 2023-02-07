@@ -92,6 +92,8 @@ class Cache {
 	function get_data() {
 		if( ! file_exists($this->cache_file) ) return false;
 
+		if( isset($_GET['refresh']) ) return false; // force a refresh
+
 		$this->filesize = filesize($this->cache_file);
 
 		$cache_content = file_get_contents($this->cache_file);
