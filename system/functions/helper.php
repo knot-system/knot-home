@@ -223,12 +223,6 @@ function get_navigation(){
 
 	$navigation = array();
 
-	$navigation[] = array(
-		'name' => 'Dashboard',
-		'url' => url(),
-		'active' => ( $template == 'dashboard' )
-	);
-
 	if( $sekretaer->config->get('microsub') ) {
 		$navigation[] = array(
 			'name' => 'Read',
@@ -244,12 +238,6 @@ function get_navigation(){
 			'active' => ( $template == 'micropub' )
 		);
 	}
-
-	$navigation[] = array(
-		'name' => 'Logout',
-		'url' => url('action/logout'),
-		'active' => false
-	);
 
 	return $navigation;
 }

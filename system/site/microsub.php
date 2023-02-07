@@ -2,7 +2,90 @@
 
 if( ! $sekretaer ) exit;
 
-snippet( 'header' );
+$sidebar_content = '';
+
+
+ob_start();
+$channels = np_ms_api_get( 'channels' );
+if( $channels && isset($channels->channels) && count($channels->channels) ) {
+	// overview: list channels
+	?>
+	<ul class="channels-list">
+	<?php
+	foreach( $channels->channels as $channel ) {
+
+		if( isset($_GET['channel']) && $channel->uid == $_GET['channel'] ) {
+			?>
+			<li><?= $channel->name ?></li>
+			<?php
+		} else {
+			?>
+			<li><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?= $channel->name.' ['.$channel->unread.' unread]'; ?></a></li>
+			<?php
+		}
+	}
+	?>
+	</ul>
+	<?php
+} else {
+	if( isset($_GET['debug']) ) {
+		echo '<strong>CHANNELS ERROR:</strong>';
+		echo '<code><pre>';
+		var_dump($channels);
+		echo '</pre></code>';
+	}
+}
+
+if( isset($_GET['channel']) ) {
+	// needs 'follow' scope
+	$feeds = np_ms_api_get( 'follow', array( 'channel' => $_GET['channel'] ) );
+	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
+		?>
+		<hr>
+		<ul class="feeds-list">
+		<?php
+		foreach( $feeds->items as $item ) {
+			?>
+			<li>
+				<?php
+				$name = $item->url;
+				if( ! empty($item->name) ) $name = $item->name;
+
+				echo '<span title="'.$item->url.'">'.$name.'</span>';
+
+				?>
+				[<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>]
+				<?php
+				// TODO: add 'mute'/'unmute' button
+				?>
+			</li>
+			<?php
+		}
+		?>
+			<li>
+				<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=add', false ) ?>">+ add a new feed</a>
+			</li>
+		</ul>
+		<?php
+	} else {
+		if( isset($_GET['debug']) ) {
+			echo '<strong>FEEDS ERROR:</strong>';
+			echo '<code><pre>';
+			var_dump($feeds);
+			echo '</pre></code>';
+		}
+	}
+}
+
+
+$sidebar_content = ob_get_contents();
+ob_end_clean();
+
+
+
+snippet( 'header', array(
+	'sidebar-content' => $sidebar_content
+) );
 
 
 // TODO: this is copied from the quick prototype. we need to rewrite this.
@@ -27,83 +110,12 @@ if( ! isset($_SESSION['scope']) || ! in_array( 'read', explode( ' ', $_SESSION['
 }
 
 
-// NOTE: see https://aperture.p3k.io/docs for aperture docs
-
-// needs 'read' scope (?)
-$channels = np_ms_api_get( 'channels' );
-if( $channels && isset($channels->channels) && count($channels->channels) ) {
-	// overview: list channels
-	?>
-	<h2>Channels</h3>
-	<ul>
-	<?php
-	foreach( $channels->channels as $channel ) {
-
-		if( isset($_GET['channel']) && $channel->uid == $_GET['channel'] ) {
-			?>
-			<li><?= $channel->name ?></li>
-			<?php
-		} else {
-			?>
-			<li><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?= $channel->name.' ['.$channel->unread.' unread]'; ?></a></li>
-			<?php
-		}
-	}
-	?>
-	</ul>
-	<?php
-} else {
-	echo '<strong>CHANNELS ERROR:</strong>';
-	echo '<code><pre>';
-	var_dump($channels);
-	echo '</pre></code>';
-}
-
-
 if( isset($_GET['channel']) ) {
 
 	// content of channel
 
-	// needs 'follow' scope
-	$feeds = np_ms_api_get( 'follow', array( 'channel' => $_GET['channel'] ) );
-	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
-		?>
-		<hr>
-		<h2>Feeds</h2>
-		<ul>
-		<?php
-		foreach( $feeds->items as $item ) {
-			?>
-			<li>
-				<?php
-				if( ! empty($item->name) ) echo $item->name.' (';
-				echo $item->url;
-				if( ! empty($item->name) ) echo ')';
-				?>
-				[<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>]
-				<?php
-				// TODO: add 'mute'/'unmute' button
-				?>
-			</li>
-			<?php
-		}
-		?>
-			<li>
-				<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=add', false ) ?>">add a new feed to this channel</a>
-			</li>
-		</ul>
-		<?php
-	} else {
-		echo '<strong>FEEDS ERROR:</strong>';
-		echo '<code><pre>';
-		var_dump($feeds);
-		echo '</pre></code>';
-	}
-
 	if( isset($_GET['action']) ) {
 		
-		echo '<hr>';
-
 		if( $_GET['action'] == 'add' ) {
 			// add new feed
 
@@ -176,7 +188,6 @@ if( isset($_GET['channel']) ) {
 	} else {
 		// list posts
 
-
 		$items_args = array(
 			'channel' => $_GET['channel'],
 			'limit' => 20,
@@ -193,8 +204,6 @@ if( isset($_GET['channel']) ) {
 
 		if( $items && isset($items->items) && count($items->items) ) {
 			?>
-			<hr>
-			<h2>Posts</h2>
 			<ul class="posts">
 			<?php
 			foreach( $items->items as $item ) {
@@ -220,6 +229,7 @@ if( isset($_GET['channel']) ) {
 					</p>
 					<p><small><a href="<?= $item->author->url ?>" target="_blank" rel="noopener"><?= $item->author->name ?></a>, <?= $datetime ?></small></p>
 					<p><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
+					<hr>
 				</li>
 				<?php
 			}
@@ -242,10 +252,13 @@ if( isset($_GET['channel']) ) {
 			</ul>
 			<?php
 		} else {
-			echo '<strong>POSTS ERROR:</strong>';
-			echo '<code><pre>';
-			var_dump($items);
-			echo '</pre></code>';
+			echo '<p>- no posts found -</p>';
+			if( isset($_GET['debug']) ) {
+				echo '<strong>POSTS ERROR:</strong>';
+				echo '<code><pre>';
+				var_dump($items);
+				echo '</pre></code>';
+			}
 		}
 
 	}

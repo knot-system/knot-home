@@ -1,18 +1,17 @@
 <?php
 
-// Version: alpha.1
+// Version: alpha.3
 
 if( ! $sekretaer ) exit;
 
 ?>
 
 
-</main>
+		</main>
 
-<footer>
-	<a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $sekretaer->version() ?>
+	</div>
 
-</footer>
+</div>
 
 <?php
 foot_html();

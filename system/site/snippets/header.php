@@ -1,35 +1,64 @@
 <?php
 
-// Version: alpha.1
+// Version: alpha.3
 
 if( ! $sekretaer ) exit;
 
 head_html();
+
+$sidebar_content = '';
+if( isset($args['sidebar-content']) ) $sidebar_content = $args['sidebar-content'];
 
 
 $navigation = get_navigation();
 
 ?>
 
-<header>
-	<h1><a href="<?= url() ?>">Sekretär</a></h1>
+<div class="canvas">
 
-	<nav>
-		<ul>
-			<?php
-			foreach( $navigation as $element ) {
-				$classes = array();
-				if( $element['active'] ) $classes[] = 'current-nav-item';
-			?>
-			<li<?= get_class_attribute($classes) ?>>
-				<a href="<?= $element['url'] ?>"><?= $element['name'] ?></a>
-			</li>
-			<?php
-			}
-			?>
-		</ul>
-	</nav>
+	<div class="nav-area">
 
-</header>
+		<header>
+			<h1><a href="<?= url() ?>">Sekretär</a></h1>
 
-<main>
+			<nav>
+				<ul>
+					<?php
+					foreach( $navigation as $element ) {
+						$classes = array();
+						if( $element['active'] ) $classes[] = 'current-nav-item';
+					?>
+					<li<?= get_class_attribute($classes) ?>>
+						<a href="<?= $element['url'] ?>"><?= $element['name'] ?></a>
+					</li>
+					<?php
+					}
+					?>
+				</ul>
+			</nav>
+
+			<hr>
+
+			<?= $sidebar_content ?>
+
+			<span class="spacer"></span>
+
+			<footer>
+
+				<ul>
+					<li<?= get_class_attribute($classes) ?>>
+						<a href="<?= url('action/logout') ?>">Logout</a>
+					</li>
+				</ul>
+
+				<span class="generator"><a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $sekretaer->version() ?></span>
+
+			</footer>
+
+		</header>
+
+	</div>
+
+	<div class="content-area">
+
+		<main>
