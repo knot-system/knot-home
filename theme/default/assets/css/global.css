@@ -314,3 +314,19 @@ ul.posts {
 		max-width: 100%;
 		height: auto;
 	}
+
+ul.pagination {
+	list-style-type: none;
+	margin: 40px auto 0;
+	text-align: center;
+	padding: 0;
+}
+
+	ul.pagination li {
+		display: inline;
+	}
+
+		ul.pagination li + li {
+			margin-left: 20px;
+		}
+		

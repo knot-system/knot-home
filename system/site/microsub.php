@@ -176,8 +176,21 @@ if( isset($_GET['channel']) ) {
 	} else {
 		// list posts
 
-		$items_args = array( 'channel' => $_GET['channel'] );
+
+		$items_args = array(
+			'channel' => $_GET['channel'],
+			'limit' => 20,
+		);
+
+		if( isset($_GET['after']) ) {
+			$items_args['after'] = $_GET['after'];
+		}
+		if( isset($_GET['before']) ) {
+			$items_args['before'] = $_GET['before'];
+		}
+
 		$items = np_ms_api_get( 'timeline', $items_args );
+
 		if( $items && isset($items->items) && count($items->items) ) {
 			?>
 			<hr>
@@ -210,6 +223,21 @@ if( isset($_GET['channel']) ) {
 				</li>
 				<?php
 			}
+
+
+			if( ! empty($items->paging) ) {
+
+				$paging = $items->paging;
+
+				echo '<ul class="pagination">';
+					echo '<li><span class="button disabled">&laquo; previous page <small>(unavailable)</small></span></li>';
+				if( ! empty($paging->after) ) {
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+				}
+				echo '</ul>';
+
+			}
+
 			?>
 			</ul>
 			<?php
