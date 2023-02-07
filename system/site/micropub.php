@@ -128,34 +128,7 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 } else {
 	// form
 
-	// get tags, if available:
-	$url = $api_url.'?q=config';
-	if( isset($_REQUEST['debug']) ) {
-		echo '<p><strong>API request to:</strong> '.$url.'</p>';
-		echo '<pre><code>';
-	}
-
-	$ch = curl_init($url);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
-	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	$result = curl_exec($ch);
-	curl_close($ch);
-	$json = json_decode($result);
-
-	if( isset($_REQUEST['debug']) ) {
-		echo '<p><strong>result:</strong></p>';
-		var_dump($result);
-		echo '<p><strong>json:</strong></p>';
-		var_dump($json);
-		echo '</code></pre>';
-	}
-	$config = $json;
-
-	$tags = [];
-	if( isset($config->categories) ) {
-		$tags = $config->categories;
-	}
+	$tags = np_mp_get_tags();
 
 	$content = '';
 	if( isset($_GET['content']) ) $content = urldecode($_GET['content']);
@@ -266,8 +239,61 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 
 }
 
-?>
 
-<?php
+
+function np_mp_get_tags() {
+	// get tags, if available:
+
+	$api_url = $_SESSION['micropub_endpoint'];
+
+	$url = $api_url.'?q=config';
+	if( isset($_REQUEST['debug']) ) {
+		echo '<p><strong>API request to:</strong> '.$url.'</p>';
+		echo '<pre><code>';
+	}
+
+
+	$cache = new Cache( 'micropub', $url, false, 60*5 ); // cache for 5 minutes
+
+	$data = $cache->get_data();
+	if( $data ) {
+
+		$config = json_decode($data);
+
+	} else {
+
+		$authorization = 'Authorization: Bearer '.$_SESSION['access_token'];
+
+		$ch = curl_init($url);
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
+		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$result = curl_exec($ch);
+		curl_close($ch);
+		$json = json_decode($result);
+
+		if( isset($_REQUEST['debug']) ) {
+			echo '<p><strong>result:</strong></p>';
+			var_dump($result);
+			echo '<p><strong>json:</strong></p>';
+			var_dump($json);
+			echo '</code></pre>';
+		}
+		$config = $json;
+
+		$cache->add_data( json_encode($config) );
+
+	}
+
+
+	$tags = [];
+	if( isset($config->categories) ) {
+		$tags = $config->categories;
+	}
+
+	return $tags;
+}
+
+
 
 snippet( 'footer' );
