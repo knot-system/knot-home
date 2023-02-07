@@ -80,6 +80,10 @@ if( isset($_GET['channel']) ) {
 				echo $item->url;
 				if( ! empty($item->name) ) echo ')';
 				?>
+				[<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>]
+				<?php
+				// TODO: add 'mute'/'unmute' button
+				?>
 			</li>
 			<?php
 		}
@@ -96,43 +100,77 @@ if( isset($_GET['channel']) ) {
 		echo '</pre></code>';
 	}
 
-	if( isset($_GET['action']) && $_GET['action'] == 'add' ) {
-		// add new feed
-
+	if( isset($_GET['action']) ) {
+		
 		echo '<hr>';
 
-		echo '<p><a href="'.url('microsub?channel='.$_GET['channel'], false).'">&laquo; abort adding a new feed</a></p>';
+		if( $_GET['action'] == 'add' ) {
+			// add new feed
 
-		if( isset($_POST['url']) ) {
+			echo '<p><a href="'.url('microsub?channel='.$_GET['channel'], false).'">&laquo; abort adding a new feed</a></p>';
 
-			$search_url = $_POST['url'];
+			if( isset($_POST['url']) ) {
 
-			// TODO: search for feed urls: https://indieweb.org/Microsub-spec#Search
-			//$sources = np_ms_api_get( 'search', array( 'query' => $search_url ) );
+				$search_url = $_POST['url'];
 
-			// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
+				// TODO: search for feed urls: https://indieweb.org/Microsub-spec#Search
+				//$sources = np_ms_api_get( 'search', array( 'query' => $search_url ) );
 
-			// follow feed - https://indieweb.org/Microsub-spec#Following
-			$response = np_ms_api_post( 'follow', [
-				'channel' => $_GET['channel'],
-				'url' => $search_url
-			] );
+				// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
 
-			echo '<p><strong>server response:</strong></p>';
-			echo '<pre>';
-			var_dump($response);
-			echo '</pre>';
+				// follow feed - https://indieweb.org/Microsub-spec#Following
+				$response = np_ms_api_post( 'follow', [
+					'channel' => $_GET['channel'],
+					'url' => $search_url
+				] );
 
-			echo '<a href="'.url('microsub?channel='.$_GET['channel'].'&refresh=true', false).'">&raquo; back to the channel overview</a>';
+				echo '<p><strong>server response:</strong></p>';
+				echo '<pre>';
+				var_dump($response);
+				echo '</pre>';
+
+				echo '<a href="'.url('microsub?channel='.$_GET['channel'].'&refresh=true', false).'">&raquo; back to the channel overview</a>';
+
+			} else {
+				?>
+				<form method="POST" action="<?= url('microsub?channel='.$_GET['channel'].'&action=add', false ) ?>">
+					<p><strong>currently, the url does not get validated. only add valid json, rss or atom feeds.</strong></p>
+					<label style="display: inline-block;">Feed URL (json, rss, atom, ...): <input type="url" name="url" placeholder="https://www.example.com/feed/rss" style="min-width:400px;"></label>
+					<button>add feed</button>
+				</form>
+				<?php
+			}
+		} elseif( $_GET['action'] == 'unfollow' ) {
+
+			$feed = urldecode($_GET['feed']);
+
+			// TODO: validate that this feed exists in the channel
+
+			if( isset($_GET['confirmation']) && $_GET['confirmation'] == 'true' ) {
+
+				$response = np_ms_api_post( 'unfollow', [
+					'channel' => $_GET['channel'],
+					'url' => $feed
+				] );
+
+				echo '<p><strong>server response:</strong></p>';
+				echo '<pre>';
+				var_dump($response);
+				echo '</pre>';
+
+				echo '<a href="'.url('microsub?channel='.$_GET['channel'].'&refresh=true', false).'">&raquo; back to the channel overview</a>';
+
+			} else {
+
+				echo '<p>do you really want to unfollow <strong>'.$feed.'</strong>?</p>';
+				echo '<p>[<a href="'.url('microsub/?channel='.$_GET['channel'].'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes<a>] [<a href="'.url('microsub/?channel='.$_GET['channel'], false).'">no</a>]</p>';
+
+			}
 
 		} else {
-			?>
-			<form method="POST" action="<?= url('microsub?channel='.$_GET['channel'].'&action=add', false ) ?>">
-				<p><strong>currently, the url does not get validated. only add valid json, rss or atom feeds.</strong></p>
-				<label style="display: inline-block;">Feed URL (json, rss, atom, ...): <input type="url" name="url" placeholder="https://www.example.com/feed/rss" style="min-width:400px;"></label>
-				<button>add feed</button>
-			</form>
-			<?php
+
+			echo '<p><strong>ERROR:</strong> unknown action: <em>'.$_GET['action'].'</em></p>';
+
 		}
 
 	} else {
