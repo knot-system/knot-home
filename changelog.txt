@@ -1,3 +1,16 @@
+alpha.3
+
+designupdate; following & unfollowing of feeds; basic feed pagination
+
+- theme: moved menu to the left side
+- theme: updated to alpha.3
+- microsub: allow following of new feeds
+- microsub: allow unfollowing of feeds
+- microsub: very basic pagination (only 'next page' link is available for now)
+- microsub: bugfix when switching channels
+- micropub: cache tags for a short time
+
+
 alpha.2
 
 you need to manually update to alpha.2 because of a bug in the auto-updater of alpha.1
