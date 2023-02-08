@@ -54,7 +54,7 @@ if( isset($_GET['channel']) ) {
 				echo '<span title="'.$item->url.'">'.$name.'</span>';
 
 				?>
-				[<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>]
+				<br><a class="button button-small" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
 				<?php
 				// TODO: add 'mute'/'unmute' button
 				?>
@@ -63,7 +63,7 @@ if( isset($_GET['channel']) ) {
 		}
 		?>
 			<li>
-				<a href="<?= url('microsub/?channel='.$_GET['channel'].'&action=add', false ) ?>">+ add a new feed</a>
+				<a class="button add-feed" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=add', false ) ?>">+ add a new feed</a>
 			</li>
 		</ul>
 		<?php
@@ -119,7 +119,7 @@ if( isset($_GET['channel']) ) {
 		if( $_GET['action'] == 'add' ) {
 			// add new feed
 
-			echo '<p><a href="'.url('microsub?channel='.$_GET['channel'], false).'">&laquo; abort adding a new feed</a></p>';
+			echo '<p><a class="button" href="'.url('microsub?channel='.$_GET['channel'], false).'">cancel</a></p>';
 
 			if( isset($_POST['url']) ) {
 
@@ -175,7 +175,7 @@ if( isset($_GET['channel']) ) {
 			} else {
 
 				echo '<p>do you really want to unfollow <strong>'.$feed.'</strong>?</p>';
-				echo '<p>[<a href="'.url('microsub/?channel='.$_GET['channel'].'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes<a>] [<a href="'.url('microsub/?channel='.$_GET['channel'], false).'">no</a>]</p>';
+				echo '<p><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes, unfollow<a> <a class="button" href="'.url('microsub/?channel='.$_GET['channel'], false).'">no, abort</a></p>';
 
 			}
 

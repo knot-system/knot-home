@@ -26,10 +26,14 @@ $navigation = get_navigation();
 					<?php
 					foreach( $navigation as $element ) {
 						$classes = array();
-						if( $element['active'] ) $classes[] = 'current-nav-item';
+						$button_classes = array('button');
+						if( $element['active'] ) {
+							$classes[] = 'current-nav-item';
+							$button_classes[] = 'disabled';
+						}
 					?>
 					<li<?= get_class_attribute($classes) ?>>
-						<a href="<?= $element['url'] ?>"><?= $element['name'] ?></a>
+						<a<?= get_class_attribute($button_classes) ?> href="<?= $element['url'] ?>"><?= $element['name'] ?></a>
 					</li>
 					<?php
 					}

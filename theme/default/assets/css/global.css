@@ -172,6 +172,12 @@ button,
 		cursor: not-allowed;
 	}
 
+	.button-small {
+		font-size: 0.8em;
+		border-radius: 3px;
+		padding: 3px 6px;
+	}
+
 sub, sup {
 	font-size: 75%;
 	line-height: 0;
@@ -416,11 +422,20 @@ ul.feeds-list {
 		display: block;
 	}
 
-		ul.channels-list li + li,
-		ul.feeds-list li + li {
+		ul.channels-list li + li {
 			margin-top: 0.6em;
 		}
 
-		ul.feeds-list {
-			font-size: 0.8em;
+		ul.feeds-list li + li {
+			margin-top: 0.7em;
+			border-top: 1px dotted var(--color-box-border);
+			padding-top: 0.7em;
 		}
+
+	ul.feeds-list .button {
+		margin-top: 0.2em;
+	}
+
+	ul.feeds-list .button.add-feed {
+		margin-top: 1em;
+	}
