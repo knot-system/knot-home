@@ -53,7 +53,7 @@ $navigation = get_navigation();
 
 				<ul>
 					<li<?= get_class_attribute($classes) ?>>
-						<a href="<?= url('action/logout') ?>">Logout</a>
+						<a class="button button-small" href="<?= url('action/logout') ?>">Logout</a>
 					</li>
 				</ul>
 
