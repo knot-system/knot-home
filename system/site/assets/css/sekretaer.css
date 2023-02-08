@@ -16,6 +16,7 @@ ul.tag-selector {
 	ul.tag-selector li {
 		display: inline-block;
 		margin-right: 0.5em;
+		margin-bottom: 0.5em;
 		background: #666;
 		color: #fff;
 		padding: 5px 10px;
