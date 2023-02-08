@@ -16,6 +16,8 @@ $navigation = get_navigation();
 
 <div class="canvas">
 
+	<div id="menu-icon" class="menu-icon"><div class="icon"></div></div>
+
 	<div class="nav-area">
 
 		<header>
