@@ -54,7 +54,9 @@ if( isset($_GET['channel']) ) {
 				echo '<span title="'.$item->url.'">'.$name.'</span>';
 
 				?>
-				<br><a class="button button-small" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
+				<br>
+				<a class="button button-small disabled">mute</a>
+				<a class="button button-small" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
 				<?php
 				// TODO: add 'mute'/'unmute' button
 				?>
