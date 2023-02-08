@@ -21,7 +21,7 @@
 	--color-link: #0000a6;
 	--color-link-hover: #0b48ff;
 
-	--sidebar-width: 240px;
+	--sidebar-width: 300px;
 
 }
 
@@ -88,7 +88,7 @@ body {
 	@media( max-width: 640px ) {
 
 		:root {
-			--sidebar-width: 200px;
+			--sidebar-width: 260px;
 		}
 
 		body {
@@ -209,6 +209,7 @@ sub, sup {
 		box-shadow: 0 0 20px rgba(0,0,0,.1);
 		position: relative;
 		background: var(--color-white);
+		overflow: hidden;
 	}
 
 	.content-area {
@@ -232,7 +233,7 @@ sub, sup {
 			position: fixed;
 			top: 0;
 			z-index: 1000;
-			left: -230px;
+			left: calc( -1*var(--sidebar-width) + 10px );
 
 			-webkit-transition: left 200ms ease-in-out;
 			-o-transition: left 200ms ease-in-out;
