@@ -20,7 +20,10 @@ if( $channels && isset($channels->channels) && count($channels->channels) ) {
 			<?php
 		} else {
 			?>
-			<li><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?= $channel->name.' ['.$channel->unread.' unread]'; ?></a></li>
+			<li><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?php
+			echo $channel->name;
+			if( isset($channel->unread) ) echo ' ['.$channel->unread.' unread]';
+			?></a></li>
 			<?php
 		}
 	}
