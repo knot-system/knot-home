@@ -123,6 +123,16 @@ class User {
 	}
 
 
+	function get( $field ) {
+
+		if( $field == 'me' ) {
+			return $this->user_id;
+		}
+
+		return false;
+	}
+
+
 	function logout() {
 
 		if( ! empty($_COOKIE['sekretaer-session']) ) {

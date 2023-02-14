@@ -109,6 +109,10 @@ class Sekretaer {
 		return $this;
 	}
 
+	function me() {
+		return $this->user->get('me');
+	}
+
 
 
 	function version() {

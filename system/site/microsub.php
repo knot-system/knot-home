@@ -276,6 +276,12 @@ function np_ms_api_get( $action, $args = array() ) {
 
 	$url = $api_url.'?action='.$action;
 
+	global $sekretaer;
+
+	if( ! isset($args['me']) ) {
+		$args['me'] = $sekretaer->me();
+	}
+
 	if( count($args) ) {
 		foreach( $args as $key => $value ) {
 			$url .= '&'.$key.'='.$value; // TODO: sanitize
