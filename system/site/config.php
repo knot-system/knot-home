@@ -9,7 +9,7 @@ return [
 	'logging' => false,
 	'theme' => 'default',
 	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue', 'green', 'red', 'lilac'
-	'scope' => array( 'read', 'create', 'follow' ),
+	'scope' => array( 'read', 'create', 'follow', 'channels', 'follow', 'mute', 'block' ),
 	'microsub' => true,
 	'micropub' => true,
 	'cookie_lifetime' => 60*60*24*10, // 10 days, in seconds
