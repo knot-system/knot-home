@@ -1,3 +1,11 @@
+alpha.4
+
+you need to logout and login again, because the scopes were updated
+
+- microsub: added additional scopes for full support of all actions / methods
+- microsub: bugfixes and enhancements
+
+
 alpha.3
 
 designupdate; following & unfollowing of feeds; basic feed pagination
