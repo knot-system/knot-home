@@ -226,13 +226,57 @@ if( isset($_GET['channel']) ) {
 						<pre><?php var_dump($item); ?></pre>
 						<?php
 					}
+					
+					if( ! empty($item->photo) ) {
+						if( ! is_array($item->photo) ) $item->photo = array($item->photo);
+
+						foreach( $item->photo as $photo ) {
+							echo '<img src="'.$photo.'"><br>';
+						}
+					}
+
+
+					
+					if( ! empty($item->name) ) echo '<h3>'.$item->name.'</h3>';
 					?>
-					<?php if( ! empty( $item->photo[0] ) ) echo '<img src="'.$item->photo[0].'"><br>'; ?>
-					<h3><?= $item->name ?></h3>
 					<p>
 						<?php if( ! empty($item->content->html) ) echo $item->content->html; ?>
 					</p>
-					<p><small><a href="<?= $item->author->url ?>" target="_blank" rel="noopener"><?= $item->author->name ?></a>, <?= $datetime ?></small></p>
+					<?php
+
+					$author_name = false;
+					if( ! empty($item->author->name) ) {
+						$author_name = $item->author->name;
+					} elseif( ! empty($item->author) ) {
+						$author_name = $item->author;
+					}
+
+					$author_url = false;
+					if( ! empty($item->author->url) ) {
+						$author_url = $item->author->url;
+					}
+					?>
+					<p>
+						<small>
+							<?php
+
+							if( $author_name ) {
+								if( $author_url ) {
+									echo '<a href="'.$author_url.'" target="_blank" rel="noopener">';
+								}
+								echo $author_name;
+								if( $author_url ) {
+									echo '</a>';
+								}
+
+								echo ', ';
+							}
+							
+							echo $datetime;
+
+							?>
+						</small>
+					</p>
 					<p><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
 					<hr>
 				</li>
