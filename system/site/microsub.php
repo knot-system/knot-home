@@ -372,12 +372,19 @@ function np_ms_api_post( $action, $args = array() ) {
 
 	$url = $api_url.'?action='.$action;
 
+	global $sekretaer;
+	
+	if( ! isset($args['me']) ) {
+		$args['me'] = $sekretaer->me();
+	}
+
 	$post_args = array();
 	if( count($args) ) {
 		foreach( $args as $key => $value ) {
 			$post_args[] = $key.'='.$value; // TODO: sanitize
 		}
 	}
+
 	$post_args = implode('&', $post_args);
 
 	if( isset($_REQUEST['debug']) ) {
