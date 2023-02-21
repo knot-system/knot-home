@@ -20,7 +20,7 @@ You can now open the url in a webbrowser, and log in with a micropub and/or micr
 
 ## Additional Options
 
-You may want to edit the `config.php` a bit after the initial setup and add additional information:
+You may want to edit the `config.php` a bit after the initial setup and add additional settings:
 
 ```php
 <?php
