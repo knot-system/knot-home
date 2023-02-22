@@ -1,3 +1,13 @@
+alpha.5
+
+- show categories of posts, if available
+- active channel is still clickable
+- also show pagination before postlist
+- show feed title, if available
+- shorten long posts with a 'read more' button
+- updated default theme to alpha.5
+
+
 alpha.4
 
 you need to logout and login again, because the scopes were updated
