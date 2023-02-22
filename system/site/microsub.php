@@ -270,20 +270,33 @@ if( isset($_GET['channel']) ) {
 					if( ! empty($item->author->url) ) {
 						$author_url = $item->author->url;
 					}
+
+					$feed_title = false;
+					$feed_link = false;
+					if( ! empty($item->_source) ) {
+						if( ! empty($item->_source->name) ) $feed_title = $item->_source->name;
+						if( ! empty($item->_source->url) ) $feed_link = $item->_source->url;
+
+						if( $feed_link && $feed_title ) $feed_title = '<a href="'.$feed_link.'" target="_blank" rel="noopener">'.$feed_title.'</a>';
+					}
+
 					?>
 					<p>
 						<small>
 							<?php
 
-							if( $author_name ) {
+							if( $author_name || $feed_title ) {
 								if( $author_url ) {
 									echo '<a href="'.$author_url.'" target="_blank" rel="noopener">';
 								}
-								echo $author_name;
+								if( $author_name ) echo $author_name;
 								if( $author_url ) {
 									echo '</a>';
 								}
 
+								if( $author_name && $feed_title ) echo ' (';
+								if( $feed_title ) echo $feed_title;
+								if( $author_name && $feed_title ) echo ')';
 								echo ', ';
 							}
 							
