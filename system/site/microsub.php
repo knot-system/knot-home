@@ -14,18 +14,17 @@ if( $channels && isset($channels->channels) && count($channels->channels) ) {
 	<?php
 	foreach( $channels->channels as $channel ) {
 
+		$classes = [];
 		if( isset($_GET['channel']) && $channel->uid == $_GET['channel'] ) {
-			?>
-			<li><?= $channel->name ?></li>
-			<?php
-		} else {
-			?>
-			<li><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?php
-			echo $channel->name;
-			if( isset($channel->unread) ) echo ' ['.$channel->unread.' unread]';
-			?></a></li>
-			<?php
+			$classes[] = 'active';
 		}
+			
+		?>
+		<li<?= get_class_attribute($classes) ?>><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?php
+		echo $channel->name;
+		if( isset($channel->unread) ) echo ' ['.$channel->unread.' unread]';
+		?></a></li>
+		<?php
 	}
 	?>
 	</ul>
