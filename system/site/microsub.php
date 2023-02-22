@@ -207,6 +207,22 @@ if( isset($_GET['channel']) ) {
 		$items = np_ms_api_get( 'timeline', $items_args );
 
 		if( $items && isset($items->items) && count($items->items) ) {
+
+			if( ! empty($items->paging) ) {
+
+				$paging = $items->paging;
+
+				echo '<ul class="pagination">';
+				if( ! empty($paging->before) ) {
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+				}
+				if( ! empty($paging->after) ) {
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+				}
+				echo '</ul>';
+
+			}
+
 			?>
 			<ul class="posts">
 			<?php
@@ -288,7 +304,9 @@ if( isset($_GET['channel']) ) {
 				$paging = $items->paging;
 
 				echo '<ul class="pagination">';
-					echo '<li><span class="button disabled">&laquo; previous page <small>(unavailable)</small></span></li>';
+				if( ! empty($paging->before) ) {
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+				}
 				if( ! empty($paging->after) ) {
 					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&after='.$paging->after, false).'">next page &raquo;</a></li>';
 				}
@@ -301,6 +319,14 @@ if( isset($_GET['channel']) ) {
 			<?php
 		} else {
 			echo '<p>- no posts found -</p>';
+			if( ! empty($items->paging) ) {
+
+				$paging = $items->paging;
+				if( ! empty($items_args['before']) || ! empty($items_args['after']) ) {
+					echo '<a class="button" href="'.url('microsub/?channel='.$_GET['channel'], false).'">go to first page</a>';
+				}
+
+			}
 			if( isset($_GET['debug']) ) {
 				echo '<strong>POSTS ERROR:</strong>';
 				echo '<code><pre>';
