@@ -241,45 +241,50 @@ if( isset($_GET['channel']) ) {
 						<pre><?php var_dump($item); ?></pre>
 						<?php
 					}
-					
-					if( ! empty($item->photo) ) {
-						if( ! is_array($item->photo) ) $item->photo = array($item->photo);
 
-						foreach( $item->photo as $photo ) {
-							echo '<img src="'.$photo.'"><br>';
+					?>
+					<span class="item-content">
+						<?php
+					
+						if( ! empty($item->photo) ) {
+							if( ! is_array($item->photo) ) $item->photo = array($item->photo);
+
+							foreach( $item->photo as $photo ) {
+								echo '<img src="'.$photo.'"><br>';
+							}
 						}
-					}
 
+						
+						if( ! empty($item->name) ) echo '<h3>'.$item->name.'</h3>';
+						?>
+						<p>
+							<?php if( ! empty($item->content->html) ) echo $item->content->html; ?>
+						</p>
+						<?php
 
-					
-					if( ! empty($item->name) ) echo '<h3>'.$item->name.'</h3>';
-					?>
-					<p>
-						<?php if( ! empty($item->content->html) ) echo $item->content->html; ?>
-					</p>
-					<?php
+						$author_name = false;
+						if( ! empty($item->author->name) ) {
+							$author_name = $item->author->name;
+						} elseif( ! empty($item->author) ) {
+							$author_name = $item->author;
+						}
 
-					$author_name = false;
-					if( ! empty($item->author->name) ) {
-						$author_name = $item->author->name;
-					} elseif( ! empty($item->author) ) {
-						$author_name = $item->author;
-					}
+						$author_url = false;
+						if( ! empty($item->author->url) ) {
+							$author_url = $item->author->url;
+						}
 
-					$author_url = false;
-					if( ! empty($item->author->url) ) {
-						$author_url = $item->author->url;
-					}
+						$feed_title = false;
+						$feed_link = false;
+						if( ! empty($item->_source) ) {
+							if( ! empty($item->_source->name) ) $feed_title = $item->_source->name;
+							if( ! empty($item->_source->url) ) $feed_link = $item->_source->url;
+						}
 
-					$feed_title = false;
-					$feed_link = false;
-					if( ! empty($item->_source) ) {
-						if( ! empty($item->_source->name) ) $feed_title = $item->_source->name;
-						if( ! empty($item->_source->url) ) $feed_link = $item->_source->url;
-					}
+						?>
+					</span>
 
-					?>
-					<p>
+					<p class="item-meta">
 						<small>
 							<?php
 
@@ -313,7 +318,7 @@ if( isset($_GET['channel']) ) {
 							?>
 						</small>
 					</p>
-					<p><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
+					<p class="item-actions"><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
 					<hr>
 				</li>
 				<?php

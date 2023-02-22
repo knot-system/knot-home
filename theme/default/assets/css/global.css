@@ -516,6 +516,19 @@ ul.posts {
 		height: auto;
 	}
 
+	ul.posts .item-content {
+		display: block;
+	}
+
+		ul.posts .item-content.shortened {
+			max-height: 1000px;
+			overflow: hidden;
+		}
+
+		ul.posts .expand-button {
+			margin-top: 1em;
+		}
+
 ul.pagination {
 	list-style-type: none;
 	margin: 40px auto 0;
