@@ -289,6 +289,12 @@ if( isset($_GET['channel']) ) {
 							
 							echo $datetime;
 
+							if( ! empty($item->category) ) {
+								$categories = $item->category;
+								if( is_array($categories) ) $categories = implode(', ', $categories);
+								echo ' – '.$categories;
+							}
+
 							?>
 						</small>
 					</p>
