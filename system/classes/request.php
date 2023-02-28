@@ -6,14 +6,18 @@ class Request {
 	private $timeout;
 	private $url;
 
+	private $http_status_code;
+	private $headers = [];
 	private $body;
 
-	function __construct() {
+	function __construct( $url = false ) {
 
 		global $sekretaer;
 
 		$this->user_agent = 'maxhaesslein/sekretaer/'.$sekretaer->version();
 		$this->timeout = 10;
+
+		if( $url ) $this->url = $url;
 
 	}
 
@@ -24,31 +28,101 @@ class Request {
 	}
 
 
-	function get_body(){
+	function curl_request( $followlocation = true, $nobody = false ) {
 
-		$this->curl_request();
+		if( ! $this->url ) return false;
+
+		$ch = curl_init( $this->url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+		curl_setopt( $ch, CURLOPT_HEADER, true );
+		curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
+
+		if( $nobody ) {
+			curl_setopt( $ch, CURLOPT_NOBODY, true );
+		}
+		
+		if( $followlocation ) curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
+
+		curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
+
+		$headers = [];
+		curl_setopt( $ch, CURLOPT_HEADERFUNCTION, function( $curl, $header ) use (&$headers) {
+			$len = strlen($header);
+			$header = explode(':', $header, 2);
+			if( count($header) < 2 ) return $len; // ignore invalid headers
+
+			$headers[strtolower(trim($header[0]))] = trim($header[1]);
+
+			return $len;
+		});
+
+
+		$body = curl_exec( $ch );
+
+		$header_size = curl_getinfo( $ch, CURLINFO_HEADER_SIZE );
+		$body = substr( $body, $header_size );
+
+		$http_status_code = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
+
+
+		if( $nobody && $http_status_code == 404 ) {
+			// NOTE: some servers may respond with a 404 status code if we use CURLOPT_NOBODY, although the content is there. We need to not use CURLOPT_NOBODY in that case:
+			$this->curl_request( $followlocation, false );
+			return $this;
+		}
+
+		$this->http_status_code = $http_status_code;
+		$this->headers = $headers;
+		$this->body = $body;
+
+		curl_close( $ch );
+
+		return $this;
+	}
+
+
+	function get_status_code() {
+		return $this->http_status_code;
+	}
+
+	function get_body() {
 
 		if( ! $this->body ) return false;
 
 		return $this->body;
 	}
 
-	function curl_request( $force = false ) {
+	function get_headers() {
 
-		if( ! $this->url ) return false;
+		if( ! $this->headers || ! count($this->headers) ) return false;
 
-		if( $force || ! $this->body ) {
+		return $this->headers;
+	}
 
-			$ch = curl_init( $this->url );
-			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-			curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
-			curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, true );
-			curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
 
-			$this->body = curl_exec( $ch );
-			curl_close( $ch );
+	function get( $url, $query = false, $headers = [] ) {
+
+		if( $query ) {
+			$query_arr = [];
+			foreach( $query as $key => $value ) {
+				$query_arr[] = $key.'='.$value;
+			}
+			$url .= '?'.implode( '&', $query_arr );
 		}
 
+		$ch = curl_init( $url );
+		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+
+		if( is_array($headers) && count($headers) ) curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
+
+		curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
+		curl_setopt( $ch, CURLOPT_TIMEOUT, $this->timeout );
+
+		$response = curl_exec($ch);
+
+		curl_close( $ch );
+
+		return $response;
 	}
 
 	function post( $url, $query = false, $headers = [] ) {

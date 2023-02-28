@@ -2,12 +2,11 @@
 
 class IndieAuth {
 
-	private $request;
-
-
 	private $scope;
 	private $authorization_endpoint;
 	private $token_endpoint;
+
+	private $requests = [];
 
 	function __construct() {
 
@@ -246,9 +245,9 @@ class IndieAuth {
 
 		if( ! $this->url_is_valid($url) ) return false;
 
-		$this->request()->set_url($url);
+		$request = $this->request($url);
 
-		$body = $this->request->get_body();
+		$body = $request->get_body();
 
 		if( ! $body ) return false;
 
@@ -262,6 +261,17 @@ class IndieAuth {
 	}
 
 
+	function request( $url ) {
+
+		if( ! array_key_exists( $url, $this->requests ) ) {
+			$this->requests[$url] = new Request($url);
+			$this->requests[$url]->curl_request();
+		}
+
+		return $this->requests[$url];
+	}
+
+
 	function url_is_valid( $url ) {
 
 		$url = parse_url( $url );
@@ -272,14 +282,6 @@ class IndieAuth {
 		if( ! array_key_exists('host', $url) ) return false;
 		
 		return true;
-	}
-
-	function request(){
-		if( ! $this->request ) {
-			$this->request = new Request();
-		}
-
-		return $this->request;
 	}
 
 	function client_id() {
