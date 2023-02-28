@@ -233,6 +233,17 @@ if( isset($_GET['channel']) ) {
 				$datetime_format = $sekretaer->config->get('datetime_format');
 				$datetime = $date->format( $datetime_format );
 
+				$content = false;
+				if( ! empty($item->content->html) ) {
+					$html = $item->content->html;
+					$html = str_replace(array("\r\n", "\r", "\n"), '', $html );
+					$text = new Text( $html );
+					$text = $text->remove_html_elements()->auto_p();
+					$content = $text->get();
+				} elseif( ! empty($item->content->text) ) {
+					$content = $item->content->text;
+				}
+
 				?>
 				<li>
 					<?php
@@ -258,7 +269,7 @@ if( isset($_GET['channel']) ) {
 						if( ! empty($item->name) ) echo '<h3>'.$item->name.'</h3>';
 						?>
 						<p>
-							<?php if( ! empty($item->content->html) ) echo $item->content->html; ?>
+							<?= $content ?>
 						</p>
 						<?php
 
