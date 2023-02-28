@@ -10,9 +10,9 @@ Here be dragons:
 
 Your server needs to run at least PHP 8.0 or later.
 
-Copy all the files into a directory on your webserver, then open the url to this path in a webbrowser. Follow the installation instructions.
+Copy all the files into a directory on your webserver, then open the url to this path in a webbrowser. The first time setup will run automatically. If you see no output, try adding `?debug` to the url, for example `https://www.example.com/sekretaer/?debug`, this should show more information about what happens during setup.
 
-This will create a `config.php` in the root folder that will hold the configuration of your system. This file is unique to your website and very important - keep a backup around, if you want to make sure to not lose anything.
+The first time setup will create a `config.php` in the root folder that will hold the configuration of your system. This file is unique to your website and very important - keep a backup around, if you want to make sure to not lose anything.
 
 The setup also creates some other files that are needed, like a (hidden) `.htaccess` file and a `cache/` folder. When you delete those item, they will be re-created as needed. They will also be automatically deleted and recreated when you make a system update.
 
@@ -20,7 +20,7 @@ You can now open the url in a webbrowser, and log in with a micropub and/or micr
 
 ## Additional Options
 
-You may want to edit the `config.php` a bit after the initial setup and add additional settings:
+You may want to edit the `config.php` in the root directory a bit after the initial setup and add additional settings:
 
 ```php
 <?php
