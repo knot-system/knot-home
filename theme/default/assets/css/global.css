@@ -512,13 +512,19 @@ ul.posts {
 	}
 
 	ul.posts img {
+		display: block;
 		max-width: 100%;
 		height: auto;
+		margin: 1em 0;
 	}
 
 	ul.posts .item-content {
 		display: block;
 	}
+
+		ul.posts .item-content .item-feed-title + .item-title {
+			margin-top: 5px;
+		}
 
 		ul.posts .item-content.shortened {
 			max-height: 1000px;

@@ -233,6 +233,25 @@ if( isset($_GET['channel']) ) {
 				$datetime_format = $sekretaer->config->get('datetime_format');
 				$datetime = $date->format( $datetime_format );
 
+				$author_name = false;
+				if( ! empty($item->author->name) ) {
+					$author_name = $item->author->name;
+				} elseif( ! empty($item->author) ) {
+					$author_name = $item->author;
+				}
+
+				$author_url = false;
+				if( ! empty($item->author->url) ) {
+					$author_url = $item->author->url;
+				}
+
+				$feed_title = false;
+				$feed_link = false;
+				if( ! empty($item->_source) ) {
+					if( ! empty($item->_source->name) ) $feed_title = $item->_source->name;
+					if( ! empty($item->_source->url) ) $feed_link = $item->_source->url;
+				}
+
 				$content = false;
 				if( ! empty($item->content->html) ) {
 					$html = $item->content->html;
@@ -243,6 +262,7 @@ if( isset($_GET['channel']) ) {
 				} elseif( ! empty($item->content->text) ) {
 					$content = $item->content->text;
 				}
+
 
 				?>
 				<li>
@@ -255,7 +275,27 @@ if( isset($_GET['channel']) ) {
 
 					?>
 					<span class="item-content">
-						<?php
+						<?php			
+
+						if( $feed_title ) {
+							?>
+							<span class="item-feed-title"><?php
+							if( $feed_link ) echo '<a href="'.$feed_link.'" target="_blank" rel="noopener">';
+								echo $feed_title;
+							if( $feed_link ) echo '</a>';
+							?></span>
+							<?php
+
+							if( ! empty($item->category) ) {
+								$categories = $item->category;
+								$categories = array_map(function($c){return '#'.$c;}, $categories);
+								if( is_array($categories) ) $categories = implode(' ', $categories);
+								echo ' '.$categories;
+							}
+
+						}
+
+						if( ! empty($item->name) ) echo '<h3 class="item-title">'.$item->name.'</h3>';
 					
 						if( ! empty($item->photo) ) {
 							if( ! is_array($item->photo) ) $item->photo = array($item->photo);
@@ -265,41 +305,18 @@ if( isset($_GET['channel']) ) {
 							}
 						}
 
-						
-						if( ! empty($item->name) ) echo '<h3>'.$item->name.'</h3>';
 						?>
 						<p>
 							<?= $content ?>
 						</p>
-						<?php
 
-						$author_name = false;
-						if( ! empty($item->author->name) ) {
-							$author_name = $item->author->name;
-						} elseif( ! empty($item->author) ) {
-							$author_name = $item->author;
-						}
-
-						$author_url = false;
-						if( ! empty($item->author->url) ) {
-							$author_url = $item->author->url;
-						}
-
-						$feed_title = false;
-						$feed_link = false;
-						if( ! empty($item->_source) ) {
-							if( ! empty($item->_source->name) ) $feed_title = $item->_source->name;
-							if( ! empty($item->_source->url) ) $feed_link = $item->_source->url;
-						}
-
-						?>
 					</span>
 
 					<p class="item-meta">
 						<small>
 							<?php
 
-							if( $author_name || $feed_title ) {
+							if( $author_name ) {
 								if( $author_url ) {
 									echo '<a href="'.$author_url.'" target="_blank" rel="noopener">';
 								}
@@ -308,23 +325,10 @@ if( isset($_GET['channel']) ) {
 									echo '</a>';
 								}
 
-								if( $feed_title && strtolower(trim($feed_title)) != strtolower(trim($author_name)) ) {
-									if( $author_name ) echo ' (';
-									if( $feed_link ) echo '<a href="'.$feed_link.'" target="_blank" rel="noopener">';
-									echo $feed_title;
-									if( $feed_link ) echo '</a>';
-									if( $author_name ) echo ')';
-								}
 								echo ', ';
 							}
 							
 							echo $datetime;
-
-							if( ! empty($item->category) ) {
-								$categories = $item->category;
-								if( is_array($categories) ) $categories = implode(', ', $categories);
-								echo ' – '.$categories;
-							}
 
 							?>
 						</small>
