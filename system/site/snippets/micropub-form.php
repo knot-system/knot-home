@@ -71,7 +71,7 @@ $name = $args['name'];
 		</li>
 
 		<li class="button-wrapper">
-			<strong>Publish:</strong><br>
+			<strong>&nbsp;</strong><br>
 			<button class="post-button">post to <?= $name ?></button><br>
 		</li>
 
