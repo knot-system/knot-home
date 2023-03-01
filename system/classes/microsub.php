@@ -10,6 +10,9 @@ class Microsub {
 	private $scope;
 	private $authorization;
 
+	private $channels = [];
+	private $feeds = [];
+
 	function __construct(){
 
 		if( empty($_SESSION['me']) || empty($_SESSION['name']) ) return; // this should not happen, but just in case ..
@@ -34,12 +37,41 @@ class Microsub {
 		$this->scope = explode( ' ', $_SESSION['scope'] );
 
 
-		if( ! in_array( 'create', $this->scope ) ) {
-			$this->show_error( 'scope is not <em>create</em> (scope is <strong>'.implode( ' ', $_SESSION['scope']).'</strong>) for '.$this->me );
+		if( ! in_array( 'read', $this->scope ) || ! in_array( 'follow', $this->scope ) ) {
+			$this->show_error( 'scope is missing <em>read</em> or <em>follow</em> (scope is <strong>'.implode( ' ', $_SESSION['scope']).'</strong>) for '.$this->me );
 		}
 
 		$this->authorization = 'Authorization: Bearer '.$this->access_token;
 
+	}
+
+	function get_channels() {
+
+		if( ! count($this->channels) ) { // according to spec, we should have at least 2 channels - https://indieweb.org/Microsub-spec#Channels
+			$api_result = $this->api_get( 'channels' );
+
+			$channels = [];
+			if( ! empty($api_result->channels) ) {
+				foreach( $api_result->channels as $channel ) {
+					$channels[$channel->uid] = $channel;
+				}
+			}
+
+			$this->channels = $channels;
+		}
+
+		return $this->channels;
+	}
+
+
+	function get_feeds( $channel ) {
+
+		if( ! array_key_exists($channel, $this->feeds) ) {
+			$feeds = $this->api_get( 'follow', array( 'channel' => $channel ) );
+			$this->feeds[$channel] = $feeds;
+		}
+
+		return $this->feeds[$channel];
 	}
 
 
@@ -96,6 +128,16 @@ class Microsub {
 			'headers' => $headers,
 			'body' => $body
 		];
+	}
+
+
+	function show_error( $error_message ) {
+
+		echo '<p><strong>Error!</strong></p>';
+		echo '<p>'.$error_message.'</p>';
+
+		snippet( 'footer' );
+		exit;
 	}
 
 

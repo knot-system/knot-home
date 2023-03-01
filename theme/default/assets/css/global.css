@@ -473,6 +473,12 @@ h1, h2, h3, h4, h5, h6 {
 
 	}
 
+.edit-link {
+	text-align: right;
+	font-size: 0.8em;
+	margin: 0;
+}
+
 main.login {
 	min-height: 100vh;
 	display: flex;
@@ -563,24 +569,15 @@ ul.feeds-list {
 		display: block;
 	}
 
-		ul.channels-list li + li {
-			margin-top: 0.6em;
+		ul.channels-list li + li,
+		ul.feeds-list li + li {
+			margin-top: 0.8em;
 		}
 
 		ul.channels-list li.active a {
 			color: inherit;
 			text-decoration: none;
 		}
-
-		ul.feeds-list li + li {
-			margin-top: 0.7em;
-			border-top: 1px dotted var(--color-box-border);
-			padding-top: 0.7em;
-		}
-
-	ul.feeds-list .button {
-		margin-top: 0.2em;
-	}
 
 	ul.feeds-list .button.add-feed {
 		margin-top: 1em;

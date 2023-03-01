@@ -3,51 +3,62 @@
 if( ! $sekretaer ) exit;
 
 
+
 $microsub = new Microsub();
+
+$channels = $microsub->get_channels();
+
+$active_channel = false;
+if( isset($_GET['channel']) ) $active_channel = $_GET['channel'];
+if( ! array_key_exists( $active_channel, $channels ) ) $active_channel = false;
+
+
+$action = false;
+if( isset($_GET['action']) ) $action = $_GET['action'];
+
 
 
 $sidebar_content = '';
 
 
 ob_start();
-$channels = $microsub->api_get( 'channels' );
-if( $channels && isset($channels->channels) && count($channels->channels) ) {
+if( ! empty($channels) ) {
 	// overview: list channels
 	?>
+	<p class="edit-link"><a href="<?= url('microsub/?action=channels', false) ?>">Edit</a></p>
 	<ul class="channels-list">
 	<?php
-	foreach( $channels->channels as $channel ) {
+	foreach( $channels as $channel ) {
 
 		$classes = [];
-		if( isset($_GET['channel']) && $channel->uid == $_GET['channel'] ) {
+		if( $active_channel && $channel->uid == $active_channel ) {
 			$classes[] = 'active';
 		}
-			
+		
 		?>
-		<li<?= get_class_attribute($classes) ?>><a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>"><?php
-		echo $channel->name;
-		if( isset($channel->unread) ) echo ' ['.$channel->unread.' unread]';
-		?></a></li>
+		<li<?= get_class_attribute($classes) ?>>
+			<a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>">
+				<?php
+				echo $channel->name;
+				if( isset($channel->unread) ) echo '*'.$channel->unread;
+				?>	
+			</a>
+		</li>
 		<?php
 	}
 	?>
 	</ul>
 	<?php
-} else {
-	if( isset($_GET['debug']) ) {
-		echo '<strong>CHANNELS ERROR:</strong>';
-		echo '<code><pre>';
-		var_dump($channels);
-		echo '</pre></code>';
-	}
 }
 
-if( isset($_GET['channel']) ) {
-	// needs 'follow' scope
-	$feeds = $microsub->api_get( 'follow', array( 'channel' => $_GET['channel'] ) );
+
+if( $active_channel ) {
+	$feeds = $microsub->get_feeds( $active_channel );
+
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
 		<hr>
+		<p class="edit-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">Edit</a></p>
 		<ul class="feeds-list">
 		<?php
 		foreach( $feeds->items as $item ) {
@@ -57,31 +68,16 @@ if( isset($_GET['channel']) ) {
 				$name = $item->url;
 				if( ! empty($item->name) ) $name = $item->name;
 
-				echo '<span title="'.$item->url.'">'.$name.'</span>';
-
 				?>
-				<br>
-				<a class="button button-small disabled">mute</a>
-				<a class="button button-small" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
-				<?php
-				// TODO: add 'mute'/'unmute' button
-				?>
+				<span title="<?= $item->url ?>"><?= $name ?></span>
 			</li>
 			<?php
 		}
 		?>
-			<li>
-				<a class="button add-feed" href="<?= url('microsub/?channel='.$_GET['channel'].'&action=add', false ) ?>">+ add a new feed</a>
-			</li>
 		</ul>
 		<?php
 	} else {
-		if( isset($_GET['debug']) ) {
-			echo '<strong>FEEDS ERROR:</strong>';
-			echo '<code><pre>';
-			var_dump($feeds);
-			echo '</pre></code>';
-		}
+		$sekretaer->debug( 'feeds_error', $feeds );
 	}
 }
 
@@ -96,100 +92,143 @@ snippet( 'header', array(
 ) );
 
 
-// TODO: this is copied from the quick prototype. we need to rewrite this.
 
-if( ! isset($_SESSION['microsub_endpoint']) ) {
-	echo '<p>no microsub endpoint found for '.$_SESSION['me'].'</p>';
-	// TODO: option to refresh the endpoint
-	snippet( 'footer' );
-	exit;
+if( $action == 'channels' ) {
+
+	echo '<h2>Manage Channels</h2>';
+
+	echo '<ul class="channels-list">';
+	foreach( $channels as $channel ) {
+
+		$classes = [];
+		if( $active_channel && $channel->uid == $active_channel ) {
+			$classes[] = 'active';
+		}
+		
+		?>
+		<li<?= get_class_attribute($classes) ?>>
+			<a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>">
+				<?php
+				echo $channel->name;
+				if( isset($channel->unread) ) echo '*'.$channel->unread;
+				?>	
+			</a>
+		</li>
+		<?php
+	}
+	echo '</ul>';
+
+	// TODO: manage channels
+	// - add new channel
+	// - reorder channels
+	// - rename channel
+	// - hide/unhide channel
+
+	echo '<p>not implemented yet</p>';
+
 }
 
-if( ! isset($_SESSION['access_token']) ) {
-	echo '<p>no access token found for '.$_SESSION['me'].'</p>';
-	snippet( 'footer' );
-	exit;
-}
 
-if( ! isset($_SESSION['scope']) || ! in_array( 'read', explode( ' ', $_SESSION['scope'] ) ) ) {
-	echo '<p>scope not found or is not <em>read</em> (scope is <strong>'.$_SESSION['scope'].'</strong>) for '.$_SESSION['me'].'</p>';
-	snippet( 'footer' );
-	exit;
-}
-
-
-if( isset($_GET['channel']) ) {
-
+if( $active_channel ) {
 	// content of channel
 
-	if( isset($_GET['action']) ) {
-		
-		if( $_GET['action'] == 'add' ) {
-			// add new feed
+	if( $action == 'feeds' ) {
 
-			echo '<p><a class="button" href="'.url('microsub?channel='.$_GET['channel'], false).'">cancel</a></p>';
+		echo '<h2>Manage Feeds</h2>';
 
-			if( isset($_POST['url']) ) {
+		// TODO: manage feeds
+		// - rename feed
+		// - mute/unmute feed
+		// - block/unblock feed
 
-				$search_url = $_POST['url'];
-
-				// TODO: search for feed urls: https://indieweb.org/Microsub-spec#Search
-				//$sources = $microsub->api_get( 'search', array( 'query' => $search_url ) );
-
-				// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
-
-				// follow feed - https://indieweb.org/Microsub-spec#Following
-				$response = $microsub->api_post( 'follow', [
-					'channel' => $_GET['channel'],
-					'url' => $search_url
-				] );
-
-				echo '<p><strong>server response:</strong></p>';
-				echo '<pre>';
-				var_dump($response);
-				echo '</pre>';
-
-				echo '<a href="'.url('microsub?channel='.$_GET['channel'].'&refresh=true', false).'">&raquo; back to the channel overview</a>';
-
-			} else {
+		?>
+		<ul class="feeds-list">
+			<?php
+			foreach( $feeds->items as $item ) {
 				?>
-				<form method="POST" action="<?= url('microsub?channel='.$_GET['channel'].'&action=add', false ) ?>">
-					<p><strong>currently, the url does not get validated. only add valid json, rss or atom feeds.</strong></p>
-					<label style="display: inline-block;">Feed URL (json, rss, atom, ...): <input type="url" name="url" placeholder="https://www.example.com/feed/rss" style="min-width:400px;"></label>
-					<button>add feed</button>
-				</form>
+				<li>
+					<?php
+					$name = $item->url;
+					if( ! empty($item->name) ) $name = $item->name;
+
+					echo '<span title="'.$item->url.'">'.$name.'</span>';
+
+					?>
+					<br>
+					<a class="button button-small disabled">mute</a>
+					<a class="button button-small" href="<?= url('microsub/?channel='.$active_channel.'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
+					<a class="button button-small disabled">block</a>
+				</li>
 				<?php
 			}
-		} elseif( $_GET['action'] == 'unfollow' ) {
+			?>
+				<li>
+					<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
+				</li>
+			</ul>
+		<?php
 
-			$feed = urldecode($_GET['feed']);
+	} elseif( $action == 'add' ) {
+		// add new feed
 
-			// TODO: validate that this feed exists in the channel
+		echo '<p><a class="button" href="'.url('microsub?channel='.$active_channel.'&action=feeds', false).'">cancel</a></p>';
 
-			if( isset($_GET['confirmation']) && $_GET['confirmation'] == 'true' ) {
+		if( isset($_POST['url']) ) {
 
-				$response = $microsub->api_post( 'unfollow', [
-					'channel' => $_GET['channel'],
-					'url' => $feed
-				] );
+			$search_url = $_POST['url'];
 
-				echo '<p><strong>server response:</strong></p>';
-				echo '<pre>';
-				var_dump($response);
-				echo '</pre>';
+			// TODO: search for feed urls: https://indieweb.org/Microsub-spec#Search
+			//$sources = $microsub->api_get( 'search', array( 'query' => $search_url ) );
 
-				echo '<a href="'.url('microsub?channel='.$_GET['channel'].'&refresh=true', false).'">&raquo; back to the channel overview</a>';
+			// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
 
-			} else {
+			// follow feed - https://indieweb.org/Microsub-spec#Following
+			$response = $microsub->api_post( 'follow', [
+				'channel' => $active_channel,
+				'url' => $search_url
+			] );
 
-				echo '<p>do you really want to unfollow <strong>'.$feed.'</strong>?</p>';
-				echo '<p><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes, unfollow<a> <a class="button" href="'.url('microsub/?channel='.$_GET['channel'], false).'">no, abort</a></p>';
+			echo '<p><strong>server response:</strong></p>';
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
 
-			}
+			echo '<a href="'.url('microsub?channel='.$active_channel.'&action=feeds&refresh=true', false).'">&raquo; back to the channel overview</a>';
+
+		} else {
+			?>
+			<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
+				<p><strong>currently, the url does not get validated. only add valid json, rss or atom feeds.</strong></p>
+				<label style="display: inline-block;">Feed URL (json, rss, atom, ...): <input type="url" name="url" placeholder="https://www.example.com/feed/rss" style="min-width:400px;"></label>
+				<button>add feed</button>
+			</form>
+			<?php
+		}
+
+	} elseif( $action == 'unfollow' ) {
+
+		$feed = urldecode($_GET['feed']);
+
+		// TODO: validate that this feed exists in the channel
+
+		if( isset($_GET['confirmation']) && $_GET['confirmation'] == 'true' ) {
+
+			$response = $microsub->api_post( 'unfollow', [
+				'channel' => $active_channel,
+				'url' => $feed
+			] );
+
+			echo '<p><strong>server response:</strong></p>';
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
+
+			echo '<a href="'.url('microsub?channel='.$active_channel.'&refresh=true', false).'">&raquo; back to the channel overview</a>';
 
 		} else {
 
-			echo '<p><strong>ERROR:</strong> unknown action: <em>'.$_GET['action'].'</em></p>';
+			echo '<p>do you really want to unfollow <strong>'.$feed.'</strong>?</p>';
+			echo '<p><a class="button" href="'.url('microsub/?channel='.$active_channel.'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes, unfollow<a> <a class="button" href="'.url('microsub/?channel='.$active_channel.'&action=feeds', false).'">no, abort</a></p>';
 
 		}
 
@@ -197,7 +236,7 @@ if( isset($_GET['channel']) ) {
 		// list posts
 
 		$items_args = array(
-			'channel' => $_GET['channel'],
+			'channel' => $active_channel,
 			'limit' => 20,
 		);
 
@@ -218,10 +257,10 @@ if( isset($_GET['channel']) ) {
 
 				echo '<ul class="pagination">';
 				if( ! empty($paging->before) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
 				}
 				if( ! empty($paging->after) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&after='.$paging->after, false).'">next page &raquo;</a></li>';
 				}
 				echo '</ul>';
 
@@ -350,10 +389,10 @@ if( isset($_GET['channel']) ) {
 
 				echo '<ul class="pagination">';
 				if( ! empty($paging->before) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
 				}
 				if( ! empty($paging->after) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$_GET['channel'].'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&after='.$paging->after, false).'">next page &raquo;</a></li>';
 				}
 				echo '</ul>';
 
@@ -368,15 +407,9 @@ if( isset($_GET['channel']) ) {
 
 				$paging = $items->paging;
 				if( ! empty($items_args['before']) || ! empty($items_args['after']) ) {
-					echo '<a class="button" href="'.url('microsub/?channel='.$_GET['channel'], false).'">go to first page</a>';
+					echo '<a class="button" href="'.url('microsub/?channel='.$active_channel, false).'">go to first page</a>';
 				}
 
-			}
-			if( isset($_GET['debug']) ) {
-				echo '<strong>POSTS ERROR:</strong>';
-				echo '<code><pre>';
-				var_dump($items);
-				echo '</pre></code>';
 			}
 		}
 
