@@ -608,8 +608,10 @@ ul.feeds-list {
 				margin-top: 1em;
 			}
 
-		#micropub-form .button-wrapper {
-			margin-top: 3em;
+		#micropub-form li.is-hidden {
+			overflow: hidden;
+			height: 0;
+			margin: 0;
 		}
 
 		#micropub-form .title-wrapper,
@@ -617,10 +619,16 @@ ul.feeds-list {
 			width: calc(50% - 10px);
 		}
 
-		#micropub-form li.is-hidden {
-			overflow: hidden;
-			height: 0;
-			margin: 0;
+		#micropub-form .image-wrapper {
+			margin-bottom: 2em;
+		}
+
+		#micropub-form .status-wrapper {
+			width: 120px;
+		}
+
+		#micropub-form .button-wrapper {
+			width: calc(100% - 120px);
 		}
 
 	#micropub-form .image-preview {

@@ -17,13 +17,6 @@ $name = $args['name'];
 
 	<ul>
 
-		<li class="status-wrapper">
-			<label>
-				<strong>Status</strong>:<br>
-				<select name="status" required><option value="draft">Draft</option><option selected value="published">Publish</option></select>
-			</label>
-		</li>
-
 		<li class="title-wrapper">
 			<label>
 				<strong>Title</strong> <small>(optional)</small>:<br>
@@ -70,11 +63,20 @@ $name = $args['name'];
 			</label>
 		</li>
 
+		<li class="status-wrapper">
+			<label>
+				<strong>Status</strong>:<br>
+				<select name="status" required><option value="draft">Draft</option><option selected value="published">Publish</option></select>
+			</label>
+		</li>
+
 		<li class="button-wrapper">
+			<strong>Publish:</strong><br>
 			<button>post to <?= $name ?></button><br>
-			<small>(this will be posted to <a href="<?= $me ?>" target="_blank" rel="noopener"><?= $me ?></a>)</small>
 		</li>
 
 	</ul>
+
+	<p><small>(this will be posted to <a href="<?= $me ?>" target="_blank" rel="noopener"><?= $me ?></a>)</small></p>
 
 </form>
