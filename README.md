@@ -26,9 +26,10 @@ You may want to edit the `config.php` in the root directory a bit after the init
 <?php
 
 return [
-	'debug' => false,
-	'logging' => false,
+	'debug' => true, // should be true while in alpha
+	'logging' => true, // should be true while in alpha; writes logfiles into the /log directory
 	'theme' => 'default',
+	'theme-color-scheme' => 'blue', // for the default theme, this can be 'blue' (default), 'green', 'red' or 'lilac'
 	'microsub' => true, // set this to false if you want to disable microsub functionality completely
 	'micropub' => true, // set this to false if you want to disable micropub functionality completely
 	'cookie_lifetime' => 60*60*24*10, // 10 days, in seconds

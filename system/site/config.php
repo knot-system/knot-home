@@ -8,7 +8,7 @@ return [
 	'debug' => true, // show additional information when an error occurs
 	'logging' => true, // write logfiles into the /log directory
 	'theme' => 'default',
-	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue', 'green', 'red', 'lilac'
+	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue' (default), 'green', 'red', 'lilac'
 	'scope' => array( 'read', 'create', 'follow', 'channels', 'follow', 'mute', 'block' ),
 	'microsub' => true,
 	'micropub' => true,
