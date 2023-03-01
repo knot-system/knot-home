@@ -25,6 +25,80 @@ $action = false;
 if( isset($_GET['action']) ) $action = $_GET['action'];
 
 
+if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
+
+	$type = $_GET['type'];
+
+	$feeds = $microsub->get_feeds( $active_channel );
+
+	$filename = date('Y-m-d_H-i-s', time()).'_sekretaer_feedlist';
+
+	$content = false;
+	if( $type == 'opml' ) {
+
+		$date_time = new DateTime();
+		$date_time = $date_time->format(DateTime::RFC822);
+
+		// spec: http://opml.org/spec2.opml
+		$content = [];
+		$content[] = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+		$content[] = '<opml version="2.0">';
+		$content[] = '<head>';
+		$content[] = '<title>Sekretaer Feed List</title>';
+		$content[] = '<dateCreated>'.$date_time.'</dateCreated>';
+		$content[] = '<dateModified>'.$date_time.'</dateModified>';
+		$content[] = '<docs>http://opml.org/spec2.opml</docs>';
+		$content[] = '</head>';
+		$content[] = '<body>';
+		foreach( $feeds->items as $item ) {
+			$url = $item->url;
+			$name = $url;
+			if( isset($item->name) ) $name = $item->name;
+			$type = 'rss'; // TODO / CLEANUP: check this
+			$content[] = '<outline text="'.$name.'" type="'.$type.'" xmlUrl="'.$url.'"/>';
+		}
+		$content[] = '</body>';
+		$content[] = '</opml>';
+
+		$content = implode( "\r\n", $content );
+
+		$filename .= '.opml';
+
+	} elseif( $type == 'json' ) {
+
+		$content = json_encode( $feeds->items );
+
+		$filename .= '.json';
+
+	} elseif( $type == 'txt' ) {
+
+		foreach( $feeds->items as $item ) {
+			$content .= $item->url;
+			$content .= "\r\n";
+		}
+
+		$filename .= '.txt';
+
+	}
+
+
+	if( $content ) {
+
+		// force download
+		header( 'Content-Type: application/octet-stream' );
+		header( 'Content-Disposition: attachment; filename='.$filename );
+		header( 'Expires: 0' );
+		header( 'Cache-Control: must-revalidate' );
+		header( 'Pragma: public' );
+
+		echo $content;
+
+		exit;
+	}
+
+}
+
+
 
 $sidebar_content = '';
 
@@ -171,8 +245,28 @@ if( $active_channel ) {
 			?>
 				<li>
 					<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
+					<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
 				</li>
 			</ul>
+		<?php
+
+	} elseif( $action == 'export' ) {
+
+		?>
+		<h2>Export Feed List</h2>
+
+		<form method="GET" action="<?= url('microsub') ?>">
+			<input type="hidden" name="channel" value="<?= $active_channel ?>">
+			<input type="hidden" name="action" value="export">
+			<select name="type" required>
+				<option value="">select type …</option>
+				<option value="json">json</option>
+				<option value="txt">txt</option>
+				<option value="opml">opml (experimental)</option>
+			</select>
+			<button>Export</button>
+		</form>
+
 		<?php
 
 	} elseif( $action == 'add' ) {
