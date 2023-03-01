@@ -107,7 +107,7 @@ ob_start();
 if( ! empty($channels) ) {
 	// overview: list channels
 	?>
-	<p class="manage-link"><a href="<?= url('microsub/?action=channels', false) ?>">manage</a></p>
+	<p class="manage-link"><a href="<?= url('microsub/?action=channels', false) ?>" title="manage channels">manage</a></p>
 	<ul class="channels-list">
 	<?php
 	foreach( $channels as $channel ) {
@@ -139,7 +139,7 @@ if( $active_channel && $active_channel != 'notifications' ) {
 
 	?>
 	<hr>
-	<p class="manage-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">manage</a></p>
+	<p class="manage-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>" title="manage feeds">manage</a></p>
 	<?php
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
@@ -178,30 +178,151 @@ snippet( 'header', array(
 
 
 if( $action == 'channels' ) {
+	// TODO: reorder channels
+	// TODO: hide/unhide channel
 
-	echo '<h2>Manage Channels</h2>';
+	?>
+	<h2>Manage Channels</h2>
 
+	<?php
+	if( isset($_GET['new']) ) {
 
-	// TODO: manage channels
-	// - add new channel
-	// - reorder channels
-	// - rename channel
-	// - hide/unhide channel
+		if( ! empty($_POST['name']) ) {
 
-	echo '<p>not implemented yet</p>'; // DEBUG
-	snippet( 'footer' ); // DEBUG
-	exit; // DEBUG
+			$new_name = $_POST['name'];
 
+			$response = $microsub->api_post( 'channels', [
+				'name' => $new_name,
+			] );
 
-	echo '<ul class="channels-list">';
-	foreach( $channels as $channel ) {
+			echo '<p><strong>server response:</strong></p>';
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
+
+			echo '<a href="'.url('microsub/?action=channels&refresh=true', false).'">&raquo; back to channel management</a>';
+
+		} else {
+
+			?>
+			<a class="button" href="<?= url('microsub/?action=channels', false) ?>">cancel</a>
+
+			<form method="POST" action="<?= url('microsub/?action=channels&new', false ) ?>" style="margin-top: 2em;">
+				<label style="display: inline-block;"><input type="text" name="name" placeholder="New Channel Name" required autofocus></label>
+				<button>add channel</button>
+			</form>
+
+			<?php
+
+		}
+
+	} elseif( ! empty($_GET['rename']) ) {
+
+		$uid = urldecode($_GET['rename']);
+
+		if( ! array_key_exists( $uid, $channels) ) exit;
+
+		$old_channel = $channels[$uid];
+		$old_name = $old_channel->name;
+
+		if( ! empty($_POST['name']) ) {
+
+			$new_name = $_POST['name'];
+
+			$response = $microsub->api_post( 'channels', [
+				'channel' => $uid,
+				'name' => $new_name,
+			] );
+
+			echo '<p><strong>server response:</strong></p>';
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
+
+			echo '<a href="'.url('microsub/?action=channels&refresh=true', false).'">&raquo; back to channel management</a>';
+
+		} else {
+
+			?>
+			<a class="button" href="<?= url('microsub/?action=channels', false) ?>">cancel</a>
+
+			<form method="POST" action="<?= url('microsub/?action=channels&rename='.$uid, false ) ?>" style="margin-top: 2em;">
+				<label style="display: inline-block;"><input type="text" name="name" value="<?= $old_name ?>" placeholder="<?= $old_name ?>" required autofocus></label>
+				<button>rename channel '<?= $old_name ?>'</button>
+			</form>
+
+			<?php
+
+		}
+
+	} elseif( ! empty($_GET['delete']) ) {
+
+		$uid = urldecode($_GET['delete']);
+
+		if( ! array_key_exists( $uid, $channels) ) exit;
+
+		$selected_channel = $channels[$uid];
+		$selected_name = $selected_channel->name;
+
+		if( ! empty($_POST['aknowledge']) ) {
+
+			$response = $microsub->api_post( 'channels', [
+				'channel' => $uid,
+				'method' => 'delete',
+			] );
+
+			echo '<p><strong>server response:</strong></p>';
+			echo '<pre>';
+			var_dump($response);
+			echo '</pre>';
+
+			echo '<a href="'.url('microsub/?action=channels&refresh=true', false).'">&raquo; back to channel management</a>';
+
+		} else {
+
+			?>
+			<a class="button" href="<?= url('microsub/?action=channels', false) ?>">cancel</a>
+
+			<form method="POST" action="<?= url('microsub/?action=channels&delete='.$uid, false ) ?>" style="margin-top: 2em;">
+				<input type="hidden" name="aknowledge" value="true">
+				<button>delete channel '<?= $selected_name ?>'</button>
+			</form>
+
+			<?php
+
+		}
+
+	} else {
+
 		?>
-		<li>
-			<?= $channel->name ?>	
-		</li>
+		<a class="button add-channel" href="<?= url('microsub/?action=channels&new', false) ?>">+ add a new channel</a>
 		<?php
+
+		echo '<ul class="channels-list" style="margin-top: 2em;">';
+		foreach( $channels as $channel ) {
+
+			if( $channel->uid == 'notifications' ) continue; // skip Notifications channel
+
+			$feed_count = 0;
+
+			$feeds = $microsub->get_feeds($channel->uid);
+			if( $feeds && ! empty($feeds->items) ) {
+				$feed_count = count($feeds->items);
+			}
+
+			?>
+			<li>
+				<span><?= $channel->name ?> (<?= $feed_count ?> Feeds)</span>
+				<br>
+				<a class="button button-small disabled">hide</a>
+				<a class="button button-small" href="<?= url('microsub/?action=channels&rename='.urlencode($channel->uid), false) ?>">rename</a>
+				<a class="button button-small" href="<?= url('microsub/?action=channels&delete='.urlencode($channel->uid), false) ?>">delete</a>
+			</li>
+			<?php
+		}
+
+		echo '</ul>';
 	}
-	echo '</ul>';
 
 
 	snippet( 'footer' );
@@ -214,19 +335,18 @@ if( $active_channel ) {
 	// content of channel
 
 	if( $action == 'feeds' ) {
-
-		echo '<h2>Manage Feeds</h2>';
-
-		// TODO: manage feeds
-		// - rename feed
-		// - mute/unmute feed
-		// - block/unblock feed
+		// TODO: rename feed
+		// TODO: mute/unmute feed
+		// TODO: block/unblock feed
 
 		?>
-		<ul class="feeds-list">
+		<h2>Manage Feeds</h2>
+
+		<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
+		<a style="margin-left: 0.5em;" class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
+
+		<ul class="feeds-list" style="margin-top: 2em;">
 			<li>
-				<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
-				<a class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
 			</li>
 			<?php
 			foreach( $feeds->items as $item ) {

@@ -579,15 +579,6 @@ ul.feeds-list {
 			text-decoration: none;
 		}
 
-	ul.feeds-list .button.add-feed,
-	ul.feeds-list .button.export-feed {
-		margin-bottom: 1em;
-	}
-
-		ul.feeds-list .button.export-feed {
-			margin-left: 0.5em;
-		}
-
 	ul.feeds-list li {
 		overflow-wrap: break-word;
 		word-wrap: break-word;
