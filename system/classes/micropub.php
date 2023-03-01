@@ -96,8 +96,6 @@ class Micropub {
 			'post-status' => $post['status']
 		);
 
-		$data['content'] = false; // DEBUG
-
 		if( isset($post['slug']) && $post['slug'] != '' ) $data['slug'] = $post['slug'];
 
 		if( $files && ! empty($files['image']) && ! empty($files['image']['name']) ) {
