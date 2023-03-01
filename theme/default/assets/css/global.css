@@ -636,3 +636,26 @@ ul.feeds-list {
 			width: calc(100% - 120px);
 		}
 
+	@media ( max-width: 640px ) {
+
+		#micropub-form .title-wrapper,
+		#micropub-form .slug-wrapper {
+			width: 100%;
+		}
+		
+			#micropub-form .slug-wrapper {
+				margin-top: 1em;
+			}
+
+		#micropub-form .status-wrapper,
+		#micropub-form .button-wrapper {
+			width: 100%;
+		}
+		
+			#micropub-form .button-wrapper strong,
+			#micropub-form .button-wrapper br {
+				display: none;
+			}
+
+	}
+
