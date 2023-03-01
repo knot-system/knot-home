@@ -38,19 +38,14 @@ if( isset($_POST['action']) && $_POST['action'] == 'post' ) {
 }
 
 
-// form
-
-$tags = $micropub->get_tags();
-
 $content = '';
 if( isset($_GET['content']) ) $content = urldecode($_GET['content']);
 
-$me = $micropub->get_me();
-
+// form
 snippet( 'micropub-form', array(
-	'tags' => $tags,
+	'tags' => $micropub->get_tags(),
 	'content' => $content,
-	'me' => $me,
+	'me' => $micropub->get_me(),
 	'name' => $micropub->get_name(),
 	'url' => url('micropub')
 ));
