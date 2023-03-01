@@ -623,6 +623,19 @@ ul.feeds-list {
 			margin-bottom: 2em;
 		}
 
+			#micropub-form .image-wrapper .image-preview {
+				display: block;
+			}
+
+				#micropub-form .image-wrapper .image-preview img {
+					display: block;
+					max-width: 200px;
+					max-height: 200px;
+					width: auto;
+					height: auto;
+					margin: 5px 0 10px;
+				}
+
 		#micropub-form .status-wrapper {
 			width: 120px;
 		}
@@ -631,14 +644,3 @@ ul.feeds-list {
 			width: calc(100% - 120px);
 		}
 
-	#micropub-form .image-preview {
-		display: block;
-	}
-
-		#micropub-form .image-preview img {
-			display: block;
-			max-width: 200px;
-			max-height: 200px;
-			width: auto;
-			height: auto;
-		}

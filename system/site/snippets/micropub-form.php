@@ -58,8 +58,8 @@ $name = $args['name'];
 			<?php /* TODO: limit max file size? depends on server receiving the image */ ?>
 			<label>
 				<strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br>
-				<input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;">
 				<div class="image-preview"></div>
+				<input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;">
 			</label>
 		</li>
 
