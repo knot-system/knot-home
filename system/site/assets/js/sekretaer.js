@@ -66,9 +66,30 @@ var Micropub = {
 
 		if( ! form ) return;
 
+		Micropub.handlePostButton( form );
 		Micropub.handleSlug( form );
 		Micropub.handleTagSelector( form );
 		Micropub.handleImagePreview( form );
+
+	},
+
+	handlePostButton: function( form ) {
+
+		var postButton = form.querySelector( 'button.post-button' );
+		if( ! postButton ) return;
+
+		var content = form.querySelector( 'textarea[name="content"]' );
+		if( ! content ) return;
+
+		var contentChanged = function(){
+			if( content.value == '' ) postButton.disabled = true;
+			else postButton.disabled = false;
+		};
+
+		content.addEventListener( 'change', contentChanged );
+		content.addEventListener( 'keyup', contentChanged );
+
+		contentChanged();
 
 	},
 

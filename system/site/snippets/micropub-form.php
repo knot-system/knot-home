@@ -72,7 +72,7 @@ $name = $args['name'];
 
 		<li class="button-wrapper">
 			<strong>Publish:</strong><br>
-			<button>post to <?= $name ?></button><br>
+			<button class="post-button">post to <?= $name ?></button><br>
 		</li>
 
 	</ul>
