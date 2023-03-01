@@ -51,6 +51,14 @@ class Request {
 	}
 
 
+	function set_request_type( $request_type ) {
+
+		$this->request_type = $request_type;
+
+		return $this;
+	}
+
+
 	function curl_request( $followlocation = true, $nobody = false ) {
 
 		if( ! $this->url ) return false;
@@ -67,7 +75,8 @@ class Request {
 		if( $this->request_type == 'post' ) {
 			curl_setopt( $ch, CURLOPT_POST, 1 );
 			if( count($this->post_data) ) {
-				curl_setopt( $ch, CURLOPT_POSTFIELDS, $this->post_data );
+				$post_data = http_build_query( $this->post_data, '', '&' );
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_data );
 			}
 		}
 
@@ -116,6 +125,9 @@ class Request {
 
 
 	function get_status_code() {
+
+		if( ! $this->http_status_code ) return false;
+
 		return $this->http_status_code;
 	}
 

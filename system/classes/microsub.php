@@ -44,12 +44,8 @@ class Microsub {
 
 
 	function api_get( $action, $args = array() ) {
-		// TODO: rewrite with Request class
 
-		$api_url = $this->api_url;
-		$authorization = $this->authorization;
-
-		$url = $api_url.'?action='.$action;
+		$url = $this->api_url.'?action='.$action;
 
 		if( ! isset($args['me']) ) {
 			$args['me'] = $this->me;
@@ -61,59 +57,45 @@ class Microsub {
 			}
 		}
 
-
 		$cache = new Cache( 'microsub', $url, false, 60*3 ); // cache for 3 minutes
 		$data = $cache->get_data();
 		if( $data ) return json_decode($data);
 
+		$request = new Request( $url );
+		$request->set_headers( array('Content-Type: application/json', $this->authorization) );
+		$request->curl_request();
 
-		// TODO: move to Request class
-		$ch = curl_init($url);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json' , $authorization ));
-		curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "GET");
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($ch);
-		curl_close($ch);
-		$json = json_decode($result);
+		$body = $request->get_body();
 
+		if( $body ) $body = json_decode($body);
 
-		$cache->add_data( json_encode($json) );
+		$cache->add_data( json_encode($body) );
 
-		return $json;
+		return $body;
 	}
 
 	function api_post( $action, $args = array() ) {
-		// TODO: rewrite with Request class
 
-		$api_url = $this->api_url;
-		$authorization = $this->authorization;
-
-		$url = $api_url.'?action='.$action;
+		$url = $this->api_url.'?action='.$action;
 		
 		if( ! isset($args['me']) ) {
 			$args['me'] = $this->me;
 		}
 
-		$post_args = array();
-		if( count($args) ) {
-			foreach( $args as $key => $value ) {
-				$post_args[] = $key.'='.$value; // TODO: sanitize
-			}
-		}
+		$request = new Request( $url );
+		$request->set_headers( array($this->authorization) );
+		$request->set_post_data( $args );
+		$request->curl_request();
 
-		$post_args = implode('&', $post_args);
+		$status_code = $request->get_status_code();
+		$headers = $request->get_headers();
+		$body = $request->get_body();
 
-		// TODO: move to Request class
-		$ch = curl_init( $url );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array($authorization) );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
-		curl_setopt( $ch, CURLOPT_POST, 1 );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_args );
-		$server_output = curl_exec($ch);
-		curl_close($ch);
-
-
-		return $server_output;
+		return [
+			'status_code' => $status_code,
+			'headers' => $headers,
+			'body' => $body
+		];
 	}
 
 
