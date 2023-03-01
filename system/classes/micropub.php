@@ -115,29 +115,15 @@ class Micropub {
 
 		$url = $this->api_url;
 
-		// TODO: use Request class for this
 
-		$ch = curl_init( $url );
+		$request = new Request( $url );
+		$request->set_headers( array( $this->authorization ) );
+		$request->set_post_data( $data );
+		$request->curl_request( false );
 
-		curl_setopt( $ch, CURLOPT_POST, true );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( $this->authorization) );
-
-		curl_setopt( $ch, CURLOPT_HEADER, true );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-
-		$result = curl_exec( $ch );
-		$httpcode = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
-
-		$new_post_url = false;
-		$curl_info = curl_getinfo( $ch );
-		if( $httpcode == 201 ) {
-			$headers = substr($result, 0, $curl_info["header_size"]);
-			preg_match("!\r\n(?:Location): *(.*?) *\r\n!i", $headers, $matches);
-			$new_post_url = $matches[1];
-		}
-
-		curl_close($ch);
+		$httpcode = $request->get_status_code();
+		$headers = $request->get_headers();
+		$body = $request->get_body();
 
 
 		$message = false;
@@ -147,7 +133,11 @@ class Micropub {
 			// HTTP 201 Created - success!
 
 			$success = true;
-			$message = 'New post created at <a href="'.$new_post_url.'" target="_blank" rel="noopener">'.$new_post_url.'</a>';
+			$message = 'New post created';
+			if( ! empty($headers['location']) ) {
+				$new_post_url = $headers['location'];
+				$message .= ' at <a href="'.$new_post_url.'" target="_blank" rel="noopener">'.$new_post_url.'</a>';
+			}
 
 		} elseif( $httpcode == 401 ) {
 			// HTTP 401 Unauthorized - No access token was provided in the request.
@@ -163,7 +153,7 @@ class Micropub {
 			// HTTP 400 Bad Request - Something was wrong with the request, such as a missing "h" parameter, or other missing data. The response body may contain more human-readable information about the error.
 
 			$message = '<strong>Bad Request</strong> - something was wrong with the request.';
-			// TODO: append response body to $message
+			if( $body ) $message .= '<br>'.$body;
 
 		} elseif( $httpcode == 500 ) {
 			// HTTP 500 Internal Server Error
@@ -174,7 +164,7 @@ class Micropub {
 
 		if( ! $success ) {
 			global $sekretaer;
-			$sekretaer->debug( $url, $data, $httpcode, $result );
+			$sekretaer->debug( $url, $data, $httpcode, $headers, $body );
 		}
 
 		return [

@@ -59,11 +59,15 @@ class Sekretaer {
 		}
 
 		if( $this->config->get('debug') ) {
-			echo '<hr><strong>ERROR</strong>';
+			echo '<div class="debugmessage"><strong class="debugmessage-head">DEBUGMESSAGE</strong><pre>';
+			$first = true;
 			foreach( $messages as $message ) {
 				if( is_array($message) || is_object($message) ) $message = var_export($message, true);
-				echo '<br>'.$message;
+				if( ! $first ) echo '<br>';
+				echo $message;
+				$first = false;
 			}
+			echo '</pre></div>';
 		}
 
 	}

@@ -5,6 +5,9 @@ class Request {
 	private $user_agent;
 	private $timeout;
 	private $url;
+	private $request_type = 'get';
+	private $request_headers = [];
+	private $post_data = [];
 
 	private $http_status_code;
 	private $headers = [];
@@ -28,6 +31,26 @@ class Request {
 	}
 
 
+	function set_headers( $headers ) {
+		if( ! is_array($headers) ) $headers = array( $headers );
+
+		$this->request_headers = $headers;
+
+		return $this;
+	}
+
+
+	function set_post_data( $data ) {
+		if( ! is_array($data) ) $data = array( $data );
+
+		$this->post_data = $data;
+
+		$this->request_type = 'post';
+
+		return $this;
+	}
+
+
 	function curl_request( $followlocation = true, $nobody = false ) {
 
 		if( ! $this->url ) return false;
@@ -36,6 +59,17 @@ class Request {
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_HEADER, true );
 		curl_setopt( $ch, CURLOPT_USERAGENT, $this->user_agent );
+
+		if( count($this->request_headers) ) {
+			curl_setopt( $ch, CURLOPT_HTTPHEADER, $this->request_headers );
+		}
+
+		if( $this->request_type == 'post' ) {
+			curl_setopt( $ch, CURLOPT_POST, 1 );
+			if( count($this->post_data) ) {
+				curl_setopt( $ch, CURLOPT_POSTFIELDS, $this->post_data );
+			}
+		}
 
 		if( $nobody ) {
 			curl_setopt( $ch, CURLOPT_NOBODY, true );
