@@ -166,7 +166,10 @@ if( $active_channel && $active_channel != 'notifications' ) {
 		</ul>
 		<?php
 	} else {
-		echo '<p>- no feeds found -</p>';
+		?>
+		<p>(no feeds found)</p>
+		<p><a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a></p>
+		<?php
 	}
 }
 
