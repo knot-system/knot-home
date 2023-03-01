@@ -590,6 +590,39 @@ ul.feeds-list {
 
 }
 
+	#micropub-form ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+	}
+
+		#micropub-form > ul > li {
+			display: block;
+			width: 100%;
+		}
+
+			#micropub-form > ul > li + li {
+				margin-top: 1em;
+			}
+
+		#micropub-form .button-wrapper {
+			margin-top: 3em;
+		}
+
+		#micropub-form .title-wrapper,
+		#micropub-form .slug-wrapper {
+			width: calc(50% - 10px);
+		}
+
+		#micropub-form li.is-hidden {
+			overflow: hidden;
+			height: 0;
+			margin: 0;
+		}
+
 	#micropub-form .image-preview {
 		display: block;
 	}

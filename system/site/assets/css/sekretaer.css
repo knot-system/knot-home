@@ -10,13 +10,14 @@ remove_stylesheet('css/sekretaer.css');
 ul.tag-selector {
 	list-style-type: none;
 	padding: 0;
-	margin-top: -0.5em;
+	display: block;
+	margin-bottom: 1em;
 }
 
 	ul.tag-selector li {
 		display: inline-block;
 		margin-right: 0.5em;
-		margin-bottom: 0.5em;
+		margin-top: 0.5em;
 		background: #666;
 		color: #fff;
 		padding: 5px 10px;

@@ -80,6 +80,11 @@ var Micropub = {
 		var slug = form.querySelector('input[name="slug"]');
 		if( ! slug ) return;
 
+		var slugWrapper = form.querySelector('.slug-wrapper');
+		if( slugWrapper ) {
+			if( slug.value == '' ) slugWrapper.classList.add('is-hidden');
+		}
+
 		var sanitizeSlug = function( slug ){
 			// slug sanitize function found here: https://mhagemann.medium.com/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
 			const a = '\u00e0\u00e1\u00e2\u00e4\u00e6\u00e3\u00e5\u0101\u0103\u0105\u00e7\u0107\u010d\u0111\u010f\u00e8\u00e9\u00ea\u00eb\u0113\u0117\u0119\u011b\u011f\u01f5\u1e27\u00ee\u00ef\u00ed\u012b\u012f\u00ec\u0131\u0130\u0142\u1e3f\u00f1\u0144\u01f9\u0148\u00f4\u00f6\u00f2\u00f3\u0153\u00f8\u014d\u00f5\u0151\u1e55\u0155\u0159\u00df\u015b\u0161\u015f\u0219\u0165\u021b\u00fb\u00fc\u00f9\u00fa\u016b\u01d8\u016f\u0171\u0173\u1e83\u1e8d\u00ff\u00fd\u017e\u017a\u017c\u00b7/_,:;'
@@ -103,8 +108,11 @@ var Micropub = {
 
 			if( ! val ) {
 				slug.value = '';
+				if( slugWrapper ) slugWrapper.classList.add('is-hidden');
 				return;
 			}
+
+			if( slugWrapper ) slugWrapper.classList.remove('is-hidden');
 
 			var sanitized = sanitizeSlug( val );
 
