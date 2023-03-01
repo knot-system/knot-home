@@ -107,7 +107,7 @@ ob_start();
 if( ! empty($channels) ) {
 	// overview: list channels
 	?>
-	<p class="edit-link"><a href="<?= url('microsub/?action=channels', false) ?>">Edit</a></p>
+	<p class="manage-link"><a href="<?= url('microsub/?action=channels', false) ?>">manage</a></p>
 	<ul class="channels-list">
 	<?php
 	foreach( $channels as $channel ) {
@@ -139,7 +139,7 @@ if( $active_channel && $active_channel != 'notifications' ) {
 
 	?>
 	<hr>
-	<p class="edit-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">Edit</a></p>
+	<p class="manage-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">manage</a></p>
 	<?php
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
