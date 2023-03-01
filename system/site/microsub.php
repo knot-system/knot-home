@@ -284,7 +284,7 @@ if( $action == 'channels' ) {
 			<a class="button" href="<?= url('microsub/?action=channels', false) ?>">cancel</a>
 
 			<form method="POST" action="<?= url('microsub/?action=channels&delete='.$uid, false ) ?>" style="margin-top: 2em;">
-				<input type="hidden" name="aknowledge" value="true">
+				<label><input type="checkbox" name="aknowledge" value="true" required> yes, delete the channel <?= $selected_name ?> and all of its content</label>
 				<button>delete channel '<?= $selected_name ?>'</button>
 			</form>
 
