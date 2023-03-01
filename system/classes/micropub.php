@@ -173,21 +173,8 @@ class Micropub {
 		}
 
 		if( ! $success ) {
-
-			// TODO: log this info if there is an error, don't show it
-			$message .= '<details><summary>Debug-Info</summary>';
-				$message .= '<p><strong>request url:</strong> '.$url.'</p>';
-				$message .= '<p><strong>request data:</strong>';
-					$message .= '<pre>';
-						$message .= var_export($data, true);
-					$message .= '</pre>';
-				$message .= '<p><strong>response status code:</strong> '.$httpcode.'</p>';
-				$message .= '<p><strong>response content:</strong></p>';
-				$message .= '<pre><code>';
-					$message .= var_export($result, true);
-				$message .= '</code></pre>';
-			$message .= '</details>';
-
+			global $sekretaer;
+			$sekretaer->debug( $url, $data, $httpcode, $result );
 		}
 
 		return [
