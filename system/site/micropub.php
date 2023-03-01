@@ -70,8 +70,8 @@ $me = $micropub->get_me();
 		</ul>
 	<?php endif; ?>
 
-	<p><label><strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br><input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;"></label></p>
-	<?php /* TODO: show preview image; TODO: limit max file size? depends on server receiving the image */ ?>
+	<p><label><strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br><input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;"><div class="image-preview"></div></label></p>
+	<?php /* TODO: limit max file size? depends on server receiving the image */ ?>
 
 	<input type="hidden" name="action" value="post">
 

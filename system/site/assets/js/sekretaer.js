@@ -68,6 +68,7 @@ var Micropub = {
 
 		Micropub.handleSlug( form );
 		Micropub.handleTagSelector( form );
+		Micropub.handleImagePreview( form );
 
 	},
 
@@ -157,8 +158,31 @@ var Micropub = {
 			});
 		}
 
-	}
+	},
 
+	handleImagePreview: function( form ) {
+
+		var file = form.querySelector('input[name="image"]');
+		if( ! file ) return;
+
+		var previewArea = form.querySelector('.image-preview');
+		if( ! previewArea ) return;
+
+		file.addEventListener("change", function () {
+			var files = file.files[0];
+			if( ! files ) return;
+
+			var fileReader = new FileReader();
+
+			fileReader.readAsDataURL(files);
+
+			fileReader.addEventListener("load", function() {
+				previewArea.innerHTML = '<img src="' + this.result + '" />';
+			});    
+			
+		});
+
+	}
 
 };
 

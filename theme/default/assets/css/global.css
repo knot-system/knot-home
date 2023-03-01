@@ -585,3 +585,19 @@ ul.feeds-list {
 	ul.feeds-list .button.add-feed {
 		margin-top: 1em;
 	}
+
+#micropub-form {
+
+}
+
+	#micropub-form .image-preview {
+		display: block;
+	}
+
+		#micropub-form .image-preview img {
+			display: block;
+			max-width: 200px;
+			max-height: 200px;
+			width: auto;
+			height: auto;
+		}
