@@ -520,6 +520,7 @@ ul.posts {
 
 	ul.posts .item-content {
 		display: block;
+		overflow: hidden;
 	}
 
 		ul.posts .item-content .item-feed-title + .item-title {
@@ -528,7 +529,6 @@ ul.posts {
 
 		ul.posts .item-content.shortened {
 			max-height: 1000px;
-			overflow: hidden;
 		}
 
 		ul.posts .expand-button {
