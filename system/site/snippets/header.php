@@ -1,6 +1,6 @@
 <?php
 
-// Version: alpha.3
+// Version: alpha.6
 
 if( ! $sekretaer ) exit;
 
@@ -14,7 +14,7 @@ $navigation = get_navigation();
 
 ?>
 
-<div class="canvas">
+<div id="template-<?= str_replace(array('.','/'), '-', $sekretaer->route->get('template')) ?>" class="canvas">
 
 	<div id="menu-icon" class="menu-icon"><div class="icon"></div></div>
 

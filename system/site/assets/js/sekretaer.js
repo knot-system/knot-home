@@ -53,8 +53,119 @@ var Login = {
 
 };
 
+
+var Micropub = {
+
+	init: function(){
+
+		var canvas = document.getElementById('template-micropub');
+
+		if( ! canvas ) return;
+
+		var form = document.getElementById('micropub-form');
+
+		if( ! form ) return;
+
+		Micropub.handleSlug( form );
+		Micropub.handleTagSelector( form );
+
+	},
+
+	handleSlug: function( form ) {
+
+		var title = form.querySelector('input[name="title"]');
+		if( ! title ) return;
+
+		var slug = form.querySelector('input[name="slug"]');
+		if( ! slug ) return;
+
+		var sanitizeSlug = function( slug ){
+			// slug sanitize function found here: https://mhagemann.medium.com/the-ultimate-way-to-slugify-a-url-string-in-javascript-b8e4a0d849e1
+			const a = '\u00e0\u00e1\u00e2\u00e4\u00e6\u00e3\u00e5\u0101\u0103\u0105\u00e7\u0107\u010d\u0111\u010f\u00e8\u00e9\u00ea\u00eb\u0113\u0117\u0119\u011b\u011f\u01f5\u1e27\u00ee\u00ef\u00ed\u012b\u012f\u00ec\u0131\u0130\u0142\u1e3f\u00f1\u0144\u01f9\u0148\u00f4\u00f6\u00f2\u00f3\u0153\u00f8\u014d\u00f5\u0151\u1e55\u0155\u0159\u00df\u015b\u0161\u015f\u0219\u0165\u021b\u00fb\u00fc\u00f9\u00fa\u016b\u01d8\u016f\u0171\u0173\u1e83\u1e8d\u00ff\u00fd\u017e\u017a\u017c\u00b7/_,:;'
+			const b = 'aaaaaaaaaacccddeeeeeeeegghiiiiiiiilmnnnnoooooooooprrsssssttuuuuuuuuuwxyyzzz------'
+			const p = new RegExp(a.split('').join('|'), 'g')
+			var sanitized = slug.toLowerCase()
+				.replace(/\s+/g, '-') // Replace spaces with -
+				.replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+				.replace(/&/g, '-and-') // Replace & with 'and'
+				.replace(/[^\w\-]+/g, '') // Remove all non-word characters
+				.replace(/\-\-+/g, '-') // Replace multiple - with single -
+				.replace(/^-+/, '') // Trim - from start of text
+				.replace(/-+$/, '') ;// Trim - from end of text
+
+			return sanitized;
+		}
+
+		var updateSlug = function( el ){
+
+			var val = el.value;
+
+			if( ! val ) {
+				slug.value = '';
+				return;
+			}
+
+			var sanitized = sanitizeSlug( val );
+
+			slug.value = sanitized;
+		};
+
+		var updateSlugThis = function(){
+			updateSlug( this );
+		};
+
+		var timeout;
+		var updateSlugWithDelay = function(){
+			clearTimeout( timeout );
+			var el = this;
+			timeout = setTimeout( function(){
+				updateSlug( el );
+			}, 500 );
+		};
+
+		title.addEventListener( 'change', updateSlugThis );
+		title.addEventListener( 'keyup', updateSlugThis );
+
+		slug.addEventListener( 'change', updateSlugThis );
+		slug.addEventListener( 'keyup', updateSlugWithDelay );
+
+	},
+
+	handleTagSelector: function( form ) {
+
+		var tagSelector = form.querySelector( 'ul.tag-selector' );
+
+		if( ! tagSelector ) return;
+
+		tagSelector.style.display = 'block';
+
+		var tags = tagSelector.querySelectorAll( 'li' );
+
+		var tagsInput = document.querySelector('input[name="tags"]');
+		if( ! tagsInput ) return;
+
+		for( var tag of tags ) {
+			tag.addEventListener( 'click', function(){
+				var el = this;
+
+				var tag = el.innerHTML;
+				if( ! tag ) return;
+
+				if( tagsInput.value ) tag = ', '+tag;
+
+				tagsInput.value = tagsInput.value + tag;
+			});
+		}
+
+	}
+
+
+};
+
+
 window.addEventListener( 'load', function(e){
 	Login.init();
+	Micropub.init();
 });
 
 })();
