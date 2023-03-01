@@ -13,6 +13,14 @@ if( isset($_GET['channel']) ) $active_channel = $_GET['channel'];
 if( ! array_key_exists( $active_channel, $channels ) ) $active_channel = false;
 
 
+if( ! $active_channel ) {
+	// Note: if no channel is selected, automatically show the first channel that is not 'notifications'
+	$channels_cleaned = $channels;
+	unset($channels_cleaned['notifications']);
+	$active_channel = array_key_first($channels_cleaned);
+}
+
+
 $action = false;
 if( isset($_GET['action']) ) $action = $_GET['action'];
 
@@ -52,13 +60,15 @@ if( ! empty($channels) ) {
 }
 
 
-if( $active_channel ) {
+if( $active_channel && $active_channel != 'notifications' ) {
 	$feeds = $microsub->get_feeds( $active_channel );
 
+	?>
+	<hr>
+	<p class="edit-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">Edit</a></p>
+	<?php
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
-		<hr>
-		<p class="edit-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>">Edit</a></p>
 		<ul class="feeds-list">
 		<?php
 		foreach( $feeds->items as $item ) {
@@ -77,7 +87,7 @@ if( $active_channel ) {
 		</ul>
 		<?php
 	} else {
-		$sekretaer->debug( 'feeds_error', $feeds );
+		echo '- no feeds found -';
 	}
 }
 
