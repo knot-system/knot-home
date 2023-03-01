@@ -36,7 +36,11 @@ if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 
 	$feeds = $microsub->get_feeds( $active_channel );
 
-	$filename = date('Y-m-d_H-i-s', time()).'_sekretaer_feedlist';
+	$channel = $channels[$active_channel];
+	$channel_name = $channel->name;
+	$channel_name_sanitized = sanitize_string_for_url($channel_name);
+
+	$filename = date('Y-m-d_H-i-s', time()).'_sekretaer_'.$channel_name_sanitized.'_feedlist';
 
 	$content = false;
 	if( $type == 'opml' ) {
