@@ -29,12 +29,6 @@ snippet( 'header' );
 	?>
 </ul>
 
-
-<pre style="font-size: 10px; opacity: 0.5; overflow: auto; margin: 40px 0;">
-<?php var_dump($_SESSION); ?>
-</pre>
-
-
 <?php
 
 snippet( 'footer' );

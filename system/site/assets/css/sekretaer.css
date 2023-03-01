@@ -51,9 +51,9 @@ ul.tag-selector {
 
 .debugmessage {
 	border: 1px solid red;
-	padding: 10px;
 	display: block;
 	margin: 20px 0;
+	padding: 0;
 	box-sizing: border-box;
 	font-size: 12px;
 	border-radius: 5px;
@@ -66,7 +66,13 @@ ul.tag-selector {
 		background: red;
 		color: #fff;
 		padding: 10px;
-		margin: -10px -10px 20px;
+	}
+
+	.debugmessage > pre {
+		padding: 10px;
+		margin: 0;
+		overflow: auto;
+		display: block;
 	}
 
 	.debugmessage hr {
