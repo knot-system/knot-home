@@ -25,6 +25,11 @@ $action = false;
 if( isset($_GET['action']) ) $action = $_GET['action'];
 
 
+if( $action == 'channels' ) {
+	$active_channel = false; // don't select a channel while managing
+}
+
+
 if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 
 	$type = $_GET['type'];
