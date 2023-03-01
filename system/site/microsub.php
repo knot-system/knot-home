@@ -224,6 +224,10 @@ if( $active_channel ) {
 
 		?>
 		<ul class="feeds-list">
+			<li>
+				<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
+				<a class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
+			</li>
 			<?php
 			foreach( $feeds->items as $item ) {
 				?>
@@ -243,10 +247,6 @@ if( $active_channel ) {
 				<?php
 			}
 			?>
-				<li>
-					<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
-					<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
-				</li>
 			</ul>
 		<?php
 
