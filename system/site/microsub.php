@@ -624,6 +624,7 @@ if( $active_channel ) {
 			<?php
 		} else {
 			echo '<p>- no posts found -</p>';
+			echo '<p><a class="button" href="'.url('microsub/?channel='.$active_channel.'&refresh', false).'">force refresh</a></p>';
 			if( ! empty($items->paging) ) {
 
 				$paging = $items->paging;
