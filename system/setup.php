@@ -191,7 +191,7 @@ if( $output ) {
 	}
 
 	if( $config ) {
-		$content = "<?php\r\n\r\nreturn [\r\n	'debug' => true,\r\n];\r\n"; // CLEANUP: remove the debug option, when the system is stable enough
+		$content = "<?php\r\n\r\nreturn [\r\n];\r\n";
 		if( file_put_contents( $abspath.'config.php', $content ) === false ) {
 
 			if( $debug_output ) {
