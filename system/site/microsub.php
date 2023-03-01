@@ -87,7 +87,7 @@ if( $active_channel && $active_channel != 'notifications' ) {
 		</ul>
 		<?php
 	} else {
-		echo '- no feeds found -';
+		echo '<p>- no feeds found -</p>';
 	}
 }
 
@@ -107,26 +107,6 @@ if( $action == 'channels' ) {
 
 	echo '<h2>Manage Channels</h2>';
 
-	echo '<ul class="channels-list">';
-	foreach( $channels as $channel ) {
-
-		$classes = [];
-		if( $active_channel && $channel->uid == $active_channel ) {
-			$classes[] = 'active';
-		}
-		
-		?>
-		<li<?= get_class_attribute($classes) ?>>
-			<a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>">
-				<?php
-				echo $channel->name;
-				if( isset($channel->unread) ) echo '*'.$channel->unread;
-				?>	
-			</a>
-		</li>
-		<?php
-	}
-	echo '</ul>';
 
 	// TODO: manage channels
 	// - add new channel
@@ -134,7 +114,24 @@ if( $action == 'channels' ) {
 	// - rename channel
 	// - hide/unhide channel
 
-	echo '<p>not implemented yet</p>';
+	echo '<p>not implemented yet</p>'; // DEBUG
+	snippet( 'footer' ); // DEBUG
+	exit; // DEBUG
+
+
+	echo '<ul class="channels-list">';
+	foreach( $channels as $channel ) {
+		?>
+		<li>
+			<?= $channel->name ?>	
+		</li>
+		<?php
+	}
+	echo '</ul>';
+
+
+	snippet( 'footer' );
+	exit;
 
 }
 
@@ -166,8 +163,8 @@ if( $active_channel ) {
 					?>
 					<br>
 					<a class="button button-small disabled">mute</a>
-					<a class="button button-small" href="<?= url('microsub/?channel='.$active_channel.'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
 					<a class="button button-small disabled">block</a>
+					<a class="button button-small" href="<?= url('microsub/?channel='.$active_channel.'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
 				</li>
 				<?php
 			}
@@ -319,14 +316,6 @@ if( $active_channel ) {
 
 				?>
 				<li>
-					<?php
-					if( isset($_GET['debug']) ) {
-						?>
-						<pre><?php var_dump($item); ?></pre>
-						<?php
-					}
-
-					?>
 					<span class="item-content">
 						<?php			
 
