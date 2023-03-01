@@ -1,3 +1,17 @@
+alpha.6
+
+- micropub/write: design update
+- micropub/write: form is now available as a snippet
+- micropub/write: show image preview when selecting an image
+- microsub/read: design update
+- microsub/read: automatically select the first channel (that is not 'notifications'), if no channel is selected
+- microsub/read: export feedlist as .txt, .json or .opml (experimental)
+- microsub/read: manage channels (create, rename, delete)
+- updated default theme to alpha.6
+- the first-time setup now runs silently in the background, if everything succeeds
+- bugfixes & enhancements
+
+
 alpha.5
 
 - show categories of posts, if available
