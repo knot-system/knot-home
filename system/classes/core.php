@@ -61,6 +61,7 @@ class Sekretaer {
 		if( $this->config->get('debug') ) {
 			echo '<hr><strong>ERROR</strong>';
 			foreach( $messages as $message ) {
+				if( is_array($message) || is_object($message) ) $message = var_export($message, true);
 				echo '<br>'.$message;
 			}
 		}
