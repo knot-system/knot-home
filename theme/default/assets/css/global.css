@@ -146,6 +146,7 @@ button,
 		color: var(--color-text);
 		text-decoration: none;
 		box-shadow: 2px 1px 20px rgba(255,255,255,0);
+		font-weight: var(--font-default-weight-medium);
 
 		-webkit-transition: box-shadow 300ms ease-in-out;
 		-o-transition: box-shadow 300ms ease-in-out;
