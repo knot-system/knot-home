@@ -409,31 +409,112 @@ if( $active_channel ) {
 		if( isset($_POST['url']) ) {
 
 			$search_url = $_POST['url'];
+			
+			$result = false;
 
-			// TODO: search for feed urls: https://indieweb.org/Microsub-spec#Search
-			//$sources = $microsub->api_get( 'search', array( 'query' => $search_url ) );
+			if( ! empty($_REQUEST['selected_url']) ) {
 
-			// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
+				$result = $_REQUEST['selected_url'];
 
-			// follow feed - https://indieweb.org/Microsub-spec#Following
-			$response = $microsub->api_post( 'follow', [
-				'channel' => $active_channel,
-				'url' => $search_url
-			] );
+			} else {
 
-			echo '<p><strong>server response:</strong></p>';
-			echo '<pre>';
-			var_dump($response);
-			echo '</pre>';
+				$search_result = $microsub->api_post( 'search', [ 'query' => $search_url ] );
+
+				if( $search_result['status_code'] == 200 ) {
+
+					$json = json_decode($search_result['body']);
+
+					$results = [];
+					if( ! empty($json->results) ) {
+						$results = $json->results;
+					}
+
+					if( count($results) < 1 ) {
+
+						$result = $seacrh_url; // try adding the query directly as a feed
+
+					} elseif( count($results) == 1 ) {
+
+						$result = $results[0]; // only 1 result, use this
+
+					} else {
+						// multiple results, show to user
+						?>
+						<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
+							<p>Found multiple feeds, please choose one:</p>
+							<ul>
+							<?php
+							foreach( $results as $feed ) {
+
+								$url = $feed->url;
+
+								// TODO: check name, description, ..
+
+								?>
+								<li>
+									<label><input type="radio" name="selected_url" value="<?= $url ?>" required> <?= $url ?></label>
+								</li>
+								<?php
+							}
+							?>
+							</ul>
+							<button>follow the selected feed</button>
+							<input type="hidden" name="url" value="<?= $search_url ?>">
+						</form>
+						<?php
+
+						snippet( 'footer' );
+
+						exit;
+					}
+
+				} else {
+					// something went wrong
+					// TODO: better error display
+					global $sekretaer;
+					$sekretaer->debug( 'something went wrong while searching for feeds, the site return an unexpected status code', $search_result['status_code'], $search_url );
+
+					snippet( 'footer' );
+
+					exit;
+				}
+
+			}
+
+			if( $result ) {
+
+				// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
+
+				// follow feed - https://indieweb.org/Microsub-spec#Following
+				$response = $microsub->api_post( 'follow', [
+					'channel' => $active_channel,
+					'url' => $result
+				] );
+
+				echo '<p><strong>server response:</strong></p>';
+				echo '<pre>';
+				var_dump($response);
+				echo '</pre>';
+
+			} else {
+
+				global $sekretaer;
+				$sekretaer->debug( 'something went wrong while searching for feeds, no feed found', $search_url );
+
+				snippet( 'footer' );
+
+				exit;
+
+			}
 
 			echo '<a href="'.url('microsub?channel='.$active_channel.'&action=feeds&refresh=true', false).'">&raquo; back to the channel overview</a>';
 
 		} else {
 			?>
 			<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
-				<p><strong>currently, the url does not get validated. only add valid json, rss or atom feeds.</strong></p>
-				<label style="display: inline-block;">Feed URL (json, rss, atom, ...): <input type="url" name="url" placeholder="https://www.example.com/feed/rss" style="min-width:400px;"></label>
+				<label style="display: inline-block;">website address or feed URL (json, rss, atom):<br><input type="url" name="url" placeholder="https://www.example.com/" style="min-width:400px;"></label>
 				<button>add feed</button>
+				<p>you don't need to add the feed url directly, you can also add the website url - we try to find the correct feed url automatically.</p>
 			</form>
 			<?php
 		}
