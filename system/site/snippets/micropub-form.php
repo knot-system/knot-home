@@ -19,28 +19,28 @@ $name = $args['name'];
 
 		<li class="title-wrapper">
 			<label>
-				<strong>Title</strong> <small>(optional)</small>:<br>
+				<strong>Title</strong><br>
 				<input name="title" style="width: 100%;" placeholder="No Title">
 			</label>
 		</li>
 
 		<li class="slug-wrapper">
 			<label>
-				<strong>Slug</strong> <small>(optional)</small>:<br>
+				<strong>Slug</strong><br>
 				<input name="slug" style="width: 100%;" placeholder="no-title">
 			</label>
 		</li>
 
 		<li class="content-wrapper">
 			<label>
-				<strong>Content</strong> <small>(required)</small>:<br>
-				<textarea name="content" style="width: 100%; height: 300px;" placeholder="Hello World!" autofocus required><?= $content ?></textarea>
+				<strong>Content</strong><br>
+				<textarea name="content" style="width: 100%; height: 300px;" placeholder="Hello World!" autofocus><?= $content ?></textarea>
 			</label>
 		</li>
 
 		<li class="tags-wrapper">
 			<label>
-				<strong>Tags</strong> <small>(optional, comma separated)</small>:<br><input name="tags" style="width: 100%;" placeholder="tag1, tag2">
+				<strong>Tags</strong> <small>(comma separated)</small><br><input name="tags" style="width: 100%;" placeholder="tag1, tag2">
 			</label>
 			<?php if( count($tags) ) : ?>
 				<ul class="tag-selector" style="display: none;">
@@ -57,7 +57,7 @@ $name = $args['name'];
 		<li class="image-wrapper">
 			<?php /* TODO: limit max file size? depends on server receiving the image */ ?>
 			<label>
-				<strong>Image</strong> <small>(optional, .jpg or .png)</small>:<br>
+				<strong>Image</strong> <small>(.jpg or .png)</small><br>
 				<div class="image-preview"></div>
 				<input type="file" name="image" accept="image/jpeg,image/png" style="width: 100%;">
 			</label>
@@ -65,7 +65,7 @@ $name = $args['name'];
 
 		<li class="status-wrapper">
 			<label>
-				<strong>Status</strong>:<br>
+				<strong>Status</strong><br>
 				<select name="status" required><option value="draft">Draft</option><option selected value="published">Publish</option></select>
 			</label>
 		</li>
