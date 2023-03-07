@@ -435,7 +435,7 @@ if( $active_channel ) {
 
 					} elseif( count($results) == 1 ) {
 
-						$result = $results[0]; // only 1 result, use this
+						$result = $results[0]->url; // only 1 result, use this
 
 					} else {
 						// multiple results, show to user
@@ -512,7 +512,7 @@ if( $active_channel ) {
 		} else {
 			?>
 			<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
-				<label style="display: inline-block;">website address or feed URL (json, rss, atom):<br><input type="url" name="url" placeholder="https://www.example.com/" style="min-width:400px;"></label>
+				<label style="display: inline-block;">website address or feed URL (json, rss, atom):<br><input type="text" name="url" placeholder="example.com" autofocus style="min-width:400px;"></label>
 				<button>add feed</button>
 				<p>you don't need to add the feed url directly, you can also add the website url - we try to find the correct feed url automatically.</p>
 			</form>
