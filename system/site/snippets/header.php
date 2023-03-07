@@ -21,8 +21,6 @@ $navigation = get_navigation();
 	<div class="nav-area">
 
 		<header>
-			<h1><a href="<?= url() ?>">Sekretär</a></h1>
-
 			<nav>
 				<ul>
 					<?php

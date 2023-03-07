@@ -223,6 +223,12 @@ function get_navigation(){
 
 	$navigation = array();
 
+	$navigation[] = array(
+		'name' => '🗞️',
+		'url' => url(''),
+		'active' => ( $template == 'dashboard' )
+	);
+
 	if( $sekretaer->config->get('microsub') ) {
 		$navigation[] = array(
 			'name' => 'Read',
