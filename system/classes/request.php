@@ -75,7 +75,7 @@ class Request {
 		if( $this->request_type == 'post' ) {
 			curl_setopt( $ch, CURLOPT_POST, 1 );
 			if( count($this->post_data) ) {
-				$post_data = http_build_query( $this->post_data, '', '&' );
+				$post_data = $this->post_data;
 				curl_setopt( $ch, CURLOPT_POSTFIELDS, $post_data );
 			}
 		}
