@@ -233,3 +233,5 @@ if( $output ) {
 	exit;
 
 }
+
+header( 'location: '.$baseurl );
