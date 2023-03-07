@@ -98,8 +98,25 @@ class Micropub {
 
 		if( isset($post['slug']) && $post['slug'] != '' ) $data['slug'] = $post['slug'];
 
-		if( $files && ! empty($files['image']) && ! empty($files['image']['name']) ) {
-			// TODO: more error handling; check if $files['image']['error'] == 0 and $files['image']['size'] is > 0 and if tmp_name exists on the disk and so on ...
+		if( $files && ! empty($files['image'])) {
+
+			if( empty($files['image']['name']) ||
+				( isset($files['image']['error']) && $files['image']['error'] != 0 ) ||
+				empty($files['image']['size']) ||
+				$files['image']['size'] <= 0 ||
+				empty($files['image']['tmp_name']) ||
+				! file_exists($files['image']['tmp_name'])
+			) {
+
+				global $sekretaer;
+				$sekretaer->debug( 'image upload error', $data, $files );
+
+				return [
+					false,
+					'<strong>Bad Request</strong> - image upload error'
+				];
+			}
+
 			$data['photo'] = curl_file_create( $files['image']['tmp_name'], $files['image']['type'], $files['image']['name'] );
 		}
 
