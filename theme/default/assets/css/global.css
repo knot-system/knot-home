@@ -666,3 +666,35 @@ ul.feeds-list {
 
 	}
 
+.add-feed-select-form {
+
+}
+
+	.add-feed-select-form ul {
+		list-style-type: none;
+		padding: 0;
+	}
+
+		.add-feed-select-form ul li {
+			display: block;
+			position: relative;
+			padding-left: 25px;
+		}
+		
+			.add-feed-select-form ul li input {
+				position: absolute;
+				left: 0;
+				margin-top: 4px;
+			}
+
+			.add-feed-select-form ul li + li {
+				margin-top: 10px;
+			}
+
+		.add-feed-select-form ul li img {
+			width: 40px;
+			height: 40px;
+			object-fit: cover;
+			display: inline-block;
+			margin-right: 0.2em;
+		}

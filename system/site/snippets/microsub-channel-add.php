@@ -45,7 +45,7 @@ if( isset($_POST['url']) ) {
 			} else {
 				// multiple results, show to user
 				?>
-				<form method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
+				<form class="add-feed-select-form" method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
 					<p>Found multiple feeds, please choose one:</p>
 					<ul>
 					<?php
@@ -53,11 +53,28 @@ if( isset($_POST['url']) ) {
 
 						$url = $feed->url;
 
-						// TODO: check name, description, ..
+						$title = $url;
+						if( ! empty($feed->name) ) $title = $feed->name;
+
+						$description = false;
+						if( ! empty($feed->description) ) $description = $feed->description;
+
+						$image = false;
+						if( ! empty($feed->photo) ) $image = $feed->photo;
 
 						?>
 						<li>
-							<label><input type="radio" name="selected_url" value="<?= $url ?>" required> <?= $url ?></label>
+							<label>
+								<span>
+									<input type="radio" name="selected_url" value="<?= $url ?>" required>
+									<?php
+									if( $image ) echo '<img src="'.$image.'">';
+									echo '<strong>'.$title.'</strong>';
+									if( $description ) echo '<br>'.$description;
+									if( $title != $url ) echo '<br><small>'.$url.'</small>';
+									?>
+								</span>
+							</label>
 						</li>
 						<?php
 					}
