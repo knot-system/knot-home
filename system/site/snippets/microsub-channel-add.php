@@ -35,60 +35,62 @@ if( isset($_POST['url']) ) {
 			}
 
 			if( count($results) < 1 ) {
-
-				$result = $search_url; // try adding the query directly as a feed
-
-			} elseif( count($results) == 1 ) {
-
-				$result = $results[0]->url; // only 1 result, use this
-
-			} else {
-				// multiple results, show to user
-				?>
-				<form class="add-feed-select-form" method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
-					<p>Found multiple feeds, please choose one:</p>
-					<ul>
-					<?php
-					foreach( $results as $feed ) {
-
-						$url = $feed->url;
-
-						$title = $url;
-						if( ! empty($feed->name) ) $title = $feed->name;
-
-						$description = false;
-						if( ! empty($feed->description) ) $description = $feed->description;
-
-						$image = false;
-						if( ! empty($feed->photo) ) $image = $feed->photo;
-
-						?>
-						<li>
-							<label>
-								<span>
-									<input type="radio" name="selected_url" value="<?= $url ?>" required>
-									<?php
-									if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
-									echo '<strong>'.$title.'</strong>';
-									if( $description ) echo '<br>'.$description;
-									if( $title != $url ) echo '<br><small>'.$url.'</small>';
-									?>
-								</span>
-							</label>
-						</li>
-						<?php
-					}
-					?>
-					</ul>
-					<button>follow the selected feed</button>
-					<input type="hidden" name="url" value="<?= $search_url ?>">
-				</form>
-				<?php
+				echo '<p>no valid feed found</p>';
 
 				snippet( 'footer' );
-
 				exit;
+
 			}
+
+			?>
+			<form class="add-feed-select-form" method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
+
+				<?php
+				if( count($results) > 1 ) {
+					echo '<p>Found multiple feeds, please choose one:</p>';
+				}
+				?>
+				<ul>
+				<?php
+				foreach( $results as $feed ) {
+
+					$url = $feed->url;
+
+					$title = $url;
+					if( ! empty($feed->name) ) $title = $feed->name;
+
+					$description = false;
+					if( ! empty($feed->description) ) $description = $feed->description;
+
+					$image = false;
+					if( ! empty($feed->photo) ) $image = $feed->photo;
+
+					?>
+					<li>
+						<label>
+							<span>
+								<input type="radio" name="selected_url" value="<?= $url ?>" required<?php if( count($results) == 1 ) echo ' checked'; ?>>
+								<?php
+								if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
+								echo '<strong>'.$title.'</strong>';
+								if( $description ) echo '<br>'.$description;
+								if( $title != $url ) echo '<br><small>'.$url.'</small>';
+								?>
+							</span>
+						</label>
+					</li>
+					<?php
+				}
+				?>
+				</ul>
+				<button>follow the selected feed</button>
+				<input type="hidden" name="url" value="<?= $search_url ?>">
+			</form>
+			<?php
+
+			snippet('footer');
+			exit;
+
 
 		} else {
 			// something went wrong
