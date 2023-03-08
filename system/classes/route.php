@@ -117,12 +117,10 @@ class Route {
 
 			} else {
 
-				$test_template = $request[0];
+				$template = $request[0];
 
-				$template = '404';
-
-				if( file_exists($sekretaer->abspath.'system/site/'.$test_template.'.php') ) {
-					$template = $test_template;
+				if( ! file_exists($sekretaer->abspath.'system/site/'.$template.'.php') ) {
+					$template = '404';
 				}
 
 				$this->route = array(
