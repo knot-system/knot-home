@@ -29,10 +29,25 @@ $feeds = $args['feeds'];
 		?>
 		<li>
 			<?php
-			$name = $item->url;
+			$url = $item->url;
+
+			$name = $url;
 			if( ! empty($item->name) ) $name = $item->name;
 
-			echo '<span title="'.$item->url.'">'.$name.'</span>';
+			$image = false;
+			if( ! empty($item->photo) ) $image = $item->photo;
+
+			$description = false;
+			if( ! empty($item->description) ) $description = $item->description;
+
+			echo '<span>';
+				if( $image ) echo '<img src="'.$image.'">'; // TODO: cache locally, so we don't leak the client IP
+				echo '<strong>'.$name.'</strong>';
+			echo '</span>';
+
+			if( $description ) echo '<br>'.$description;
+
+			if( $url != $name ) echo '<br><small>'.$url.'</small>';
 
 			?>
 			<br>
