@@ -1,6 +1,6 @@
 <?php
 
-// Version: alpha.6
+// Version: alpha.7
 
 if( ! $sekretaer ) exit;
 
@@ -44,12 +44,9 @@ $name = $args['name'];
 			</label>
 			<?php if( count($tags) ) : ?>
 				<ul class="tag-selector" style="display: none;">
-					<?php foreach( $tags as $tag ) {
-					?>
+				<?php foreach( $tags as $tag ) { ?>
 					<li><?= $tag ?></li>
-					<?php
-					}
-					?>
+				<?php } ?>
 				</ul>
 			<?php endif; ?>
 		</li>
