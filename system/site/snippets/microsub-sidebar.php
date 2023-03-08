@@ -45,7 +45,11 @@ if( $active_channel && $active_channel != 'notifications' ) {
 
 	?>
 	<hr>
-	<p class="manage-link"><a href="<?= url('microsub/'.$active_channel.'/feeds/', false) ?>" title="manage feeds">manage</a></p>
+	<span class="channel-meta">
+		<strong><?= $channels[$active_channel]->name ?></strong>
+		<p class="manage-link"><a href="<?= url('microsub/'.$active_channel.'/feeds/', false) ?>" title="manage feeds">manage</a>
+		</p>
+	</span>
 	<?php
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>

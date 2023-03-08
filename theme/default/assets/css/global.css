@@ -475,10 +475,14 @@ h1, h2, h3, h4, h5, h6 {
 
 	}
 
+.channel-meta {
+	margin-bottom: 1em;
+}
+
 .manage-link {
 	text-align: right;
 	font-size: 0.8em;
-	margin: 0 0 0.5em;
+	margin: -1.5em 0 0.5em;
 }
 
 main.login {
