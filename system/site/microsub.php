@@ -355,7 +355,8 @@ if( $active_channel ) {
 		<h2>Manage Feeds</h2>
 
 		<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
-		<a style="margin-left: 0.5em;" class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
+		<a class="button disabled">import feeds</a>
+		<a class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
 
 		<ul class="feeds-list" style="margin-top: 2em;">
 			<li>
