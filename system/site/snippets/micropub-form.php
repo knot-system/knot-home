@@ -55,7 +55,6 @@ $name = $args['name'];
 		</li>
 
 		<li class="image-wrapper">
-			<?php /* TODO: limit max file size? depends on server receiving the image */ ?>
 			<label>
 				<strong>Image</strong> <small>(.jpg or .png)</small><br>
 				<div class="image-preview"></div>

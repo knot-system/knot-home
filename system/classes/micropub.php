@@ -98,14 +98,13 @@ class Micropub {
 
 		if( isset($post['slug']) && $post['slug'] != '' ) $data['slug'] = $post['slug'];
 
-		if( $files && ! empty($files['image'])) {
+		if( $files && ! empty($files['image']) && ! empty($files['image']['name']) ) {
 
-			if( empty($files['image']['name']) ||
-				( isset($files['image']['error']) && $files['image']['error'] != 0 ) ||
-				empty($files['image']['size']) ||
-				$files['image']['size'] <= 0 ||
-				empty($files['image']['tmp_name']) ||
-				! file_exists($files['image']['tmp_name'])
+			if( empty($files['image']['size'])
+			 || ( isset($files['image']['error']) && $files['image']['error'] != UPLOAD_ERR_OK )
+			 || $files['image']['size'] <= 0
+			 || empty($files['image']['tmp_name'])
+			 || ! file_exists($files['image']['tmp_name'])
 			) {
 
 				global $sekretaer;
@@ -118,6 +117,7 @@ class Micropub {
 			}
 
 			$data['photo'] = curl_file_create( $files['image']['tmp_name'], $files['image']['type'], $files['image']['name'] );
+			
 		}
 
 		if( trim($post['tags']) ) {
