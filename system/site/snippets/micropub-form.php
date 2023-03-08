@@ -2,7 +2,7 @@
 
 // Version: alpha.6
 
-if( ! $sekretaer ) exit;;
+if( ! $sekretaer ) exit;
 
 $url = $args['url'];
 $content = $args['content'];
