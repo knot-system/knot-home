@@ -3,26 +3,29 @@
 if( ! $sekretaer ) exit;
 
 
+$active_channel = $sekretaer->route->get('channel'); // TODO
+$action = $sekretaer->route->get('action'); // TODO
+
 
 $microsub = new Microsub();
 
-$channels = $microsub->get_channels();
 
-$active_channel = false;
-if( isset($_GET['channel']) ) $active_channel = $_GET['channel'];
+$channels = $microsub->get_channels();
 if( ! array_key_exists( $active_channel, $channels ) ) $active_channel = false;
 
 
 if( ! $active_channel ) {
-	// Note: if no channel is selected, automatically show the first channel that is not 'notifications'
+	// NOTE: if no channel is selected, automatically show the first channel that is not 'notifications'
 	$channels_cleaned = $channels;
 	unset($channels_cleaned['notifications']);
 	$active_channel = array_key_first($channels_cleaned);
 }
 
 
-$action = false;
-if( isset($_GET['action']) ) $action = $_GET['action'];
+$snippet = false; // TODO
+
+
+
 
 
 if( $action == 'channels' ) {
@@ -128,7 +131,7 @@ if( ! empty($channels) ) {
 		
 		?>
 		<li<?= get_class_attribute($classes) ?>>
-			<a href="<?= url('microsub') ?>?channel=<?= $channel->uid; ?>">
+			<a href="<?= url('microsub/'.$channel->uid) ?>">
 				<?php
 				echo $channel->name;
 				if( isset($channel->unread) ) echo '*'.$channel->unread;
@@ -148,7 +151,7 @@ if( $active_channel && $active_channel != 'notifications' ) {
 
 	?>
 	<hr>
-	<p class="manage-link"><a href="<?= url('microsub/?channel='.$active_channel.'&action=feeds', false) ?>" title="manage feeds">manage</a></p>
+	<p class="manage-link"><a href="<?= url('microsub/'.$active_channel.'/feeds/', false) ?>" title="manage feeds">manage</a></p>
 	<?php
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
@@ -172,7 +175,7 @@ if( $active_channel && $active_channel != 'notifications' ) {
 	} else {
 		?>
 		<p>(no feeds found)</p>
-		<p><a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a></p>
+		<p><a class="button add-feed" href="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">+ add a new feed</a></p>
 		<?php
 	}
 }
@@ -354,9 +357,9 @@ if( $active_channel ) {
 		?>
 		<h2>Manage Feeds</h2>
 
-		<a class="button add-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=add', false ) ?>">+ add a new feed</a>
+		<a class="button add-feed" href="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">+ add a new feed</a>
 		<a class="button disabled">import feeds</a>
-		<a class="button export-feed" href="<?= url('microsub/?channel='.$active_channel.'&action=export', false ) ?>">export feed list</a>
+		<a class="button export-feed" href="<?= url('microsub/'.$active_channel.'/export/', false ) ?>">export feed list</a>
 
 		<ul class="feeds-list" style="margin-top: 2em;">
 			<li>
@@ -375,7 +378,7 @@ if( $active_channel ) {
 					<br>
 					<a class="button button-small disabled">mute</a>
 					<a class="button button-small disabled">block</a>
-					<a class="button button-small" href="<?= url('microsub/?channel='.$active_channel.'&action=unfollow&feed='.urlencode($item->url), false) ?>">unfollow</a>
+					<a class="button button-small" href="<?= url('microsub/'.$active_channel.'/unfollow?feed='.urlencode($item->url), false) ?>">unfollow</a>
 				</li>
 				<?php
 			}
@@ -405,7 +408,7 @@ if( $active_channel ) {
 	} elseif( $action == 'add' ) {
 		// add new feed
 
-		echo '<p><a class="button" href="'.url('microsub?channel='.$active_channel.'&action=feeds', false).'">cancel</a></p>';
+		echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/feeds/', false).'">cancel</a></p>';
 
 		if( isset($_POST['url']) ) {
 
@@ -441,7 +444,7 @@ if( $active_channel ) {
 					} else {
 						// multiple results, show to user
 						?>
-						<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
+						<form method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
 							<p>Found multiple feeds, please choose one:</p>
 							<ul>
 							<?php
@@ -508,11 +511,11 @@ if( $active_channel ) {
 
 			}
 
-			echo '<a href="'.url('microsub?channel='.$active_channel.'&action=feeds&refresh=true', false).'">&raquo; back to the channel overview</a>';
+			echo '<a href="'.url('microsub/'.$active_channel.'/feeds/?refresh=true', false).'">&raquo; back to the channel overview</a>';
 
 		} else {
 			?>
-			<form method="POST" action="<?= url('microsub?channel='.$active_channel.'&action=add', false ) ?>">
+			<form method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
 				<label style="display: inline-block;">website address or feed URL (json, rss, atom):<br><input type="text" name="url" placeholder="example.com" autofocus style="min-width:400px;"></label>
 				<button>add feed</button>
 				<p>you don't need to add the feed url directly, you can also add the website url - we try to find the correct feed url automatically.</p>
@@ -538,12 +541,12 @@ if( $active_channel ) {
 			var_dump($response);
 			echo '</pre>';
 
-			echo '<a href="'.url('microsub?channel='.$active_channel.'&refresh=true', false).'">&raquo; back to the channel overview</a>';
+			echo '<a href="'.url('microsub/'.$active_channel.'/?refresh=true', false).'">&raquo; back to the channel overview</a>';
 
 		} else {
 
 			echo '<p>do you really want to unfollow <strong>'.$feed.'</strong>?</p>';
-			echo '<p><a class="button" href="'.url('microsub/?channel='.$active_channel.'&action=unfollow&confirmation=true&feed='.$_GET['feed'], false).'">yes, unfollow<a> <a class="button" href="'.url('microsub/?channel='.$active_channel.'&action=feeds', false).'">no, abort</a></p>';
+			echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/unfollow?confirmation=true&feed='.$_GET['feed'], false).'">yes, unfollow<a> <a class="button" href="'.url('microsub/'.$active_channel.'/feeds/', false).'">no, abort</a></p>';
 
 		}
 
@@ -572,10 +575,10 @@ if( $active_channel ) {
 
 				echo '<ul class="pagination">';
 				if( ! empty($paging->before) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?before='.$paging->before, false).'">&laquo; previous page</a></li>';
 				}
 				if( ! empty($paging->after) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?after='.$paging->after, false).'">next page &raquo;</a></li>';
 				}
 				echo '</ul>';
 
@@ -696,10 +699,10 @@ if( $active_channel ) {
 
 				echo '<ul class="pagination">';
 				if( ! empty($paging->before) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&before='.$paging->before, false).'">&laquo; previous page</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?before='.$paging->before, false).'">&laquo; previous page</a></li>';
 				}
 				if( ! empty($paging->after) ) {
-					echo '<li><a class="button" href="'.url('microsub/?channel='.$active_channel.'&after='.$paging->after, false).'">next page &raquo;</a></li>';
+					echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?after='.$paging->after, false).'">next page &raquo;</a></li>';
 				}
 				echo '</ul>';
 
@@ -710,12 +713,12 @@ if( $active_channel ) {
 			<?php
 		} else {
 			echo '<p>- no posts found -</p>';
-			echo '<p><a class="button" href="'.url('microsub/?channel='.$active_channel.'&refresh', false).'">force refresh</a></p>';
+			echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/?refresh', false).'">force refresh</a></p>';
 			if( ! empty($items->paging) ) {
 
 				$paging = $items->paging;
 				if( ! empty($items_args['before']) || ! empty($items_args['after']) ) {
-					echo '<a class="button" href="'.url('microsub/?channel='.$active_channel, false).'">go to first page</a>';
+					echo '<a class="button" href="'.url('microsub/'.$active_channel.'/', false).'">go to first page</a>';
 				}
 
 			}

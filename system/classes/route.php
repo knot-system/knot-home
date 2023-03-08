@@ -123,8 +123,20 @@ class Route {
 					$template = '404';
 				}
 
+				$channel = false;
+				if( ! empty($request[1]) ) {
+					$channel = $request[1];
+				}
+
+				$action = false;
+				if( ! empty($request[2]) ) {
+					$action = $request[2];
+				}
+
 				$this->route = array(
-					'template' => $template
+					'template' => $template,
+					'channel' => $channel,
+					'action' => $action
 				);
 
 			}
