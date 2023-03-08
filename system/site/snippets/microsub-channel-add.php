@@ -68,7 +68,7 @@ if( isset($_POST['url']) ) {
 								<span>
 									<input type="radio" name="selected_url" value="<?= $url ?>" required>
 									<?php
-									if( $image ) echo '<img src="'.$image.'">';
+									if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
 									echo '<strong>'.$title.'</strong>';
 									if( $description ) echo '<br>'.$description;
 									if( $title != $url ) echo '<br><small>'.$url.'</small>';

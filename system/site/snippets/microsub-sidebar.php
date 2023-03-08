@@ -58,8 +58,14 @@ if( $active_channel && $active_channel != 'notifications' ) {
 				$name = $item->url;
 				if( ! empty($item->name) ) $name = $item->name;
 
+				$image = false;
+				if( ! empty($item->photo) ) $image = $item->photo;
+
 				?>
-				<span title="<?= $item->url ?>"><?= $name ?></span>
+				<span title="<?= $item->url ?>"><?php
+				if( $image ) echo '<img src="'.$image.'">'; // TODO: cache locally, so we don't leak the client IP
+				echo $name;
+				?></span>
 			</li>
 			<?php
 		}

@@ -593,6 +593,15 @@ ul.feeds-list {
 		hyphens: auto;
 	}
 
+		ul.feeds-list li img {
+			width: 20px;
+			height: 20px;
+			object-fit: cover;
+			display: inline-block;
+			margin-right: 0.2em;
+			vertical-align: middle;
+		}
+
 #micropub-form {
 
 }
@@ -692,9 +701,10 @@ ul.feeds-list {
 			}
 
 		.add-feed-select-form ul li img {
-			width: 40px;
-			height: 40px;
+			width: 20px;
+			height: 20px;
 			object-fit: cover;
 			display: inline-block;
 			margin-right: 0.2em;
+			vertical-align: middle;
 		}
