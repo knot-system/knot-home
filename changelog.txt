@@ -1,3 +1,17 @@
+alpha.7
+
+- micropub/write: don't require content to be set
+- micropub/write: bugfix for image upload
+- microsub/read: better experience when adding new feeds: feeds are automatically detected, when multiple feeds are detected you can select which one to follow, additional information about the feed are retrieved
+- microsub/read: exported feedlist now has the channel name in the filename
+- removed 'Sekretär' h1, and added Dashboard to navigation
+- added additional HTML tags to allowed_html_elements config option: <u>, <del>, <pre>, <blockquote>, <code>, <audio>
+- automatic link detection enhancements
+- added robots.txt to disallow indexing
+- default theme update to alpha.7
+- bugfixes & enhancements
+
+
 alpha.6
 
 - micropub/write: design update
