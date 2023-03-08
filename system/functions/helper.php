@@ -225,7 +225,7 @@ function get_navigation(){
 
 	$navigation[] = array(
 		'name' => '🗞️',
-		'url' => url(''),
+		'url' => url('dashboard'),
 		'active' => ( $template == 'dashboard' )
 	);
 
