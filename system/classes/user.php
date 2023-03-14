@@ -13,6 +13,13 @@ class User {
 		if( ! empty($_SESSION['user_id']) ) $user_id = $_SESSION['user_id'];
 
 		$this->user_id = $user_id;
+
+		if( $user_id ) {
+			if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $sekretaer->version() ) {
+				// was logged in in an old version, reset session
+				$this->logout();
+			}
+		}
 	
 		return $this;
 	}
@@ -110,6 +117,10 @@ class User {
 		$_SESSION['name'] = $this->create_short_name( $response['me'] );
 
 
+		global $sekretaer;
+		$_SESSION['_version'] = $sekretaer->version();
+
+
 		if( $autologin ) {
 
 			$cookie_session_id = uniqid();
@@ -156,7 +167,7 @@ class User {
 		if( ! empty($_COOKIE['sekretaer-session']) ) {
 			$cookie_session_id = $_COOKIE['sekretaer-session'];
 
-			$cache = new Cache( 'session', $cookie_session_id, true );
+			$cache = new Cache( 'session', $cookie_session_id, true, 20 );
 			$cache->remove();
 
 			setcookie( 'sekretaer-session', null, array(
