@@ -4,6 +4,12 @@ if( ! $sekretaer ) exit;
 
 head_html();
 
+
+$prefill_url = '';
+if( ! empty($_COOKIE['sekretaer-url']) ) {
+	$prefill_url = $_COOKIE['sekretaer-url'];
+}
+
 ?>
 
 <main class="login">
@@ -22,9 +28,11 @@ head_html();
 
 		<form id="login-form" action="<?= url('action/login') ?>" method="POST">
 
-			<label><span style="display: inline-block; width: 60px;">URL:</span> <input type="url" name="url" placeholder="https://www.example.com" autofocus style="width: 250px;" required autocomplete="username"></label>
+			<label><span style="display: inline-block; width: 60px;">URL:</span> <input type="url" name="url" placeholder="https://www.example.com" value="<?= $prefill_url ?>" autofocus style="width: 100%; max-width: 340px;" required autocomplete="username"></label>
 
-			<span style="display: inline-block; width: 60px;"></span> <label style="display: inline-block"><input type="checkbox" name="autologin" value="true"> stay logged in (this sets a cookie)</label>
+			<span style="display: inline-block; width: 60px;"></span> <label style="display: inline-block"><input type="checkbox" name="autologin" value="true"> stay logged in <small>(this sets a cookie)</small></label>
+			
+			<br><span style="display: inline-block; width: 60px;"></span> <label style="display: inline-block"><input type="checkbox" name="rememberurl" value="true"<?php if( $prefill_url ) echo ' checked'; ?>> remember URL on this page <small>(this sets a cookie)</small></label>
 
 			<br><br>
 
@@ -32,7 +40,7 @@ head_html();
 
 			<input type="hidden" name="path" value="<?= implode('/', $sekretaer->route->request) ?>">
 		
-			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is a alpha release. things may break.</span>
+			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is an alpha release. things may break.</span>
 
 		</form>
 		

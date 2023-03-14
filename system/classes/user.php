@@ -35,6 +35,24 @@ class User {
 
 		global $sekretaer;
 
+		if( ! empty($post['rememberurl']) && $post['rememberurl'] == 'true' ) {
+
+			$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+
+			setcookie( 'sekretaer-url', $url, array(
+				'expires' => time()+$cookie_lifetime,
+				'path' => '/'
+			));
+
+		} elseif( isset($_COOKIE['sekretaer-url']) ) {
+
+			setcookie( 'sekretaer-url', null, array(
+				'expires' => -1,
+				'path' => '/'
+			));
+
+		}
+
 		$indieauth = new IndieAuth();
 
 		$scope = $sekretaer->config->get( 'scope' );
