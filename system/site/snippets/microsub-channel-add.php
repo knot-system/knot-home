@@ -14,7 +14,7 @@ echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/feeds/', fa
 if( isset($_POST['url']) ) {
 
 	
-	if( empty($_REQUEST['selected_url']) ) {
+	if( empty($_REQUEST['selected_feeds']) ) {
 
 		$search_url = $_POST['url'];
 
@@ -31,7 +31,7 @@ if( isset($_POST['url']) ) {
 
 				<?php
 				if( count($feeds) > 1 ) {
-					echo '<p>Found multiple feeds, please choose one:</p>';
+					echo '<p>Found multiple feeds, please selected the feeds you want to follow:</p>';
 				}
 				?>
 				<ul>
@@ -53,7 +53,7 @@ if( isset($_POST['url']) ) {
 					<li>
 						<label>
 							<span>
-								<input type="radio" name="selected_url" value="<?= $url ?>" required<?php if( count($feeds) == 1 ) echo ' checked'; ?>>
+								<input type="checkbox" name="selected_feeds[]" value="<?= $url ?>" <?php if( count($feeds) == 1 ) echo ' checked'; ?>>
 								<?php
 								if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
 								echo '<strong>'.$title.'</strong>';
@@ -67,7 +67,7 @@ if( isset($_POST['url']) ) {
 				}
 				?>
 				</ul>
-				<button>follow the selected feed</button>
+				<button>follow the selected feed<?php if( count($feeds) > 1 ) echo 's'; ?></button>
 				<input type="hidden" name="url" value="<?= $search_url ?>">
 			</form>
 			<?php
@@ -75,21 +75,24 @@ if( isset($_POST['url']) ) {
 
 	} else {
 
-		$result = $_REQUEST['selected_url'];
+		$selected_feeds = $_REQUEST['selected_feeds'];
 
-		// follow feed - https://indieweb.org/Microsub-spec#Following
-		$response = $microsub->api_post( 'follow', [
-			'channel' => $active_channel,
-			'url' => $result
-		] );
+		if( ! is_array($selected_feeds) ) $selected_feeds = array($selected_feeds);
 
-		echo '<p><strong>server response:</strong></p>';
-		echo '<pre>';
-		var_dump($response);
-		echo '</pre>';
+		foreach( $selected_feeds as $selected_feed ) {
+
+			$response = $microsub->subscribe_feed( $selected_feed, $active_channel );
+
+			if( $response == 'success' ) {
+				echo '<p><strong>sucessfully subscribed to '.$selected_feed.'</strong></p>';
+			} else {
+				echo '<p><strong>Error:</strong> could not subscribe to <strong>'.$selected_feed.'</strong>:<br>'.$response.'</p>';
+			}
+
+		}
 
 		echo '<a href="'.url('microsub/'.$active_channel.'/feeds/add/?refresh=true', false).'">&raquo; back to the feed management</a>';
-		
+
 	}
 
 

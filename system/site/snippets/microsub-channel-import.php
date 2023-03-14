@@ -22,19 +22,19 @@ if( isset($_POST['selected_feeds']) ) {
 
 	$import_feeds = $_POST['selected_feeds'];
 
+	if( ! is_array($import_feeds) && ! empty($import_feeds) ) $import_feeds = array($import_feeds);
+
 	if( is_array($import_feeds) && count($import_feeds) ) {
+
 		foreach( $import_feeds as $import_feed ) {
 
-			// follow feed - https://indieweb.org/Microsub-spec#Following
-			$response = $microsub->api_post( 'follow', [
-				'channel' => $active_channel,
-				'url' => $import_feed
-			] );
+			$response = $microsub->subscribe_feed( $import_feed, $active_channel );
 
-			echo '<p>subscribe to <strong>'.$import_feed.'</strong>';
-			echo '<pre>';
-			var_dump($response);
-			echo '</pre>';
+			if( $response == 'success' ) {
+				echo '<p><strong>sucessfully subscribed to '.$import_feed.'</strong></p>';
+			} else {
+				echo '<p><strong>Error:</strong> could not subscribe to <strong>'.$import_feed.'</strong>:<br>'.$response.'</p>';
+			}
 
 		}
 
@@ -153,7 +153,7 @@ if( isset($_POST['selected_feeds']) ) {
 						?>
 						<label>
 							<span>
-								<input type="checkbox" name="selected_feeds[]" value="<?= $url ?>">
+								<input type="checkbox" name="selected_feeds[]" value="<?= $url ?>" checked>
 								<?php
 								if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
 								echo '<strong>'.$title.'</strong>';

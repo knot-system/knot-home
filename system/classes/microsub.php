@@ -154,6 +154,22 @@ class Microsub {
 		return $results;
 	}
 
+	function subscribe_feed( $url, $active_channel ) {
+
+		// follow feed - https://indieweb.org/Microsub-spec#Following
+		$response = $this->api_post( 'follow', [
+			'channel' => $active_channel,
+			'url' => $url
+		] );
+
+
+		if( $response['status_code'] == 200 ) {
+			return 'success';
+		}
+
+		return $response['body'];
+	}
+
 
 	function show_error( $error_message ) {
 
