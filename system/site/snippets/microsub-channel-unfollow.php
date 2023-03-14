@@ -21,10 +21,17 @@ if( isset($_GET['confirmation']) && $_GET['confirmation'] == 'true' ) {
 		'url' => $feed
 	] );
 
-	echo '<p><strong>server response:</strong></p>';
-	echo '<pre>';
-	var_dump($response);
-	echo '</pre>';
+	if( $response['status_code'] == 200 ) {
+
+		echo '<p>successfully unfollowed <strong>'.$feed.'</strong></p>';
+
+	} else {
+
+		echo '<p><strong>server response:</strong></p>';
+		echo '<pre>';
+		var_dump($response);
+		echo '</pre>';
+	}
 
 	echo '<a href="'.url('microsub/'.$active_channel.'/feeds/?refresh=true', false).'">&raquo; back to the feeds management</a>';
 
