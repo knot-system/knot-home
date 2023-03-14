@@ -130,6 +130,30 @@ class Microsub {
 		];
 	}
 
+	function find_feeds( $url ) {
+
+		$search_result = $this->api_post( 'search', [ 'query' => $url ] );
+
+		if( $search_result['status_code'] != 200 ) {
+			global $sekretaer;
+			$sekretaer->debug( 'something went wrong while searching for feeds, the site return an unexpected status code', $search_result['status_code'], $url );
+			return [];
+		}
+
+		$json = json_decode($search_result['body']);
+
+		$results = [];
+		if( ! empty($json->results) ) {
+			$results = $json->results;
+		}
+
+		if( count($results) < 1 ) {
+			return [];
+		}
+
+		return $results;
+	}
+
 
 	function show_error( $error_message ) {
 

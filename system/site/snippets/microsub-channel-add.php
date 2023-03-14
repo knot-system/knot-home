@@ -1,6 +1,6 @@
 <?php
 
-// Version: alpha.7
+// Version: alpha.8
 
 if( ! $sekretaer ) exit;
 
@@ -13,46 +13,30 @@ echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/feeds/', fa
 
 if( isset($_POST['url']) ) {
 
-	$search_url = $_POST['url'];
 	
-	$result = false;
+	if( empty($_REQUEST['selected_url']) ) {
 
-	if( ! empty($_REQUEST['selected_url']) ) {
+		$search_url = $_POST['url'];
 
-		$result = $_REQUEST['selected_url'];
+		$feeds = $microsub->find_feeds( $search_url );
 
-	} else {
+		if( ! count($feeds) ) {
 
-		$search_result = $microsub->api_post( 'search', [ 'query' => $search_url ] );
+			echo '<p>no feed found at '.$search_url.'</p>';
 
-		if( $search_result['status_code'] == 200 ) {
-
-			$json = json_decode($search_result['body']);
-
-			$results = [];
-			if( ! empty($json->results) ) {
-				$results = $json->results;
-			}
-
-			if( count($results) < 1 ) {
-				echo '<p>no valid feed found</p>';
-
-				snippet( 'footer' );
-				exit;
-
-			}
+		} else {
 
 			?>
 			<form class="add-feed-select-form" method="POST" action="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">
 
 				<?php
-				if( count($results) > 1 ) {
+				if( count($feeds) > 1 ) {
 					echo '<p>Found multiple feeds, please choose one:</p>';
 				}
 				?>
 				<ul>
 				<?php
-				foreach( $results as $feed ) {
+				foreach( $feeds as $feed ) {
 
 					$url = $feed->url;
 
@@ -69,7 +53,7 @@ if( isset($_POST['url']) ) {
 					<li>
 						<label>
 							<span>
-								<input type="radio" name="selected_url" value="<?= $url ?>" required<?php if( count($results) == 1 ) echo ' checked'; ?>>
+								<input type="radio" name="selected_url" value="<?= $url ?>" required<?php if( count($feeds) == 1 ) echo ' checked'; ?>>
 								<?php
 								if( $image ) echo '<img src="'.$image.'">';  // TODO: cache locally, so we don't leak the client IP
 								echo '<strong>'.$title.'</strong>';
@@ -87,27 +71,11 @@ if( isset($_POST['url']) ) {
 				<input type="hidden" name="url" value="<?= $search_url ?>">
 			</form>
 			<?php
-
-			snippet('footer');
-			exit;
-
-
-		} else {
-			// something went wrong
-			// TODO: better error display
-			global $sekretaer;
-			$sekretaer->debug( 'something went wrong while searching for feeds, the site return an unexpected status code', $search_result['status_code'], $search_url );
-
-			snippet( 'footer' );
-
-			exit;
 		}
 
-	}
+	} else {
 
-	if( $result ) {
-
-		// TODO: add feed validation (currently, everything gets added, even if its not a valid feed)
+		$result = $_REQUEST['selected_url'];
 
 		// follow feed - https://indieweb.org/Microsub-spec#Following
 		$response = $microsub->api_post( 'follow', [
@@ -120,18 +88,10 @@ if( isset($_POST['url']) ) {
 		var_dump($response);
 		echo '</pre>';
 
-	} else {
-
-		global $sekretaer;
-		$sekretaer->debug( 'something went wrong while searching for feeds, no feed found', $search_url );
-
-		snippet( 'footer' );
-
-		exit;
-
+		echo '<a href="'.url('microsub/'.$active_channel.'/feeds/add/?refresh=true', false).'">&raquo; back to the feed management</a>';
+		
 	}
 
-	echo '<a href="'.url('microsub/'.$active_channel.'/feeds/add/?refresh=true', false).'">&raquo; back to the feed management</a>';
 
 } else {
 	?>
