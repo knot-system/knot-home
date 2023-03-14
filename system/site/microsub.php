@@ -117,7 +117,6 @@ if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 }
 
 
-
 $sidebar_content = '';
 
 
@@ -141,6 +140,8 @@ if( $action == 'channels' ) {
 	$snippet = 'microsub-channels';
 } elseif( $action == 'feeds' ) {
 	$snippet = 'microsub-channel-feeds';
+} elseif( $action == 'import' ) {
+	$snippet = 'microsub-channel-import';
 } elseif( $action == 'export' ) {
 	$snippet = 'microsub-channel-export';
 } elseif( $action == 'add' ) {
