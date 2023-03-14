@@ -19,7 +19,7 @@ $feeds = $args['feeds'];
 
 <a class="button add-feed" href="<?= url('microsub/'.$active_channel.'/add/', false ) ?>">+ add a new feed</a>
 <a class="button import-feed" href="<?= url('microsub/'.$active_channel.'/import' ) ?>">import feeds</a>
-<a class="button export-feed" href="<?= url('microsub/'.$active_channel.'/export' ) ?>">export feed list</a>
+<a class="button export-feed" href="<?= url('microsub/'.$active_channel.'/export' ) ?>">export feeds</a>
 
 <ul class="feeds-list" style="margin-top: 2em;">
 	<li>
