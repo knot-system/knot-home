@@ -40,7 +40,7 @@ if( ! empty($_COOKIE['sekretaer-url']) ) {
 
 			<input type="hidden" name="path" value="<?= implode('/', $core->route->request) ?>">
 		
-			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is an alpha release. things may break.</span>
+			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is an early release. things may break.</span>
 
 		</form>
 		

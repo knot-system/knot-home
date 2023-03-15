@@ -3,5 +3,5 @@
 return [
 	'name' => 'Default Theme',
 	'author' => 'maxhaesslein',
-	'version' => 'alpha.7'
+	'version' => '0.1.0'
 ];
