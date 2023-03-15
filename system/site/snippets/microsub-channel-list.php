@@ -1,8 +1,8 @@
 <?php
 
-// Version: alpha.7
+// Version: alpha.8
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 
 $active_channel = $args['active_channel'];
@@ -47,7 +47,7 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 		$date = new DateTimeImmutable($item->published);
 
-		$datetime_format = $sekretaer->config->get('datetime_format');
+		$datetime_format = $core->config->get('datetime_format');
 		$datetime = $date->format( $datetime_format );
 
 		$author_name = false;

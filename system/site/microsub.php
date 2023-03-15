@@ -1,10 +1,10 @@
 <?php
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 
-$active_channel = $sekretaer->route->get('channel'); // TODO rename to $channel
-$action = $sekretaer->route->get('action');
+$active_channel = $core->route->get('channel'); // TODO rename to $channel
+$action = $core->route->get('action');
 
 
 if( $active_channel == 'manage' ) {

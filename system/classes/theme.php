@@ -12,15 +12,15 @@ class Theme {
 	public $metatags = array();
 
 
-	function __construct( $sekretaer ) {
+	function __construct( $core ) {
 
-		$theme_name = $sekretaer->config->get('theme');
+		$theme_name = $core->config->get('theme');
 
-		if( ! file_exists( $sekretaer->abspath.'theme/'.$theme_name.'/theme.php' ) ) {
+		if( ! file_exists( $core->abspath.'theme/'.$theme_name.'/theme.php' ) ) {
 			$theme_name = 'default';
 		}
 
-		$file_path = $sekretaer->abspath.'theme/'.$theme_name.'/theme.php';
+		$file_path = $core->abspath.'theme/'.$theme_name.'/theme.php';
 		$this->config = $this->load_theme_config_from_file( $file_path );
 
 		$this->folder_name = $theme_name;
@@ -35,32 +35,32 @@ class Theme {
 		$this->add_metatag( 'viewport', '<meta name="viewport" content="width=device-width,initial-scale=1.0">' );
 		$this->add_metatag( 'title', '<title>Sekretär</title>' );
 
-		$this->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$sekretaer->version().'">' );
+		$this->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
 
 
 		// expand sekretaer config options:
-		$config_path = $sekretaer->abspath.'theme/'.$theme_name.'/config.php';
+		$config_path = $core->abspath.'theme/'.$theme_name.'/config.php';
 		if( file_exists( $config_path ) ) {
-			$sekretaer->config->load_config_file( $config_path );
+			$core->config->load_config_file( $config_path );
 			// we need to overwrite it with the local user config again:
-			$sekretaer->config->load_config_file( $sekretaer->abspath.'config.php' );
+			$core->config->load_config_file( $core->abspath.'config.php' );
 		}
 
 	}
 
 
 	function load(){
-		global $sekretaer;
-		$sekretaer->include( $this->path.'functions.php' );
+		global $core;
+		$core->include( $this->path.'functions.php' );
 	}
 
 
 	function load_theme_config_from_file( $file_path ) {
 
-		global $sekretaer;
+		global $core;
 
 		if( ! file_exists($file_path) ) {
-			$sekretaer->debug( 'no config file found', $file_path );
+			$core->debug( 'no config file found', $file_path );
 			exit;
 		}
 
@@ -82,10 +82,10 @@ class Theme {
 
 	function add_stylesheet( $path, $type = 'theme' ) {
 
-		global $sekretaer;
+		global $core;
 
-		$global_path = $sekretaer->abspath.'system/site/assets/';
-		$global_url = $sekretaer->baseurl.'/system/site/assets/';
+		$global_path = $core->abspath.'system/site/assets/';
+		$global_url = $core->baseurl.'/system/site/assets/';
 
 		if( $type == 'theme' && file_exists($this->path.$path) ) {
 			$type = 'theme';
@@ -114,16 +114,16 @@ class Theme {
 
 	function print_stylesheets() {
 
-		global $sekretaer;
+		global $core;
 
 		foreach( $this->stylesheets as $stylesheet ) {
 			if( $stylesheet['type'] == 'global' ) {
-				$version = $sekretaer->version();
+				$version = $core->version();
 			} else {
 				$version = $this->get('version');
 			}
 
-			if( $sekretaer->config->get('debug') ) {
+			if( $core->config->get('debug') ) {
 				$version .= '.'.time();
 			}
 
@@ -139,10 +139,10 @@ class Theme {
 
 		// $loading is meant for 'async' or 'defer' attributes
 
-		global $sekretaer;
+		global $core;
 
-		$global_path = $sekretaer->abspath.'system/site/assets/';
-		$global_url = $sekretaer->baseurl.'/system/site/assets/';
+		$global_path = $core->abspath.'system/site/assets/';
+		$global_url = $core->baseurl.'/system/site/assets/';
 
 		if( $type == 'theme' && file_exists($this->path.$path) ) {
 			$type = 'theme';
@@ -173,7 +173,7 @@ class Theme {
 
 	function print_scripts( $position = false ) {
 
-		global $sekretaer;
+		global $core;
 
 		foreach( $this->scripts as $script ) {
 
@@ -181,12 +181,12 @@ class Theme {
 			elseif( ! $script['footer'] && $position == 'footer' ) continue;
 
 			if( $script['type'] == 'global' ) {
-				$version = $sekretaer->version();
+				$version = $core->version();
 			} else {
 				$version = $this->get('version');
 			}
 
-			if( $sekretaer->config->get('debug') ) {
+			if( $core->config->get('debug') ) {
 				$version .= '.'.time();
 			}
 
@@ -208,8 +208,8 @@ class Theme {
 		if( ! array_key_exists( $position, $this->metatags ) ) $this->metatags[$position] = array();
 
 		if( array_key_exists($name, $this->metatags) ) {
-			global $sekretaer;
-			$sekretaer->debug('a metatag with this name already exists, it gets overwritten', $name, $string);
+			global $core;
+			$core->debug('a metatag with this name already exists, it gets overwritten', $name, $string);
 		}
 
 		$this->metatags[$position][$name] = $string;
@@ -240,7 +240,7 @@ class Theme {
 
 	function snippet( $path, $args = array(), $return = false ) {
 		
-		global $sekretaer;
+		global $core;
 
 		$snippet_path = 'snippets/'.$path.'.php';
 
@@ -250,11 +250,11 @@ class Theme {
 			$include_path = 'system/site/'.$snippet_path;
 		}
 
-		if( ! file_exists( $sekretaer->abspath.$include_path) ) return;
+		if( ! file_exists( $core->abspath.$include_path) ) return;
 
 		ob_start();
 
-		$sekretaer->include( $include_path, $args );
+		$core->include( $include_path, $args );
 
 		$snippet = ob_get_contents();
 		ob_end_clean();

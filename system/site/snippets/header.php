@@ -1,8 +1,8 @@
 <?php
 
-// Version: alpha.6
+// Version: alpha.8
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 head_html();
 
@@ -14,7 +14,7 @@ $navigation = get_navigation();
 
 ?>
 
-<div id="template-<?= str_replace(array('.','/'), '-', $sekretaer->route->get('template')) ?>" class="canvas">
+<div id="template-<?= str_replace(array('.','/'), '-', $core->route->get('template')) ?>" class="canvas">
 
 	<div id="menu-icon" class="menu-icon"><div class="icon"></div></div>
 
@@ -55,7 +55,7 @@ $navigation = get_navigation();
 					</li>
 				</ul>
 
-				<span class="generator"><a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $sekretaer->version() ?></span>
+				<span class="generator"><a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $core->version() ?></span>
 
 			</footer>
 

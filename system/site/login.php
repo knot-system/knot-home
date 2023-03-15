@@ -1,6 +1,6 @@
 <?php
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 head_html();
 
@@ -38,7 +38,7 @@ if( ! empty($_COOKIE['sekretaer-url']) ) {
 
 			<span style="display: inline-block; width: 60px;"></span> <button>Login</button> <span id="login-loader" class="loading hidden"></span>
 
-			<input type="hidden" name="path" value="<?= implode('/', $sekretaer->route->request) ?>">
+			<input type="hidden" name="path" value="<?= implode('/', $core->route->request) ?>">
 		
 			<br><span style="display: inline-block; width: 60px;"></span> <span class="alpha-warning">this is an alpha release. things may break.</span>
 
@@ -50,7 +50,7 @@ if( ! empty($_COOKIE['sekretaer-url']) ) {
 </main>
 
 <footer>
-	<a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $sekretaer->version() ?>
+	<a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $core->version() ?>
 </footer>
 
 <?php

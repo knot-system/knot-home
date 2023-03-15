@@ -1,8 +1,8 @@
 <?php
 
-// Version: alpha.7
+// Version: alpha.8
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 $url = $args['url'];
 $content = $args['content'];

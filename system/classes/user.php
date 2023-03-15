@@ -6,7 +6,7 @@ class User {
 	private $user_id;
 
 
-	function __construct( $sekretaer ) {
+	function __construct( $core ) {
 
 		$user_id = false;
 
@@ -15,7 +15,7 @@ class User {
 		$this->user_id = $user_id;
 
 		if( $user_id ) {
-			if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $sekretaer->version() ) {
+			if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $core->version() ) {
 				// was logged in in an old version, reset session
 				$this->logout();
 			}
@@ -40,11 +40,11 @@ class User {
 
 		if( ! empty($post['url']) ) $url = $post['url'];
 
-		global $sekretaer;
+		global $core;
 
 		if( ! empty($post['rememberurl']) && $post['rememberurl'] == 'true' ) {
 
-			$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+			$cookie_lifetime = $core->config->get('cookie_lifetime');
 
 			setcookie( 'sekretaer-url', $url, array(
 				'expires' => time()+$cookie_lifetime,
@@ -62,7 +62,7 @@ class User {
 
 		$indieauth = new IndieAuth();
 
-		$scope = $sekretaer->config->get( 'scope' );
+		$scope = $core->config->get( 'scope' );
 
 		$authorization_url = $indieauth->login( $url, $scope );
 
@@ -117,20 +117,20 @@ class User {
 		$_SESSION['name'] = $this->create_short_name( $response['me'] );
 
 
-		global $sekretaer;
-		$_SESSION['_version'] = $sekretaer->version();
+		global $core;
+		$_SESSION['_version'] = $core->version();
 
 
 		if( $autologin ) {
 
 			$cookie_session_id = uniqid();
 
-			global $sekretaer;
+			global $core;
 
 			$cookie = new Cache( 'session', $cookie_session_id, true );
 			$cookie->add_data( json_encode($_SESSION) );
 
-			$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+			$cookie_lifetime = $core->config->get('cookie_lifetime');
 
 			setcookie( 'sekretaer-session', $cookie_session_id, array(
 				'expires' => time()+$cookie_lifetime,

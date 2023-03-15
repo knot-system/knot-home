@@ -107,8 +107,8 @@ class Micropub {
 			 || ! file_exists($files['image']['tmp_name'])
 			) {
 
-				global $sekretaer;
-				$sekretaer->debug( 'image upload error', $data, $files );
+				global $core;
+				$core->debug( 'image upload error', $data, $files );
 
 				return [
 					false,
@@ -180,8 +180,8 @@ class Micropub {
 		}
 
 		if( ! $success ) {
-			global $sekretaer;
-			$sekretaer->debug( $url, $data, $httpcode, $headers, $body );
+			global $core;
+			$core->debug( $url, $data, $httpcode, $headers, $body );
 		}
 
 		return [

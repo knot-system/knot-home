@@ -45,9 +45,9 @@ function request_get_remote( $url, $headers = array() ) {
 
 function get_user_agent(){
 
-	global $sekretaer;
-	if( $sekretaer ) {
-		$version = $sekretaer->version();
+	global $core;
+	if( $core ) {
+		$version = $core->version();
 	} else {
 		global $abspath;
 		$version = get_system_version( $abspath );

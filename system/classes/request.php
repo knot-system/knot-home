@@ -15,9 +15,9 @@ class Request {
 
 	function __construct( $url = false ) {
 
-		global $sekretaer;
+		global $core;
 
-		$this->user_agent = 'maxhaesslein/sekretaer/'.$sekretaer->version();
+		$this->user_agent = 'maxhaesslein/sekretaer/'.$core->version();
 		$this->timeout = 10;
 
 		if( $url ) $this->url = $url;

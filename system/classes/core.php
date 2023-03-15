@@ -1,6 +1,6 @@
 <?php
 
-class Sekretaer {
+class Core {
 
 	public $version;
 
@@ -18,8 +18,8 @@ class Sekretaer {
 
 	function __construct() {
 
-		global $sekretaer;
-		$sekretaer = $this;
+		global $core;
+		$core = $this;
 
 
 		$abspath = realpath(dirname(__FILE__)).'/';
@@ -74,7 +74,7 @@ class Sekretaer {
 
 	function include( $file_path, $args = array() ) {
 
-		$sekretaer = $this;
+		$core = $this;
 
 		$full_file_path = $this->abspath.$file_path;
 
@@ -127,7 +127,7 @@ class Sekretaer {
 
 	function refresh_cache() {
 		
-		$sekretaer = $this;
+		$core = $this;
 
 		$cache = new Cache( false, false );
 

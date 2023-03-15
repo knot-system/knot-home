@@ -42,17 +42,17 @@ class IndieAuth {
 		}
 
 
-		global $sekretaer;
+		global $core;
 
 
-		if( $sekretaer->config->get('microsub') ) {
+		if( $core->config->get('microsub') ) {
 			$microsub_endpoint = $this->discover_endpoint( 'microsub', $url );
 			if( $microsub_endpoint ) {
 				$_SESSION['indieauth_microsub_endpoint'] = $microsub_endpoint;
 			}
 		}
 
-		if( $sekretaer->config->get('micropub') ) {
+		if( $core->config->get('micropub') ) {
 			$micropub_endpoint = $this->discover_endpoint( 'micropub', $url );
 			if( $micropub_endpoint ) {
 				$_SESSION['indieauth_micropub_endpoint'] = $micropub_endpoint;

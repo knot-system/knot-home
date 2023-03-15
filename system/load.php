@@ -27,18 +27,18 @@ include_once( $abspath.'system/functions.php' );
 include_once( $abspath.'system/classes.php' );
 
 
-$sekretaer = new Sekretaer();
+$core = new Core();
 
 
 // here we gooo
 
-$sekretaer->theme->load();
+$core->theme->load();
 
 
-$template = $sekretaer->route->get('template');
-if( ! file_exists( $sekretaer->abspath.'system/site/'.$template.'.php') ){
-	$sekretaer->debug( 'template not found!', $template );
+$template = $core->route->get('template');
+if( ! file_exists( $core->abspath.'system/site/'.$template.'.php') ){
+	$core->debug( 'template not found!', $template );
 	exit;
 }
 
-$sekretaer->include( 'system/site/'.$template.'.php' );
+$core->include( 'system/site/'.$template.'.php' );

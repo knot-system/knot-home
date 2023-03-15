@@ -20,7 +20,7 @@ class Cache {
 		// TODO: add config option to disable cache
 		// TODO: add method to force a cache refresh?
 
-		global $sekretaer;
+		global $core;
 
 		if( ! $type && ! $input ) return;
 
@@ -53,7 +53,7 @@ class Cache {
 		if( $lifetime ) { // lifetime is in seconds
 			$this->lifetime = $lifetime;
 		} else {
-			$this->lifetime = $sekretaer->config->get( 'cache_lifetime' );
+			$this->lifetime = $core->config->get( 'cache_lifetime' );
 		}
 
 		$this->cache_file_name = $this->get_file_name();
@@ -65,11 +65,11 @@ class Cache {
 
 	function get_file_name(){
 
-		global $sekretaer;
+		global $core;
 
 		$hash = $this->hash;
 
-		$folderpath = $sekretaer->abspath.$this->cache_folder;
+		$folderpath = $core->abspath.$this->cache_folder;
 
 		$files = read_folder( $folderpath, false, false );
 
@@ -103,10 +103,10 @@ class Cache {
 
 
 	function add_data( $data ) {
-		global $sekretaer;
+		global $core;
 
-		if( ! file_put_contents( $sekretaer->abspath.$this->cache_file, $data ) ) {
-			$sekretaer->debug( 'could not create cache file', $this->cache_file );
+		if( ! file_put_contents( $core->abspath.$this->cache_file, $data ) ) {
+			$core->debug( 'could not create cache file', $this->cache_file );
 		}
 
 		return $this;
@@ -130,12 +130,12 @@ class Cache {
 
 
 	private function check_cache_folder(){
-		global $sekretaer;
+		global $core;
 
-		if( is_dir($sekretaer->abspath.$this->cache_folder) ) return;
+		if( is_dir($core->abspath.$this->cache_folder) ) return;
 
-		if( mkdir( $sekretaer->abspath.$this->cache_folder, 0777, true ) === false ) {
-			$sekretaer->debug( 'could not create cache dir', $this->cache_folder );
+		if( mkdir( $core->abspath.$this->cache_folder, 0777, true ) === false ) {
+			$core->debug( 'could not create cache dir', $this->cache_folder );
 		}
 
 		return $this;
@@ -145,11 +145,11 @@ class Cache {
 	function clear_cache_folder(){
 		// this function clears out old cache files.
 
-		global $sekretaer;
+		global $core;
 
-		$lifetime = $sekretaer->config->get( 'cache_lifetime' );
+		$lifetime = $core->config->get( 'cache_lifetime' );
 
-		$folderpath = $sekretaer->abspath.'cache/';
+		$folderpath = $core->abspath.'cache/';
 
 		$files = read_folder( $folderpath, true );
 

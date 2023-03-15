@@ -1,8 +1,8 @@
 <?php
 
-// Version: alpha.1
+// Version: alpha.8
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 ?>
 <article>

@@ -7,9 +7,9 @@ function get_system_version( $abspath ){
 
 
 function url( $path = '', $trailing_slash = true ) {
-	global $sekretaer;
+	global $core;
 	
-	$path = $sekretaer->baseurl.$path;
+	$path = $core->baseurl.$path;
 
 	if( $trailing_slash ) {
 		$path = trailing_slash_it($path);
@@ -39,41 +39,41 @@ function un_trailing_slash_it( $string ) {
 
 
 function add_stylesheet( $path, $type = 'theme' ) {
-	global $sekretaer;
-	$sekretaer->theme->add_stylesheet( $path, $type );
+	global $core;
+	$core->theme->add_stylesheet( $path, $type );
 }
 
 function remove_stylesheet( $path, $type = 'theme' ) {
-	global $sekretaer;
-	$sekretaer->theme->remove_stylesheet( $path, $type );
+	global $core;
+	$core->theme->remove_stylesheet( $path, $type );
 }
 
 
 function add_script( $path, $type = 'theme', $loading = false, $footer = false ) {
-	global $sekretaer;
-	$sekretaer->theme->add_script( $path, $type, $loading, $footer );
+	global $core;
+	$core->theme->add_script( $path, $type, $loading, $footer );
 }
 
 function remove_script( $path, $type = 'theme' ) {
-	global $sekretaer;
-	$sekretaer->theme->remove_script( $path, $type );
+	global $core;
+	$core->theme->remove_script( $path, $type );
 }
 
 
 function add_metatag( $name, $string, $position = false ) {
-	global $sekretaer;
-	$sekretaer->theme->add_metatag( $name, $string, $position );
+	global $core;
+	$core->theme->add_metatag( $name, $string, $position );
 }
 
 function remove_metatag( $name, $position = false ) {
-	global $sekretaer;
-	$sekretaer->theme->remove_metatag( $name, $position );
+	global $core;
+	$core->theme->remove_metatag( $name, $position );
 }
 
 
 function snippet( $path, $args = array(), $return = false ) {
-	global $sekretaer;
-	return $sekretaer->theme->snippet( $path, $args, $return );
+	global $core;
+	return $core->theme->snippet( $path, $args, $return );
 }
 
 
@@ -110,12 +110,12 @@ function sanitize_string_for_url( $string ) {
 
 function read_folder( $folderpath, $recursive = false, $return_folderpath = true ) {
 
-	global $sekretaer;
+	global $core;
 
 	$files = [];
 
 	if( ! is_dir( $folderpath ) ) {
-		$sekretaer->debug( $folderpath.' is no directory' );
+		$core->debug( $folderpath.' is no directory' );
 		return array();
 	}
 
@@ -139,7 +139,7 @@ function read_folder( $folderpath, $recursive = false, $return_folderpath = true
 		}
 		closedir($handle);
 	} else {
-		$sekretaer->debug( 'could not open dir', $folderpath );
+		$core->debug( 'could not open dir', $folderpath );
 		return array();
 	}
 
@@ -149,11 +149,11 @@ function read_folder( $folderpath, $recursive = false, $return_folderpath = true
 
 function head_html(){
 
-	global $sekretaer;
+	global $core;
 
 	$body_classes = array();
 
-	$color_scheme = $sekretaer->config->get('theme-color-scheme');
+	$color_scheme = $core->config->get('theme-color-scheme');
 	if( $color_scheme ) $body_classes[] = 'theme-color-scheme-'.$color_scheme;
 
 ?><!DOCTYPE html>
@@ -168,16 +168,16 @@ function head_html(){
 <html lang="en">
 <head>
 <?php
-	$sekretaer->theme->print_metatags( 'header' );
+	$core->theme->print_metatags( 'header' );
 ?>
 
 
 <?php
-	$sekretaer->theme->print_stylesheets();
+	$core->theme->print_stylesheets();
 ?>
 
 <?php
-	$sekretaer->theme->print_scripts();
+	$core->theme->print_scripts();
 
 	?>
 	
@@ -188,13 +188,13 @@ function head_html(){
 
 function foot_html(){
 
-	global $sekretaer;
+	global $core;
 
-	$sekretaer->theme->print_metatags( 'footer' );
+	$core->theme->print_metatags( 'footer' );
 ?>
 
 <?php
-	$sekretaer->theme->print_scripts( 'footer' );
+	$core->theme->print_scripts( 'footer' );
 
 ?>
 
@@ -206,9 +206,9 @@ function foot_html(){
 
 
 function php_redirect( $path ) {
-	global $sekretaer;
+	global $core;
 
-	$new_location = $sekretaer->baseurl.$path;
+	$new_location = $core->baseurl.$path;
 
 	header( 'location:'.$new_location );
 	exit;
@@ -217,9 +217,9 @@ function php_redirect( $path ) {
 
 function get_navigation(){
 
-	global $sekretaer;
+	global $core;
 
-	$template = $sekretaer->route->get('template');
+	$template = $core->route->get('template');
 
 	$navigation = array();
 
@@ -229,7 +229,7 @@ function get_navigation(){
 		'active' => ( $template == 'dashboard' )
 	);
 
-	if( $sekretaer->config->get('microsub') ) {
+	if( $core->config->get('microsub') ) {
 		$navigation[] = array(
 			'name' => 'Read',
 			'url' => url('microsub'),
@@ -237,7 +237,7 @@ function get_navigation(){
 		);
 	}
 
-	if( $sekretaer->config->get('micropub') ) {
+	if( $core->config->get('micropub') ) {
 		$navigation[] = array(
 			'name' => 'Write',
 			'url' => url('micropub'),

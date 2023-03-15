@@ -135,8 +135,8 @@ class Microsub {
 		$search_result = $this->api_post( 'search', [ 'query' => $url ] );
 
 		if( $search_result['status_code'] != 200 ) {
-			global $sekretaer;
-			$sekretaer->debug( 'something went wrong while searching for feeds, the site return an unexpected status code', $search_result['status_code'], $url );
+			global $core;
+			$core->debug( 'something went wrong while searching for feeds, the site return an unexpected status code', $search_result['status_code'], $url );
 			return [];
 		}
 

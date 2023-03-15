@@ -6,10 +6,10 @@ class Route {
 
 	public $request;
 
-	function __construct( $sekretaer ) {
+	function __construct( $core ) {
 
 		$request_string = $_SERVER['REQUEST_URI'];
-		$request_string = preg_replace( '/^'.preg_quote($sekretaer->basefolder, '/').'/', '', $request_string );
+		$request_string = preg_replace( '/^'.preg_quote($core->basefolder, '/').'/', '', $request_string );
 
 		$query_string = false;
 
@@ -24,7 +24,7 @@ class Route {
 
 
 		// check if we want to auto-login
-		if( ! $sekretaer->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
+		if( ! $core->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
 
 			$cookie_session_id = $_COOKIE['sekretaer-session'];
 
@@ -38,7 +38,7 @@ class Route {
 				$_SESSION = $session_data;
 
 				// refresh cookie lifetime:
-				$cookie_lifetime = $sekretaer->config->get('cookie_lifetime');
+				$cookie_lifetime = $core->config->get('cookie_lifetime');
 				setcookie( 'sekretaer-session', $cookie_session_id, array(
 					'expires' => time()+$cookie_lifetime,
 					'path' => '/'
@@ -71,7 +71,7 @@ class Route {
 
 				if( $action == 'logout' ) {
 
-					$sekretaer->logout();
+					$core->logout();
 
 				} elseif( $action == 'login' ) {
 
@@ -79,7 +79,7 @@ class Route {
 						$_SESSION['login_redirect_path'] = trailing_slash_it($_POST['path']);
 					}
 
-					$sekretaer->authorize( $_POST );
+					$core->authorize( $_POST );
 					exit;
 
 				} elseif( $action == 'redirect' ) {
@@ -89,7 +89,7 @@ class Route {
 						$redirect_path = $_SESSION['login_redirect_path'];
 					}
 
-					$sekretaer->login();
+					$core->login();
 
 				}
 
@@ -109,7 +109,7 @@ class Route {
 		}
 
 
-		if( $sekretaer->authorized() ) {
+		if( $core->authorized() ) {
 
 			if( empty($request[0]) ) {
 				
@@ -119,7 +119,7 @@ class Route {
 
 				$template = $request[0];
 
-				if( ! file_exists($sekretaer->abspath.'system/site/'.$template.'.php') ) {
+				if( ! file_exists($core->abspath.'system/site/'.$template.'.php') ) {
 					$template = '404';
 				}
 

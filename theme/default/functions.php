@@ -10,13 +10,13 @@ add_script( 'assets/js/global.js', 'theme', 'async', true );
 
 
 // preload important webfonts:
-add_metatag( 'font_preload_nunito-400', '<link rel="preload" href="'.$sekretaer->theme->url.'assets/fonts/nunito-v25-latin/nunito-v25-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
-add_metatag( 'font_preload_patua-one-400', '<link rel="preload" href="'.$sekretaer->theme->url.'assets/fonts/patua-one-v16-latin/patua-one-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
+add_metatag( 'font_preload_nunito-400', '<link rel="preload" href="'.$core->theme->url.'assets/fonts/nunito-v25-latin/nunito-v25-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
+add_metatag( 'font_preload_patua-one-400', '<link rel="preload" href="'.$core->theme->url.'assets/fonts/patua-one-v16-latin/patua-one-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
 
 
 // change the 'generator' meta-tag to include the current theme:
 remove_metatag( 'generator' );
-add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$sekretaer->version().' with '.$sekretaer->theme->get('name').' v.'.$sekretaer->theme->get('version').'">' );
+add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().' with '.$core->theme->get('name').' v.'.$core->theme->get('version').'">' );
 
 
 // add favicon

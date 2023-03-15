@@ -1,6 +1,6 @@
 <?php
 
-if( ! $sekretaer ) exit;
+if( ! $core ) exit;
 
 http_response_code(404);
 
