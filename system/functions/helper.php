@@ -1,5 +1,6 @@
 <?php
 
+// Core Version: 0.1.0
 
 function get_system_version( $abspath ){
 	return trim(file_get_contents($abspath.'system/version.txt'));

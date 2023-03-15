@@ -1,5 +1,7 @@
 <?php
 
+// Core Version: 0.1.0
+
 // NOTE: in system/classes/core.php there is also the 'refresh_cache()' function
 // that takes care of deleting old, obsolete cache files
 
