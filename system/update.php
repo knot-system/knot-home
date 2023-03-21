@@ -199,7 +199,7 @@ if( $step == 'check' ) {
 
 	deleteDirectory( $abspath.'theme/default/' );
 	deleteDirectory( $abspath.'system/' );
-	unlink( $abspath.'.htacces' );
+	unlink( $abspath.'.htaccess' );
 	unlink( $abspath.'index.php' );
 	unlink( $abspath.'README.md');
 	unlink( $abspath.'changelog.txt');
