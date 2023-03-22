@@ -2,6 +2,7 @@
 
 // update: 2023-03-15
 
+
 function request_post( $url, $headers = array() ){
 
 	$ch = curl_init( $url );
@@ -51,8 +52,10 @@ function get_user_agent(){
 		$version = $core->version();
 	} else {
 		global $abspath;
-		$version = get_system_version( $abspath );
+		$version = get_eigenheim_version( $abspath );
 	}
 
-	return 'maxhaesslein/sekretaer/'.$version;
+	$user_agent = $core->config->get('user_agent');
+
+	return $user_agent.$version;
 }
