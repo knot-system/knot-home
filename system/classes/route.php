@@ -7,7 +7,9 @@ class Route {
 
 	public $request;
 
-	function __construct( $core ) {
+	function __construct() {
+
+		global $core;
 
 		$request_string = $_SERVER['REQUEST_URI'];
 		$request_string = preg_replace( '/^'.preg_quote($core->basefolder, '/').'/', '', $request_string );

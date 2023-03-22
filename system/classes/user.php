@@ -7,7 +7,9 @@ class User {
 	private $user_id;
 
 
-	function __construct( $core ) {
+	function __construct() {
+
+		global $core;
 
 		$user_id = false;
 

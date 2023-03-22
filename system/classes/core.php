@@ -41,14 +41,14 @@ class Core {
 
 
 		session_start();
-		$this->user = new User( $this );
+		$this->user = new User();
 
 
-		$this->config = new Config( $this );
-		$this->log = new Log( $this );
+		$this->config = new Config();
+		$this->log = new Log();
 
 
-		$this->theme = new Theme( $this );
+		$this->theme = new Theme();
 
 		$this->theme->add_stylesheet( 'css/sekretaer.css', 'global' );
 		
@@ -61,7 +61,7 @@ class Core {
 		$this->theme->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
 
 
-		$this->route = new Route( $this );
+		$this->route = new Route();
 
 		$this->refresh_cache();
 	}

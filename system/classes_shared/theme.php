@@ -15,7 +15,9 @@ class Theme {
 	public $metatags = array();
 
 
-	function __construct( $core ) {
+	function __construct() {
+
+		global $core;
 
 		$theme_name = $core->config->get('theme');
 
