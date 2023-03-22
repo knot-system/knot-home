@@ -35,7 +35,7 @@ return [
 	'cookie_lifetime' => 60*60*24*10, // 10 days, in seconds
 	'cache_lifetime' => 60*60*24*30, // 30 days, in seconds
 
-	// for more config options, see the file system/site/config.php
+	// for more config options, see the file system/config.php
 	
 ];
 
@@ -44,7 +44,7 @@ return [
 This section of the README will be expanded later, when we reach a stable state.
 
 The loading order of the config is as follows:
-1) `system/site/config.php`
+1) `system/config.php`
    gets overwritten by:
 2) `theme/{themename}/config.php` (if it exists)
    gets overwritten by:
@@ -68,7 +68,7 @@ You can also create a `theme/{themename}/snippets/` folder and copy files from `
 
 The `theme/{themename}/functions.php` contains some functions that get called when the theme gets loaded.
 
-The `theme/{themename}/config.php` can overwrite config options from `system/site/config.php` (but gets itself overwritten by the local `config.php` in the root directory), so the custom theme can for example set its own image sizes.
+The `theme/{themename}/config.php` can overwrite config options from `system/config.php` (but gets itself overwritten by the local `config.php` in the root directory), so the custom theme can for example set its own image sizes.
 
 ## Updating
 

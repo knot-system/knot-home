@@ -1,6 +1,7 @@
 <?php
 
-// update: 2023-03-15
+// update: 2023-03-22
+
 
 class Request {
 
@@ -19,7 +20,7 @@ class Request {
 
 		global $core;
 
-		$this->user_agent = 'maxhaesslein/sekretaer/'.$core->version();
+		$this->user_agent = get_user_agent();
 		$this->timeout = 10;
 
 		if( $url ) $this->url = $url;

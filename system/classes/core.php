@@ -1,6 +1,5 @@
 <?php
 
-// update: 2023-03-15
 
 class Core {
 
@@ -47,7 +46,20 @@ class Core {
 
 		$this->config = new Config( $this );
 		$this->log = new Log( $this );
+
+
 		$this->theme = new Theme( $this );
+
+		$this->theme->add_stylesheet( 'css/sekretaer.css', 'global' );
+		
+		$this->theme->add_script( 'js/sekretaer.js', 'global', 'async', true );
+
+		$this->theme->add_metatag( 'charset', '<meta charset="utf-8">' );
+		$this->theme->add_metatag( 'viewport', '<meta name="viewport" content="width=device-width,initial-scale=1.0">' );
+		$this->theme->add_metatag( 'title', '<title>Sekretär</title>' );
+
+		$this->theme->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
+
 
 		$this->route = new Route( $this );
 

@@ -1,6 +1,7 @@
 <?php
 
-// update: 2023-03-15
+// update: 2023-03-22
+
 
 class Theme {
 
@@ -29,18 +30,8 @@ class Theme {
 		$this->path = 'theme/'.$theme_name.'/';
 		$this->url = url('theme/'.$theme_name.'/');
 
-		$this->add_stylesheet( 'css/sekretaer.css', 'global' );
 
-		$this->add_script( 'js/sekretaer.js', 'global', 'async', true );
-
-		$this->add_metatag( 'charset', '<meta charset="utf-8">' );
-		$this->add_metatag( 'viewport', '<meta name="viewport" content="width=device-width,initial-scale=1.0">' );
-		$this->add_metatag( 'title', '<title>Sekretär</title>' );
-
-		$this->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
-
-
-		// expand sekretaer config options:
+		// expand core config options:
 		$config_path = $core->abspath.'theme/'.$theme_name.'/config.php';
 		if( file_exists( $config_path ) ) {
 			$core->config->load_config_file( $config_path );

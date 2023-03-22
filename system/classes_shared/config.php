@@ -1,6 +1,7 @@
 <?php
 
-// update: 2023-03-15
+// update: 2023-03-22
+
 
 class Config {
 
@@ -8,8 +9,8 @@ class Config {
 
 	function __construct( $core ) {
 
-		// load site config / default config
-		$this->load_config_file( $core->abspath.'system/site/config.php' );
+		// load default config
+		$this->load_config_file( $core->abspath.'system/config.php' );
 
 		// NOTE: the file theme/{themename}/config.php may be loaded here; but because at this time we don't have the correct themename yet, this happens in system/classes/theme.php; after the theme config.php gets loaded, it gets overwritten by the local config again.
 		
@@ -45,7 +46,8 @@ class Config {
 			return $this->config[$option];
 		}
 
-		return false;
+		// TODO: check if we want to allow to return all config options
+		return $this->config;
 	}
 
 };
