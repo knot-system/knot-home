@@ -1,42 +1,103 @@
 <?php
 
-// 2023-03-22
 
+function head_html(){
 
-function add_stylesheet( $path, $type = 'theme' ) {
 	global $core;
-	$core->theme->add_stylesheet( $path, $type );
+
+	$body_classes = array();
+
+	$color_scheme = $core->config->get('theme-color-scheme');
+	if( $color_scheme ) $body_classes[] = 'theme-color-scheme-'.$color_scheme;
+
+?><!DOCTYPE html>
+<!--
+  _________       __                    __      /\/\             
+ /   _____/ ____ |  | _________   _____/  |____)/)/_____ 
+ \_____  \_/ __ \|  |/ /\_  __ \_/ __ \   ____  \\_  __ \
+ /        \  ___/|    <  |  | \/\  ___/|  | / __ \|  | \/
+/_______  /\___  >__|_ \ |__|    \___  >__|(____  /__|   
+        \/     \/     \/             \/         \/    
+-->
+<html lang="en">
+<head>
+<?php
+	$core->theme->print_metatags( 'header' );
+?>
+
+
+<?php
+	$core->theme->print_stylesheets();
+?>
+
+<?php
+	$core->theme->print_scripts();
+
+	?>
+	
+</head>
+<body<?= get_class_attribute($body_classes) ?>><?php
+
 }
 
-function remove_stylesheet( $path, $type = 'theme' ) {
+function foot_html(){
+
 	global $core;
-	$core->theme->remove_stylesheet( $path, $type );
+
+	$core->theme->print_metatags( 'footer' );
+?>
+
+<?php
+	$core->theme->print_scripts( 'footer' );
+
+?>
+
+
+</body>
+</html>
+<?php
 }
 
 
-function add_script( $path, $type = 'theme', $loading = false, $footer = false ) {
+function php_redirect( $path ) {
 	global $core;
-	$core->theme->add_script( $path, $type, $loading, $footer );
-}
 
-function remove_script( $path, $type = 'theme' ) {
-	global $core;
-	$core->theme->remove_script( $path, $type );
-}
+	$new_location = $core->baseurl.$path;
 
-
-function add_metatag( $name, $string, $position = false ) {
-	global $core;
-	$core->theme->add_metatag( $name, $string, $position );
-}
-
-function remove_metatag( $name, $position = false ) {
-	global $core;
-	$core->theme->remove_metatag( $name, $position );
+	header( 'location:'.$new_location );
+	exit;
 }
 
 
-function snippet( $path, $args = array(), $return = false ) {
+function get_navigation(){
+
 	global $core;
-	return $core->theme->snippet( $path, $args, $return );
+
+	$template = $core->route->get('template');
+
+	$navigation = array();
+
+	$navigation[] = array(
+		'name' => '🗞️',
+		'url' => url('dashboard'),
+		'active' => ( $template == 'dashboard' )
+	);
+
+	if( $core->config->get('microsub') ) {
+		$navigation[] = array(
+			'name' => 'Read',
+			'url' => url('microsub'),
+			'active' => ( $template == 'microsub' )
+		);
+	}
+
+	if( $core->config->get('micropub') ) {
+		$navigation[] = array(
+			'name' => 'Write',
+			'url' => url('micropub'),
+			'active' => ( $template == 'micropub' )
+		);
+	}
+
+	return $navigation;
 }
