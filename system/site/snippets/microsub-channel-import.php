@@ -85,11 +85,24 @@ if( isset($_POST['selected_feeds']) ) {
 
 			if( $xml->body->outline ) {
 				foreach( $xml->body->outline as $feed ) {
-					if( ! isset($feed['xmlUrl']) ) continue;
 
-					$url = $feed['xmlUrl']->__toString();
-					
-					$urls[] = $url;
+					if( isset($feed->outline) ) {
+
+						foreach( $feed->outline as $subfeed ) {
+
+							if( ! isset($subfeed['xmlUrl']) ) continue;
+
+							$url = $subfeed['xmlUrl']->__toString();
+							$urls[] = $url;
+						}
+
+					} else {
+
+						if( ! isset($feed['xmlUrl']) ) continue;
+
+						$url = $feed['xmlUrl']->__toString();
+						$urls[] = $url;
+					}
 				}
 			}
 
