@@ -507,10 +507,42 @@ main.login {
 		bottom: 0;
 	}
 
+	main.login .spacer {
+		display: inline-block;
+		width: 50px;
+	}
+
+	main.login .login-content {
+		min-width: 400px;
+	}
+
 	main.login .alpha-warning {
 		opacity: 0.5;
 		display: inline-block;
 		margin-top: 1em;
+	}
+
+	@media ( max-width: 640px ) {
+
+		main.login .spacer {
+			width: 40px;
+		}
+
+	}
+
+	@media ( max-width: 440px ) {
+
+		main.login .login-content {
+			min-width: unset;
+			padding-left: 20px;
+			padding-right: 20px;
+		}
+
+		main.login .spacer {
+			width: 100%;
+			display: block;
+		}
+
 	}
 
 ul.posts {
