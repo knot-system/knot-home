@@ -130,8 +130,12 @@ class User {
 
 			global $core;
 
+			$session_data = $_SESSION;
+			unset($session_data['login_redirect_path']);
+			$session_data = json_encode($session_data);
+
 			$cookie = new Cache( 'session', $cookie_session_id, true );
-			$cookie->add_data( json_encode($_SESSION) );
+			$cookie->add_data( $session_data );
 
 			$cookie_lifetime = $core->config->get('cookie_lifetime');
 
