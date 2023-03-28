@@ -47,8 +47,7 @@ class Route {
 					'path' => '/'
 				));
 
-				// refresh cache lifetime:
-				$cache->touch();
+				$cache->refresh_lifetime();
 
 			} else {
 
