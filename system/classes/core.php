@@ -39,13 +39,13 @@ class Core {
 
 		$this->version = get_system_version( $abspath );
 
+		$this->config = new Config();
+		$this->log = new Log();
+
 
 		session_start();
 		$this->user = new User();
 
-
-		$this->config = new Config();
-		$this->log = new Log();
 
 
 		$this->theme = new Theme();

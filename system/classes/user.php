@@ -18,10 +18,27 @@ class User {
 		$this->user_id = $user_id;
 
 		if( $user_id ) {
+
 			if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $core->version() ) {
 				// was logged in in an old version, reset session
 				$this->logout();
 			}
+
+			// check, if me is allowed
+
+			$allowed_user_ids = $core->config->get('allowed_urls');
+			if( is_array($allowed_user_ids) && count($allowed_user_ids) ) {
+				$canonical_user_id = un_trailing_slash_it($user_id);
+
+				$allowed_user_ids = array_map( 'un_trailing_slash_it', $allowed_user_ids );
+
+				if( ! in_array($canonical_user_id, $allowed_user_ids) ) {
+					$core->debug( 'this url is not allowed', $user_id );
+					$this->logout();
+				}
+
+			}
+
 		}
 	
 		return $this;
