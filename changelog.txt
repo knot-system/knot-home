@@ -1,3 +1,22 @@
+v.0.1.0
+
+**if you use a custom theme with snippets, you need to update all snippets**
+
+this is the first beta release.
+
+- very basic feedlist importer (for .txt, .json or .opml)
+- login form: option to remember the URL in a cookie
+- force logout all sessions on system update
+- new config option 'allowed_urls'; this will restrict the login to the specified urls, if set
+- refresh session lifetime on auto-login, so the users stayes logged in longer than 10 days
+- renamed global $sekretaer to $core for better compatibility between modules (you need to update all snippets in a custom theme though)
+- moved some functions and classes into a _shared folder, for simpler sharing between modules
+- system config.php moved from system/site/config.php to system/config.php
+- updater fix
+- bugfixes & enhancements
+- compatibility with the homestead installer
+
+
 alpha.7
 
 - micropub/write: don't require content to be set
