@@ -77,7 +77,7 @@ if( $baseurl == '' ) {
 $config = true;
 if( file_exists($abspath.'config.php') ) $config = false;
 
-if( $config && empty($_POST['start']) && $output ) {
+if( $config && empty($_REQUEST['start']) && $output ) {
 	?>
 	<hr>
 	<form action="<?= $baseurl ?>" method="POST">
