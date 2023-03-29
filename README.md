@@ -1,10 +1,8 @@
 # Sekretär
 
-A small micropub and microsub client. This will be part of a larger system. More details will be added later.
+A small micropub and microsub client and feed reader, which is part of a larger system called [Homestead](https://github.com/maxhaesslein/homestead). You can install it as a standalone service, or use the Homestead installer, which also installs other modules alongside it.
 
-This is currently in a early alpha stage. **You should not use this for now. THINGS WILL BREAK!**
-
-Here be dragons:
+This is currently in beta stage. **Things may break, and are likely to change in the future!**
 
 ## Initial Setup
 
