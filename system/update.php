@@ -137,9 +137,14 @@ if( $step == 'check' ) {
 		$latest_release = $json[0];
 
 		$zipball = $latest_release->zipball_url;
+
+		$zip_folder_name_start = 'maxhaesslein-sekretaer-';
+
 	} elseif( $_REQUEST['version'] == 'dev' ) {
 
 		$zipball = $dev_zip;
+
+		$zip_folder_name_start = 'sekretaer-';
 
 	} else {
 
@@ -217,7 +222,7 @@ if( $step == 'check' ) {
 	foreach( scandir( $temp_folder ) as $obj ) {
 		if( $obj == '.' || $obj == '..' ) continue;
 		if( ! is_dir($temp_folder.$obj) ) continue;
-		if( ! str_starts_with($obj, 'maxhaesslein-sekretaer-') ) continue;
+		if( ! str_starts_with($obj, $zip_folder_name_start) ) continue;
 		// the zip file should have exactly one subfolder, called 'maxhaesslein-sekretaer-{hash}'. this is what we want to get here
 		$subfolder = $temp_folder.$obj.'/';
 	}
