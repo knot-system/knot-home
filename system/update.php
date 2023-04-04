@@ -2,6 +2,7 @@
 // this file can update the system with the latest release from github. create a empty file called 'update' or 'update.txt' in the root directory, and then add '?update' to the url, to trigger the update
 
 $api_url = 'https://api.github.com/repos/maxhaesslein/sekretaer/releases';
+$dev_zip = 'https://github.com/maxhaesslein/sekretaer/archive/refs/heads/main.zip';
 
 $step = false;
 if( ! empty($_GET['step']) ) $step = $_GET['step'];
@@ -43,8 +44,10 @@ if( $step == 'check' ) {
 	$release_name = $latest_release->name;
 
 	?>
-	<p>Latest release: <strong><?= $release_name ?></strong><br>
-	Currently installed: <strong><?= $core_version ?></strong></p>
+	<p>
+		Currently installed: <strong>v.<?= $core_version ?></strong><br>
+		Latest release: <strong>v.<?= $release_name ?></strong>
+	</p>
 	<?php
 
 	$release_notes = array();
@@ -108,7 +111,11 @@ if( $step == 'check' ) {
 	<form action="<?= $baseurl ?>" method="GET">
 		<input type="hidden" name="update" value="true">
 		<input type="hidden" name="step" value="install">
-		<button><?php if( $new_version_available ) echo 'update system'; else echo 're-install system'; ?></button> (this may take some time, please be patient)
+		<p><label>Version: <select name="version">
+			<option value="latest" selected>latest release (v.<?= $release_name ?>)</option>
+			<option value="dev">unstable dev release (not recommended)</option>
+		</select></label></p>
+		<p><button>update system</button></p>
 	</form>
 
 	<?php
@@ -116,19 +123,33 @@ if( $step == 'check' ) {
 
 } elseif( $step == 'install' )  {
 
-	$json = get_remote_json( $api_url );
-	
-	if( ! $json || ! is_array($json) ) {
+	if( empty($_REQUEST['version']) || $_REQUEST['version'] == 'latest' ) {
+
+		$json = get_remote_json( $api_url );
+		
+		if( ! $json || ! is_array($json) ) {
+			?>
+			<p><strong>Error:</strong> could not get release information from GitHub</p>
+			<?php
+			exit;
+		}
+
+		$latest_release = $json[0];
+
+		$zipball = $latest_release->zipball_url;
+	} elseif( $_REQUEST['version'] == 'dev' ) {
+
+		$zipball = $dev_zip;
+
+	} else {
+
 		?>
-		<p><strong>Error:</strong> could not get release information from GitHub</p>
+		<p><strong>Error:</strong> unknown version</p>
 		<?php
 		exit;
+
 	}
-
-	$latest_release = $json[0];
-
-	$zipball = $latest_release->zipball_url;
-
+	
 	if( ! $zipball ) {
 		?>
 		<p><strong>Error:</strong> could not get new .zip file from GitHub</p>
@@ -310,10 +331,9 @@ if( $step == 'check' ) {
 } else {
 	?>
 
-	<p><strong>Warning: please backup your <em>config.php</em> file and maybe your <em>theme/custom-theme</em> folder before updating!</strong></p>
-	<p>Also, read the <a href="https://github.com/maxhaesslein/sekretaer/releases/latest/" target="_blank" rel="noopener">latest release notes</a> before continuing.</p>
+	<p>Currently installed version: <strong>v.<?= $core_version ?></strong></p>
 
-	<p>Currently installed version: <em><?= $core_version ?></em></p>
+	<p>Please backup your <em>config.php</em> file and maybe your <em>theme/custom-theme</em> folder before updating!</p>
 
 	<form action="<?= $baseurl ?>" method="GET">
 		<input type="hidden" name="update" value="true">
