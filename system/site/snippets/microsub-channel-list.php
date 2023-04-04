@@ -72,7 +72,7 @@ if( $items && isset($items->items) && count($items->items) ) {
 		$content = false;
 		if( ! empty($item->content->html) ) {
 			$html = $item->content->html;
-			$html = str_replace(array("\r\n", "\r", "\n"), '', $html );
+			$html = str_replace(array("\r\n", "\r", "\n"), ' ', $html );
 			$text = new Text( $html );
 			$text = $text->remove_html_elements()->auto_p();
 			$content = $text->get();
