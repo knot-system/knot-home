@@ -1,3 +1,10 @@
+v.0.1.1
+
+- updater: allow updating to the current (unstable) dev release
+- compatibility with the homestead updater
+- bugfixes and enhancements
+
+
 v.0.1.0
 
 **if you use a custom theme with snippets, you need to update all snippets**
