@@ -29,13 +29,17 @@
 
 				if( item.scrollHeight > item.clientHeight ) {
 
+					var buttonWrapper = document.createElement('span');
+					buttonWrapper.classList.add('expand-button-wrapper');
+					buttonWrapper.addEventListener( 'click', ItemShortener.expand );
+
 					var button = document.createElement('span');
-					button.classList.add('button');
 					button.classList.add('expand-button');
 					button.innerHTML = 'read more …';
-					button.addEventListener( 'click', ItemShortener.expand );
 
-					item.after(button);
+					buttonWrapper.appendChild(button);
+
+					item.after(buttonWrapper);
 
 				}
 

@@ -25,6 +25,8 @@
 
 	--external-link-icon: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%20width='14'%20height='14'%20fill='none'%20stroke='%23000'%20stroke-linecap='round'%20stroke-linejoin='round'%20stroke-width='9.38%'%3E%3Cpath%20d='M14%209%20L3%209%203%2029%2023%2029%2023%2018%20M18%204%20L28%204%2028%2014%20M28%204%20L14%2018'/%3E%3C/svg%3E");
 
+	--shortened-height: 500px;
+
 }
 
 	body.theme-color-scheme-blue {
@@ -575,12 +577,37 @@ ul.posts {
 		}
 
 		ul.posts .item-content.shortened {
-			max-height: 1000px;
+			max-height: var(--shortened-height);
+			position: relative;
 		}
 
-		ul.posts .expand-button {
-			margin-top: 1em;
+			ul.posts .item-content.shortened:after {
+				content: "";
+				display: block;
+				width: calc(100% - 20px);
+				height: 20px;
+				position: absolute;
+				bottom: -20px;
+				left: 10px;
+				box-shadow: 0 0 10px rgba(0,0,0,.2);
+			}
+
+		ul.posts .expand-button-wrapper {
+			text-align: center;
+			display: block;
+			cursor: pointer;
 		}
+
+			ul.posts .expand-button {
+				display: inline-block;
+				background: rgba(0,0,0,.1);
+				border-radius: 0 0 0.3em 0.3em;
+				padding: 0.2em 0.6em;
+			}
+
+				ul.posts .expand-button-wrapper:hover .expand-button {
+					background: rgba(0,0,0,.2);
+				}
 
 	ul.posts .post-read-full {
 
