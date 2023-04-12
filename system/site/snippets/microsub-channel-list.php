@@ -1,6 +1,6 @@
 <?php
 
-// Version: 0.1.0
+// Version: 0.1.2
 
 if( ! $core ) exit;
 
@@ -142,7 +142,7 @@ if( $items && isset($items->items) && count($items->items) ) {
 					?>
 				</small>
 			</p>
-			<p class="item-actions"><a class="button" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post <sup>🡥</sup></a> <a class="button" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
+			<p class="item-actions"><a class="button post-read-full" href="<?= $item->url ?>" target="_blank" rel="noopener">read full post</a> <a class="button post-share" href="<?= url('micropub') ?>?content=<?= urlencode($item->url) ?>">share this post</a></p>
 			<hr>
 		</li>
 		<?php

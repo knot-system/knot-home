@@ -23,6 +23,8 @@
 
 	--sidebar-width: 300px;
 
+	--external-link-icon: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%20width='14'%20height='14'%20fill='none'%20stroke='%23000'%20stroke-linecap='round'%20stroke-linejoin='round'%20stroke-width='9.38%'%3E%3Cpath%20d='M14%209%20L3%209%203%2029%2023%2029%2023%2018%20M18%204%20L28%204%2028%2014%20M28%204%20L14%2018'/%3E%3C/svg%3E");
+
 }
 
 	body.theme-color-scheme-blue {
@@ -578,6 +580,24 @@ ul.posts {
 
 		ul.posts .expand-button {
 			margin-top: 1em;
+		}
+
+	ul.posts .post-read-full {
+
+	}
+
+		ul.posts .post-read-full:after {
+			content: "";
+			display: inline-block;
+			margin-left: 0.2em;
+			position: relative;
+			vertical-align: baseline;
+			top: -0.3em;
+			width: 0.8em;
+			height: 0.8em;
+			background: var(--color-text);
+			-webkit-mask: var(--external-link-icon) no-repeat center center / contain;
+			mask: var(--external-link-icon) no-repeat center center / contain;
 		}
 
 ul.pagination {
