@@ -27,7 +27,7 @@
 			for( var item of items ) {
 				item.classList.add('shortened');
 
-				if( item.scrollHeight > item.clientHeight ) {
+				if( item.scrollHeight > item.clientHeight + 20 ) {
 
 					var buttonWrapper = document.createElement('span');
 					buttonWrapper.classList.add('expand-button-wrapper');
@@ -40,6 +40,10 @@
 					buttonWrapper.appendChild(button);
 
 					item.after(buttonWrapper);
+
+				} else {
+
+					item.classList.remove( 'shortened' );
 
 				}
 
