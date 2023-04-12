@@ -351,8 +351,7 @@ header {
 	align-items: stretch;
 	justify-content: space-between;
 	width: var(--sidebar-width);
-	position: fixed;
-	left: 0;
+	position: sticky;
 	top: 0;
 }
 
