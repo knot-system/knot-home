@@ -1,6 +1,7 @@
 v.0.1.2
 
 - updater: fix for displaying relevant release information
+- default theme: some design updates
 
 
 v.0.1.1
