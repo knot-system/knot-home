@@ -10,8 +10,9 @@ add_script( 'assets/js/global.js', 'theme', 'async', true );
 
 
 // preload important webfonts:
-add_metatag( 'font_preload_nunito-400', '<link rel="preload" href="'.$core->theme->url.'assets/fonts/nunito-v25-latin/nunito-v25-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
-add_metatag( 'font_preload_patua-one-400', '<link rel="preload" href="'.$core->theme->url.'assets/fonts/patua-one-v16-latin/patua-one-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
+$baseurl = str_replace(['https:','http:'], '', $core->theme->url);
+add_metatag( 'font_preload_nunito-400', '<link rel="preload" href="'.$baseurl.'assets/fonts/nunito-v25-latin/nunito-v25-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
+add_metatag( 'font_preload_patua-one-400', '<link rel="preload" href="'.$baseurl.'assets/fonts/patua-one-v16-latin/patua-one-v16-latin-regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">' );
 
 
 // change the 'generator' meta-tag to include the current theme:
