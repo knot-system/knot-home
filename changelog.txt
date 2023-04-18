@@ -3,6 +3,7 @@ v.0.1.2
 - updater: fix for displaying relevant release information
 - default theme: some design updates
 - css & js files: start URL with '//' (instead of 'https://' or 'http://') to avoid mixed content
+- don't delete .htaccess file on update
 - bugfixes & enhancements
 
 
