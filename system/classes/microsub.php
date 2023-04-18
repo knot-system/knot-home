@@ -90,7 +90,14 @@ class Microsub {
 			}
 		}
 
-		$cache = new Cache( 'microsub', $url, false, 60*3 ); // cache for 3 minutes
+		$cache_time = 60*3; // default: 3 minutes
+		if( $action == 'channels' ) {
+			$cache_time = 60*30; // 30 minutes
+		} elseif( $action == 'follow' ) {
+			$cache_time = 60*10; // 10 minutes
+		}
+
+		$cache = new Cache( 'microsub', $url, false, $cache_time );
 		$data = $cache->get_data();
 		if( $data ) return json_decode($data);
 
