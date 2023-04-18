@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-03-22
+// update: 2023-04-18
 
 
 class Theme {
@@ -80,7 +80,7 @@ class Theme {
 		global $core;
 
 		$global_path = $core->abspath.'system/site/assets/';
-		$global_url = $core->baseurl.'/system/site/assets/';
+		$global_url = $core->baseurl.'system/site/assets/';
 
 		if( $type == 'theme' && file_exists($this->path.$path) ) {
 			$type = 'theme';
@@ -122,8 +122,14 @@ class Theme {
 				$version .= '.'.time();
 			}
 
+			$url = $stylesheet['url'];
+
+			$url = str_replace( ['https:', 'http:'], '', $url ); // NOTE: urls should start with "//domain.tld", because then it doesn't matter if the page get's loaded via http or https - webfonts may have problems otherwise
+
+			$url .= '?v='.$version;
+
 		?>
-	<link rel="stylesheet" href="<?= $stylesheet['url'] ?>?v=<?= $version ?>">
+	<link rel="stylesheet" href="<?= $url ?>">
 <?php
 		}
 
@@ -137,7 +143,7 @@ class Theme {
 		global $core;
 
 		$global_path = $core->abspath.'system/site/assets/';
-		$global_url = $core->baseurl.'/system/site/assets/';
+		$global_url = $core->baseurl.'system/site/assets/';
 
 		if( $type == 'theme' && file_exists($this->path.$path) ) {
 			$type = 'theme';
@@ -188,8 +194,14 @@ class Theme {
 			$loading = '';
 			if( ! empty($script['loading']) ) $loading = ' '.$script['loading'];
 
+			$url = $script['url'];
+
+			$url = str_replace( ['https:', 'http:'], '', $url ); // NOTE: urls should start with "//domain.tld", because then it doesn't matter if the page get's loaded via http or https
+
+			$url .= '?v='.$version;
+
 		?>
-	<script<?= $loading ?> src="<?= $script['url'] ?>?v=<?= $version ?>"></script>
+	<script<?= $loading ?> src="<?= $url ?>"></script>
 <?php
 		}
 
