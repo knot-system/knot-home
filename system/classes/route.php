@@ -61,6 +61,8 @@ class Route {
 					));
 				}
 
+				$this->redirect( $request_string );
+
 			} else {
 
 				// session expired, delete cookie
@@ -70,8 +72,6 @@ class Route {
 				));
 
 			}
-
-			$this->redirect( $request_string );
 
 		}
 
