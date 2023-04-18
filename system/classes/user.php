@@ -68,14 +68,14 @@ class User {
 
 			setcookie( 'sekretaer-url', $url, array(
 				'expires' => time()+$cookie_lifetime,
-				'path' => '/'
+				'path' => $core->basefolder
 			));
 
 		} elseif( isset($_COOKIE['sekretaer-url']) ) {
 
 			setcookie( 'sekretaer-url', null, array(
 				'expires' => -1,
-				'path' => '/'
+				'path' => $core->basefolder
 			));
 
 		}
@@ -158,7 +158,7 @@ class User {
 
 			setcookie( 'sekretaer-session', $cookie_session_id, array(
 				'expires' => time()+$cookie_lifetime,
-				'path' => '/'
+				'path' => $core->basefolder
 			));
 
 		}
@@ -188,6 +188,8 @@ class User {
 
 	function logout() {
 
+		global $core;
+
 		if( ! empty($_COOKIE['sekretaer-session']) ) {
 			$cookie_session_id = $_COOKIE['sekretaer-session'];
 
@@ -196,7 +198,7 @@ class User {
 
 			setcookie( 'sekretaer-session', null, array(
 				'expires' => -1,
-				'path' => '/'
+				'path' => $core->basefolder
 			));
 		}
 

@@ -44,7 +44,7 @@ class Route {
 				$cookie_lifetime = $core->config->get('cookie_lifetime');
 				setcookie( 'sekretaer-session', $cookie_session_id, array(
 					'expires' => time()+$cookie_lifetime,
-					'path' => '/'
+					'path' => $core->basefolder
 				));
 
 				$cache->refresh_lifetime();
@@ -54,7 +54,7 @@ class Route {
 				// session expired, delete cookie
 				setcookie( 'sekretaer-session', false, array(
 					'expires' => -1,
-					'path' => '/'
+					'path' => $core->basefolder
 				));
 
 			}

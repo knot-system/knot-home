@@ -256,7 +256,7 @@ if( $step == 'check' ) {
 	@session_destroy();
 	setcookie( 'sekretaer-session', false, array(
 		'expires' => -1,
-		'path' => '/'
+		'path' => $basefolder
 	));
 
 	deleteDirectory( $abspath.'cache/');
