@@ -29,6 +29,8 @@ class Route {
 		// check if we want to auto-login
 		if( ! $core->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
 
+			// TODO: check additional safety options, like browser and location ? -- to make session cloning harder
+
 			$cookie_session_id = $_COOKIE['sekretaer-session'];
 
 			$cache = new Cache( 'session', $cookie_session_id, true );
@@ -40,14 +42,24 @@ class Route {
 				// restore session data:
 				$_SESSION = $session_data;
 
-				// refresh cookie lifetime:
+				$cache->refresh_lifetime();
+
 				$cookie_lifetime = $core->config->get('cookie_lifetime');
+
+				// refresh session cookie lifetime:
 				setcookie( 'sekretaer-session', $cookie_session_id, array(
 					'expires' => time()+$cookie_lifetime,
 					'path' => $core->basefolder
 				));
 
-				$cache->refresh_lifetime();
+				// refresh url cookie lifetime
+				if( ! empty($_COOKIE['sekretaer-url']) ) {
+					$url_cookie = $_COOKIE['sekretaer-url'];
+					setcookie( 'sekretaer-url', $url_cookie, array(
+						'expires' => time()+$cookie_lifetime,
+						'path' => $core->basefolder
+					));
+				}
 
 			} else {
 
