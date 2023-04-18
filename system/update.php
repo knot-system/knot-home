@@ -253,7 +253,9 @@ if( $step == 'check' ) {
 	@unlink( $abspath.'update.txt' );
 	@unlink( $abspath.'update' );
 
-	@session_destroy();
+	$_SESSION = []; // destroy existing session
+
+	// delete session cookie:
 	setcookie( 'sekretaer-session', false, array(
 		'expires' => -1,
 		'path' => $basefolder
