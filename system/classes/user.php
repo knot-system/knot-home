@@ -184,10 +184,65 @@ class User {
 	}
 
 
+	function autologin() {
+
+		global $core;
+
+		if( $this->authorized() ) return false;
+
+		if( empty($_COOKIE['sekretaer-session']) ) return false;
+
+		// TODO: check additional safety options, like browser and location ? -- to make session cloning harder
+
+		$cookie_session_id = $_COOKIE['sekretaer-session'];
+
+		$cache = new Cache( 'session', $cookie_session_id, true );
+		$session_data = trim($cache->get_data());
+
+		if( ! $session_data ) {
+			// session expired, delete cookie
+			setcookie( 'sekretaer-session', false, array(
+				'expires' => -1,
+				'path' => $core->basefolder
+			));
+
+			return false;
+		}
+
+
+		$session_data = json_decode($session_data, true);
+
+		// restore session data:
+		// TODO: only save session id / user id in the $_SESSION variable, and create the user object from a session cache file instead
+		$_SESSION = $session_data;
+
+		$cache->refresh_lifetime();
+
+		$cookie_lifetime = $core->config->get('cookie_lifetime');
+
+		// refresh session cookie lifetime:
+		setcookie( 'sekretaer-session', $cookie_session_id, array(
+			'expires' => time()+$cookie_lifetime,
+			'path' => $core->basefolder
+		));
+
+		// refresh url cookie lifetime
+		if( ! empty($_COOKIE['sekretaer-url']) ) {
+			$url_cookie = $_COOKIE['sekretaer-url'];
+			setcookie( 'sekretaer-url', $url_cookie, array(
+				'expires' => time()+$cookie_lifetime,
+				'path' => $core->basefolder
+			));
+		}
+
+		return true;
+	}
+
+
 	function create_short_name( $me ) {
 
 		$short_name = str_replace( array('http://www.', 'https://www.', 'http://', 'https://'), '', $me );
-		$short_name = trim( $short_name, '/' );
+		$short_name = un_trailing_slash_it( $short_name );
 
 		return $short_name;
 	}
