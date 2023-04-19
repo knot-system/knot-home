@@ -165,6 +165,7 @@ class User {
 
 			$session_data = $_SESSION;
 			unset($session_data['login_redirect_path']);
+			$session_data['autologin'] = true; // TODO: use this, to determine the length of the cache lifetime (also use this for the cache lifetime, when reseting the cache time on autologin)
 			$session_data = json_encode($session_data);
 
 			$cookie = new Cache( 'session', $cookie_session_id, true );

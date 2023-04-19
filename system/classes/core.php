@@ -102,38 +102,6 @@ class Core {
 	}
 
 
-	function authorized() {
-		if( $this->user->authorized() ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	function authorize( $post ) {
-		$this->user->authorize( $post );
-
-		return $this;
-	}
-
-	function login() {
-		$this->user->login();
-
-		return $this;
-	}
-
-	function logout() {
-		$this->user->logout();
-
-		return $this;
-	}
-
-	function me() {
-		return $this->user->get('me');
-	}
-
-
-
 	function version() {
 		return $this->version;
 	}

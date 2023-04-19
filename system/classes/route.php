@@ -27,7 +27,9 @@ class Route {
 
 
 		// check if we want to auto-login
-		if( ! $core->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
+		if( ! $core->user->authorized() && ! empty($_COOKIE['sekretaer-session']) ) {
+
+			// TODO: this should be something like $core->user->autologin() and handled there
 
 			// TODO: check additional safety options, like browser and location ? -- to make session cloning harder
 
@@ -85,7 +87,7 @@ class Route {
 
 				if( $action == 'logout' ) {
 
-					$core->logout();
+					$core->user->logout();
 
 				} elseif( $action == 'login' ) {
 
@@ -93,7 +95,7 @@ class Route {
 						$_SESSION['login_redirect_path'] = trailing_slash_it($_POST['path']);
 					}
 
-					$core->authorize( $_POST );
+					$core->user->authorize( $_POST );
 					exit;
 
 				} elseif( $action == 'redirect' ) {
@@ -103,7 +105,7 @@ class Route {
 						$redirect_path = $_SESSION['login_redirect_path'];
 					}
 
-					$core->login();
+					$core->user->login();
 
 				}
 
@@ -123,7 +125,7 @@ class Route {
 		}
 
 
-		if( $core->authorized() ) {
+		if( $core->user->authorized() ) {
 
 			if( empty($request[0]) ) {
 				
