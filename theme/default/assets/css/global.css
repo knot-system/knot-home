@@ -664,7 +664,8 @@ ul.feeds-list {
 			margin-top: 0.8em;
 		}
 
-		ul.channels-list li.active a {
+		ul.channels-list li.active a,
+		ul.feeds-list li.active a {
 			color: inherit;
 			text-decoration: none;
 		}

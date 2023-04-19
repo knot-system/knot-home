@@ -117,6 +117,12 @@ if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 }
 
 
+$active_source = false;
+if( $active_channel && ! empty($action) ) {
+	$active_source = $action;
+}
+
+
 $sidebar_content = '';
 
 
@@ -124,6 +130,7 @@ ob_start();
 snippet( 'microsub-sidebar', [
 	'channels' => $channels,
 	'active_channel' => $active_channel,
+	'active_source' => $active_source,
 	'microsub' => $microsub,
 ] );
 $sidebar_content = ob_get_contents();
@@ -154,9 +161,10 @@ if( $action == 'channels' ) {
 
 
 snippet($snippet, [
-	'active_channel' => $active_channel,
-	'feeds' => $feeds,
 	'channels' => $channels,
+	'active_channel' => $active_channel,
+	'active_source' => $active_source,
+	'feeds' => $feeds,
 	'microsub' => $microsub
 ]);
 

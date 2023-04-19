@@ -1,5 +1,6 @@
 v.0.1.2
 
+- read: timeline can be filtered by feed
 - updater: fix for displaying relevant release information
 - default theme: some design updates
 - css & js files: start URL with '//' (instead of 'https://' or 'http://') to avoid mixed content

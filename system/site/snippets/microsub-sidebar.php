@@ -1,12 +1,13 @@
 <?php
 
-// Version: 0.1.0
+// Version: 0.1.2
 
 if( ! $core ) exit;
 
 
 $channels = $args['channels'];
 $active_channel = $args['active_channel'];
+$active_source = $args['active_source'];
 $microsub = $args['microsub'];
 
 
@@ -51,25 +52,46 @@ if( $active_channel && $active_channel != 'notifications' ) {
 		</p>
 	</span>
 	<?php
+
 	if( $feeds && isset($feeds->items) && count($feeds->items) ) {
 		?>
 		<ul class="feeds-list">
 		<?php
 		foreach( $feeds->items as $item ) {
+
+			$classes = [];
+			if( $active_source && $active_source == $item->_id ) {
+				$classes[] = 'active';
+			}
+
 			?>
-			<li>
+			<li<?= get_class_attribute($classes) ?>>
 				<?php
+				$source_id = false;
+				if( ! empty($item->_id) ) $source_id = $item->_id;
+
 				$name = $item->url;
 				if( ! empty($item->name) ) $name = $item->name;
 
 				$image = false;
 				if( ! empty($item->photo) ) $image = $item->photo;
 
+				if( $source_id ) {
+					echo '<a href="'.url('microsub/'.$active_channel.'/'.$source_id.'/', false).'">';
+				}
+
 				?>
 				<span title="<?= $item->url ?>"><?php
 				if( $image ) echo '<img src="'.$image.'">'; // TODO: cache locally, so we don't leak the client IP
 				echo $name;
 				?></span>
+				<?php
+
+				if( $source_id ) {
+					echo '</a>';
+				}
+
+				?>
 			</li>
 			<?php
 		}

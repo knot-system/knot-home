@@ -6,13 +6,19 @@ if( ! $core ) exit;
 
 
 $active_channel = $args['active_channel'];
+$active_source = $args['active_source'];
 $microsub = $args['microsub'];
+
 
 
 $items_args = array(
 	'channel' => $active_channel,
 	'limit' => 20,
 );
+
+if( $active_source ) {
+	$items_args['source'] = $active_source;
+}
 
 if( isset($_GET['after']) ) {
 	$items_args['after'] = $_GET['after'];
@@ -27,16 +33,11 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 	if( ! empty($items->paging) ) {
 
-		$paging = $items->paging;
-
-		echo '<ul class="pagination">';
-		if( ! empty($paging->before) ) {
-			echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?before='.$paging->before, false).'">&laquo; previous page</a></li>';
-		}
-		if( ! empty($paging->after) ) {
-			echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?after='.$paging->after, false).'">next page &raquo;</a></li>';
-		}
-		echo '</ul>';
+		snippet( 'microsub-pagination', [
+			'paging' => $items->paging,
+			'active_channel' => $active_channel,
+			'active_source' => $active_source
+		]);
 
 	}
 
@@ -151,16 +152,11 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 	if( ! empty($items->paging) ) {
 
-		$paging = $items->paging;
-
-		echo '<ul class="pagination">';
-		if( ! empty($paging->before) ) {
-			echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?before='.$paging->before, false).'">&laquo; previous page</a></li>';
-		}
-		if( ! empty($paging->after) ) {
-			echo '<li><a class="button" href="'.url('microsub/'.$active_channel.'/?after='.$paging->after, false).'">next page &raquo;</a></li>';
-		}
-		echo '</ul>';
+		snippet( 'microsub-pagination', [
+			'paging' => $items->paging,
+			'active_channel' => $active_channel,
+			'active_source' => $active_source
+		]);
 
 	}
 
