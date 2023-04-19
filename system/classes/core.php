@@ -13,7 +13,7 @@ class Core {
 	public $log;
 	public $theme;
 
-	private $user;
+	public $user;
 
 	public $route;
 

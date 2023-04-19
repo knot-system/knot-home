@@ -16,30 +16,32 @@ class Microsub {
 
 	function __construct(){
 
-		if( empty($_SESSION['me']) || empty($_SESSION['name']) ) return; // this should not happen, but just in case ..
+		global $core;
 
-		$this->me = $_SESSION['me'];
-		$this->name = $_SESSION['name'];
+		if( ! $core->user->get('me') || ! $core->user->get('name') ) return; // this should not happen, but just in case ..
 
-		if( ! isset($_SESSION['microsub_endpoint']) ) {
+		$this->me = $core->user->get('me');
+		$this->name = $core->user->get('name');
+
+		if( ! $core->user->get('microsub_endpoint') ) {
 			// TODO: option to refresh the endpoint
 			$this->show_error( 'no microsub endpoint found for '.$this->me );
 		}
-		$this->api_url = $_SESSION['microsub_endpoint'];
+		$this->api_url = $core->user->get('microsub_endpoint');
 
-		if( ! isset($_SESSION['access_token']) ) {
+		if( ! $core->user->get('access_token') ) {
 			$this->show_error( 'no access token found for '.$this->me );
 		}
-		$this->access_token = $_SESSION['access_token'];
+		$this->access_token = $core->user->get('access_token');
 
-		if( ! isset($_SESSION['scope']) ) {
+		if( ! $core->user->get('scope') ) {
 			$this->show_error( 'no scope found for '.$this->me );
 		}
-		$this->scope = explode( ' ', $_SESSION['scope'] );
+		$this->scope = explode( ' ', $core->user->get('scope') );
 
 
 		if( ! in_array( 'read', $this->scope ) || ! in_array( 'follow', $this->scope ) ) {
-			$this->show_error( 'scope is missing <em>read</em> or <em>follow</em> (scope is <strong>'.implode( ' ', $_SESSION['scope']).'</strong>) for '.$this->me );
+			$this->show_error( 'scope is missing <em>read</em> or <em>follow</em> (scope is <strong>'.implode( ' ', $core->user->get('scope')).'</strong>) for '.$this->me );
 		}
 
 		$this->authorization = 'Authorization: Bearer '.$this->access_token;

@@ -11,20 +11,20 @@ snippet( 'header' );
 
 <h3>Session Info:</h3>
 <ul>
-	<li><strong>User:</strong> <?= $_SESSION['me'] ?></li>
-	<li><strong>Short Username:</strong> <?= $_SESSION['name'] ?></li>
+	<li><strong>User:</strong> <?= $core->user->get('me') ?></li>
+	<li><strong>Short Username:</strong> <?= $core->user->get('name') ?></li>
 	<?php
-	if( isset($_SESSION['access_token']) ) {
-		echo '<li><strong>Access Token:</strong> <abbr title="'.$_SESSION['access_token'].'">*******</abbr></li>';
+	if( $core->user->get('access_token') ) {
+		echo '<li><strong>Access Token:</strong> <abbr title="'.$core->user->get('access_token').'">*******</abbr></li>';
 	}
-	if( isset($_SESSION['scope']) ) {
-		echo '<li><strong>Scope:</strong> '.$_SESSION['scope'].'</li>';
+	if( $core->user->get('scope') ) {
+		echo '<li><strong>Scope:</strong> '.$core->user->get('scope').'</li>';
 	}
-	if( isset($_SESSION['microsub_endpoint']) ) {
-		echo '<li><strong>Microsub Endpoint:</strong> '.$_SESSION['microsub_endpoint'].'</li>';
+	if( $core->user->get('microsub_endpoint') ) {
+		echo '<li><strong>Microsub Endpoint:</strong> '.$core->user->get('microsub_endpoint').'</li>';
 	}
-	if( isset($_SESSION['micropub_endpoint']) ) {
-		echo '<li><strong>Micropub Endpoint:</strong> '.$_SESSION['micropub_endpoint'].'</li>';
+	if( $core->user->get('micropub_endpoint') ) {
+		echo '<li><strong>Micropub Endpoint:</strong> '.$core->user->get('micropub_endpoint').'</li>';
 	}
 	?>
 </ul>

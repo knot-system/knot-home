@@ -3,45 +3,61 @@
 
 class User {
 
-
 	private $user_id;
-
+	private $fields = [];
 
 	function __construct() {
 
-		global $core;
+		if( empty($_SESSION['user_id']) ) return;
 
-		$user_id = false;
-
-		if( ! empty($_SESSION['user_id']) ) $user_id = $_SESSION['user_id'];
-
+		$user_id = $_SESSION['user_id'];
 		$this->user_id = $user_id;
 
-		if( $user_id ) {
 
-			if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $core->version() ) {
-				// was logged in in an old version, reset session
+		global $core;
+
+		if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $core->version() ) {
+			// was logged in in an old version, reset session
+			$this->logout();
+		}
+
+
+		// check, if me is allowed
+		$allowed_user_ids = $core->config->get('allowed_urls');
+		if( is_array($allowed_user_ids) && count($allowed_user_ids) ) {
+			$canonical_user_id = un_trailing_slash_it($user_id);
+
+			$allowed_user_ids = array_map( 'un_trailing_slash_it', $allowed_user_ids );
+
+			if( ! in_array($canonical_user_id, $allowed_user_ids) ) {
+				$core->debug( 'this url is not allowed', $user_id );
 				$this->logout();
 			}
 
-			// check, if me is allowed
-
-			$allowed_user_ids = $core->config->get('allowed_urls');
-			if( is_array($allowed_user_ids) && count($allowed_user_ids) ) {
-				$canonical_user_id = un_trailing_slash_it($user_id);
-
-				$allowed_user_ids = array_map( 'un_trailing_slash_it', $allowed_user_ids );
-
-				if( ! in_array($canonical_user_id, $allowed_user_ids) ) {
-					$core->debug( 'this url is not allowed', $user_id );
-					$this->logout();
-				}
-
-			}
-
 		}
-	
-		return $this;
+
+
+		$fields = [];
+		// TODO: get info from session cache file instead of $_SESSION variable; $_SESSION variable should only contain the user id and session id in the future
+		// TODO: $fields['me'] & $fields['user_id'] are the same values, do we need both fields?
+		$fields['user_id'] = $_SESSION['user_id'];
+		$fields['me'] = $_SESSION['me'];
+		$fields['name'] = $_SESSION['name'];
+		if( ! empty($_SESSION['access_token']) ) {
+			$fields['access_token'] = $_SESSION['access_token'];
+		}
+		if( ! empty($_SESSION['scope']) ) {
+			$fields['scope'] = $_SESSION['scope'];
+		}
+		if( ! empty($_SESSION['microsub_endpoint']) ) {
+			$fields['microsub_endpoint'] = $_SESSION['microsub_endpoint'];
+		}
+		if( ! empty($_SESSION['micropub_endpoint']) ) {
+			$fields['micropub_endpoint'] = $_SESSION['micropub_endpoint'];
+		}
+		$this->fields = $fields;
+
+
 	}
 
 
@@ -178,11 +194,9 @@ class User {
 
 	function get( $field ) {
 
-		if( $field == 'me' ) {
-			return $this->user_id;
-		}
+		if( ! array_key_exists($field, $this->fields) ) return false;
 
-		return false;
+		return $this->fields[$field];
 	}
 
 
