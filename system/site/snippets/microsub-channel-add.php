@@ -43,8 +43,6 @@ if( isset($_POST['url']) ) {
 					$title = $url;
 					if( ! empty($feed->name) ) $title = $feed->name;
 
-					if( is_object($title) ) $title = var_export($title, true); // TODO: remove this bugfix, if we fixed feed detection in postamt
-
 					$description = false;
 					if( ! empty($feed->description) ) $description = $feed->description;
 
