@@ -1,6 +1,6 @@
 <?php
 
-// Version: 0.1.2
+// Version: 0.1.3
 
 if( ! $core ) exit;
 
@@ -51,7 +51,7 @@ if( ! empty($item->_source) ) {
 		if( $source && ! empty($source->_id) && ! empty($source->name) ) {
 
 			$feed_title = $source->name;
-			$feed_link = url('microsub/'.$active_channel.'/'.$source->_id);
+			$feed_link = url('microsub/'.$active_channel.'/'.$source->_id.'/#active-feed', false);
 
 			?>
 			<span class="item-feed-title"><a href="<?= $feed_link ?>"><?= $feed_title ?></a></span>

@@ -1,6 +1,6 @@
 <?php
 
-// Version: 0.1.2
+// Version: 0.1.3
 
 if( ! $core ) exit;
 
@@ -77,7 +77,9 @@ if( $active_channel && $active_channel != 'notifications' ) {
 				if( ! empty($item->photo) ) $image = $item->photo;
 
 				if( $source_id ) {
-					echo '<a href="'.url('microsub/'.$active_channel.'/'.$source_id.'/', false).'">';
+					echo '<a href="'.url('microsub/'.$active_channel.'/'.$source_id.'/#active-feed', false).'"';
+					if( $active_source && $active_source == $source_id ) echo ' name="active-feed"';
+					echo '>';
 				}
 
 				?>

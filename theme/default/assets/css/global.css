@@ -213,13 +213,16 @@ sub, sup {
 		width: var(--sidebar-width);
 		min-height: 100vh;
 		box-shadow: 0 0 20px rgba(0,0,0,.1);
-		position: relative;
 		background: var(--color-white);
+		position: fixed;
+		left: 0;
+		top: 0;
+		z-index: 1000;
 	}
 
 	.content-area {
 		width: calc(100% - var(--sidebar-width));
-		padding: 20px 40px;
+		padding: 20px 40px 20px calc(var(--sidebar-width) + 40px);
 		box-sizing: border-box;
 		min-height: 100vh;
 	}
@@ -235,9 +238,6 @@ sub, sup {
 	@media ( max-width: 800px ) {
 
 		.nav-area {
-			position: fixed;
-			top: 0;
-			z-index: 1000;
 			left: calc( -1*var(--sidebar-width) + 10px );
 
 			-webkit-transition: left 200ms ease-in-out;
