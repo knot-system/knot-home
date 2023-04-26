@@ -79,6 +79,7 @@ function get_navigation(){
 
 	$navigation[] = array(
 		'name' => '🗞️',
+		'title' => 'Dashboard',
 		'url' => url('dashboard'),
 		'active' => ( $template == 'dashboard' )
 	);
@@ -86,6 +87,7 @@ function get_navigation(){
 	if( $core->config->get('microsub') ) {
 		$navigation[] = array(
 			'name' => 'Read',
+			'title' => 'read feeds',
 			'url' => url('microsub'),
 			'active' => ( $template == 'microsub' )
 		);
@@ -94,6 +96,7 @@ function get_navigation(){
 	if( $core->config->get('micropub') ) {
 		$navigation[] = array(
 			'name' => 'Write',
+			'title' => 'write a new post',
 			'url' => url('micropub'),
 			'active' => ( $template == 'micropub' )
 		);

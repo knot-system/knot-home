@@ -11,7 +11,7 @@ snippet( 'header' );
 
 <h3>Session Info:</h3>
 <ul>
-	<li><strong>User:</strong> <?= $core->user->get('me') ?></li>
+	<li><strong>Login Username:</strong> <?= $core->user->get('me') ?></li>
 	<li><strong>Short Username:</strong> <?= $core->user->get('name') ?></li>
 	<?php
 	if( $core->user->get('access_token') ) {

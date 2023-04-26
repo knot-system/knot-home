@@ -33,7 +33,7 @@ $navigation = get_navigation();
 						}
 					?>
 					<li<?= get_class_attribute($classes) ?>>
-						<a<?= get_class_attribute($button_classes) ?> href="<?= $element['url'] ?>"><?= $element['name'] ?></a>
+						<a<?= get_class_attribute($button_classes) ?> href="<?= $element['url'] ?>" title="<?= $element['title'] ?>"><?= $element['name'] ?></a>
 					</li>
 					<?php
 					}
