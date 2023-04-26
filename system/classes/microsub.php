@@ -92,17 +92,6 @@ class Microsub {
 			}
 		}
 
-		$cache_time = 60*3; // default: 3 minutes
-		if( $action == 'channels' ) {
-			$cache_time = 60*30; // 30 minutes
-		} elseif( $action == 'follow' ) {
-			$cache_time = 60*10; // 10 minutes
-		}
-
-		$cache = new Cache( 'microsub', $url, false, $cache_time );
-		$data = $cache->get_data();
-		if( $data ) return json_decode($data);
-
 		$request = new Request( $url );
 		$request->set_headers( array('Content-Type: application/json', $this->authorization) );
 		$request->curl_request();
@@ -110,8 +99,6 @@ class Microsub {
 		$body = $request->get_body();
 
 		if( $body ) $body = json_decode($body);
-
-		$cache->add_data( json_encode($body) );
 
 		return $body;
 	}
