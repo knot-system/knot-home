@@ -68,7 +68,7 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 } else {
 	echo '<p>- no posts found -</p>';
-	echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/?refresh', false).'">force refresh</a></p>';
+	echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/', false).'">refresh</a></p>';
 	if( ! empty($items->paging) ) {
 
 		$paging = $items->paging;

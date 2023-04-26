@@ -33,7 +33,7 @@ if( isset($_GET['confirmation']) && $_GET['confirmation'] == 'true' ) {
 		echo '</pre>';
 	}
 
-	echo '<a href="'.url('microsub/'.$active_channel.'/feeds/?refresh=true', false).'">&raquo; back to the feeds management</a>';
+	echo '<a href="'.url('microsub/'.$active_channel.'/feeds/', false).'">&raquo; back to the feeds management</a>';
 
 } else {
 

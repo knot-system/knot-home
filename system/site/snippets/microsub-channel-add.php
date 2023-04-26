@@ -91,7 +91,7 @@ if( isset($_POST['url']) ) {
 
 		}
 
-		echo '<a href="'.url('microsub/'.$active_channel.'/feeds/add/?refresh=true', false).'">&raquo; back to the feed management</a>';
+		echo '<a href="'.url('microsub/'.$active_channel.'/feeds/add/', false).'">&raquo; back to the feed management</a>';
 
 	}
 

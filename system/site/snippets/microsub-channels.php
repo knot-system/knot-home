@@ -34,7 +34,7 @@ if( isset($_GET['new']) ) {
 		var_dump($response);
 		echo '</pre>';
 
-		echo '<a href="'.url('microsub/manage/?refresh=true', false).'">&raquo; back to channel management</a>';
+		echo '<a href="'.url('microsub/manage/', false).'">&raquo; back to channel management</a>';
 
 	} else {
 
@@ -73,7 +73,7 @@ if( isset($_GET['new']) ) {
 		var_dump($response);
 		echo '</pre>';
 
-		echo '<a href="'.url('microsub/manage/?refresh=true', false).'">&raquo; back to channel management</a>';
+		echo '<a href="'.url('microsub/manage/', false).'">&raquo; back to channel management</a>';
 
 	} else {
 
@@ -110,7 +110,7 @@ if( isset($_GET['new']) ) {
 		var_dump($response);
 		echo '</pre>';
 
-		echo '<a href="'.url('microsub/manage/?refresh=true', false).'">&raquo; back to channel management</a>';
+		echo '<a href="'.url('microsub/manage/', false).'">&raquo; back to channel management</a>';
 
 	} else {
 
