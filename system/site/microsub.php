@@ -27,6 +27,8 @@ if( ! $active_channel ) {
 	$active_channel = array_key_first($channels_cleaned);
 }
 
+$feeds = false;
+
 if( $action == 'channels' ) {
 	$active_channel = false;
 	$feeds = false;
