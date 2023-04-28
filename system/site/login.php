@@ -10,6 +10,10 @@ if( ! empty($_COOKIE['sekretaer-url']) ) {
 	$prefill_url = $_COOKIE['sekretaer-url'];
 }
 
+if( isset($_GET['login_url']) ) {
+	$prefill_url = $_GET['login_url'];
+}
+
 ?>
 
 <main class="login">
