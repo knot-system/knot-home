@@ -156,7 +156,7 @@ if( ! is_dir( $abspath.'cache/') ) {
 		<?php
 	}
 
-	if( mkdir( $abspath.'cache/', 0777, true ) === false ) {
+	if( mkdir( $abspath.'cache/', 0774, true ) === false ) {
 
 		if( $debug_output ) {
 			?>
