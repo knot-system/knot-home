@@ -5,7 +5,7 @@
 // - and/or via the config.php in the root folder
 
 return [
-	'debug' => true, // show additional information when an error occurs
+	'debug' => false, // show additional information when an error occurs
 	'logging' => true, // write logfiles into the /log directory
 	'theme' => 'default',
 	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue' (default), 'green', 'red', 'lilac'
