@@ -40,6 +40,11 @@ class Core {
 		$this->version = get_system_version( $abspath );
 
 		$this->config = new Config();
+
+		if( ! $this->config->get('debug') ) {
+			error_reporting(0);
+		}
+
 		$this->log = new Log();
 
 
