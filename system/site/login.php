@@ -6,15 +6,10 @@ head_html();
 
 
 $prefill_url = '';
-if( ! empty($_COOKIE['sekretaer-url']) ) {
-	$prefill_url = $_COOKIE['sekretaer-url'];
-
-	// refresh url cookie lifetime
-	setcookie( 'sekretaer-url', $prefill_url, array(
-		'expires' => time()+$cookie_lifetime,
-		'path' => $core->basefolder
-	));
-
+$cookie = new Cookie('sekretaer-url');
+if( $cookie->exists() ) {
+	$cookie->refresh();
+	$prefill_url = $cookie->get();
 }
 
 if( isset($_GET['login_url']) ) {

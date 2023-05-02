@@ -256,10 +256,9 @@ if( $step == 'check' ) {
 	$_SESSION = []; // destroy existing session
 
 	// delete session cookie:
-	setcookie( 'sekretaer-session', false, array(
-		'expires' => -1,
-		'path' => $basefolder
-	));
+	$cookie = new Cookie( 'sekretaer-session' );
+	$cookie->remove();
+	
 
 	deleteDirectory( $abspath.'cache/');
 	mkdir( $abspath.'cache/' );

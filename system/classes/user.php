@@ -90,27 +90,21 @@ class User {
 
 		if( ! empty($post['url']) ) $url = $post['url'];
 
-		global $core;
 
+		$cookie = new Cookie( 'sekretaer-url' );
 		if( ! empty($post['rememberurl']) && $post['rememberurl'] == 'true' ) {
 
-			$cookie_lifetime = $core->config->get('cookie_lifetime');
+			$cookie->set($url);
 
-			setcookie( 'sekretaer-url', $url, array(
-				'expires' => time()+$cookie_lifetime,
-				'path' => $core->basefolder
-			));
+		} else {
 
-		} elseif( isset($_COOKIE['sekretaer-url']) ) {
-
-			setcookie( 'sekretaer-url', null, array(
-				'expires' => -1,
-				'path' => $core->basefolder
-			));
+			$cookie->remove();
 
 		}
 
 		$indieauth = new IndieAuth();
+
+		global $core;
 
 		$scope = $core->config->get( 'scope' );
 
@@ -184,13 +178,9 @@ class User {
 
 			$session_data['autologin'] = true;
 
-			$cookie_lifetime = $core->config->get('cookie_lifetime');
-
 			// this is the cookie for the autologin
-			setcookie( 'sekretaer-session', $session_id, array(
-				'expires' => time()+$cookie_lifetime,
-				'path' => $core->basefolder
-			));
+			$cookie = new Cookie( 'sekretaer-session' );
+			$cookie->set( $session_id );
 
 		}
 
@@ -213,20 +203,21 @@ class User {
 
 		if( $this->authorized() ) return false;
 
-		if( empty($_COOKIE['sekretaer-session']) ) return false;
+		$cookie = new Cookie( 'sekretaer-session' );
 
-		$session_id = $_COOKIE['sekretaer-session'];
+		if( ! $cookie->exists() ) {
+			return false;
+		}
+
+		$session_id = $cookie->get();
 
 		$this->session_id = $session_id;
 
 		if( ! $this->load_session_data() ) {
 
 			// session expired, delete cookie
-			setcookie( 'sekretaer-session', false, array(
-				'expires' => -1,
-				'path' => $core->basefolder
-			));
-
+			$cookie->remove();
+			
 			return false;
 		}
 
@@ -236,22 +227,12 @@ class User {
 
 		$_SESSION['session_id'] = $session_id;
 
-		$cookie_lifetime = $core->config->get('cookie_lifetime');
-
 		// refresh session cookie lifetime:
-		setcookie( 'sekretaer-session', $session_id, array(
-			'expires' => time()+$cookie_lifetime,
-			'path' => $core->basefolder
-		));
+		$cookie->refresh();
 
 		// refresh url cookie lifetime
-		if( ! empty($_COOKIE['sekretaer-url']) ) {
-			$url_cookie = $_COOKIE['sekretaer-url'];
-			setcookie( 'sekretaer-url', $url_cookie, array(
-				'expires' => time()+$cookie_lifetime,
-				'path' => $core->basefolder
-			));
-		}
+		$url_cookie = new Cookie( 'sekretaer-url' );
+		$url_cookie->refresh();
 
 		return true;
 	}
@@ -279,15 +260,9 @@ class User {
 		$session_id = $this->session_id;
 
 
-		if( ! empty($_COOKIE['sekretaer-session']) ) {
-			// remove autologin cookie
-			global $core;
-
-			setcookie( 'sekretaer-session', null, array(
-				'expires' => -1,
-				'path' => $core->basefolder
-			));
-		}
+		// remove autologin cookie, if it exists
+		$cookie = new Cookie( 'sekretaer-session' );
+		$cookie->remove();
 
 		// remove session cache
 		$session_cache = new Cache( 'session', $session_id, true );
