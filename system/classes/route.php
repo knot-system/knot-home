@@ -81,7 +81,9 @@ class Route {
 
 			if( empty($request[0]) ) {
 				
-				$this->redirect('dashboard');
+				$homepage = trailing_slash_it($core->config->get('homepage'));
+
+				$this->redirect($homepage);
 
 			} else {
 
