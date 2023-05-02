@@ -93,6 +93,13 @@ class Route {
 					$template = '404';
 				}
 
+				// make sure that microsub/micropub is enabled, when using it as a template
+				if( $template == 'microsub' && ! $core->config->get('microsub') ) {
+					$template = '404';
+				} elseif( $template == 'micropub' && ! $core->config->get('micropub') ) {
+					$template = '404';
+				}
+
 				$channel = false;
 				if( ! empty($request[1]) ) {
 					$channel = $request[1];
