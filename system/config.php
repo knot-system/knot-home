@@ -10,8 +10,8 @@ return [
 	'theme' => 'default',
 	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue' (default), 'green', 'red', 'lilac'
 	'scope' => array( 'read', 'create', 'follow', 'channels', 'follow', 'mute', 'block' ),
-	'microsub' => true,
-	'micropub' => true,
+	'microsub' => true, // set to false to disable the 'read' tab
+	'micropub' => true, // set to false to disable the 'write' tab
 	'homepage' => 'dashboard', // can be 'dashboard', 'microsub' or 'micropub'
 	'cookie_lifetime' => 60*60*24*10, // 10 days, in seconds
 	'cache_lifetime' => 60*60*24*30, // 30 days, in seconds
