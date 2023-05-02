@@ -3,6 +3,7 @@ v.0.1.3
 - you can now set the default page after login via the new config option 'homepage' (can be set to 'microsub' or 'micropub', defaults to 'dashboard')
 - removed timeline caching, because postamt is now much faster
 - sidebar now scrolls to active feed, if there is more than a viewport worth of feeds to display
+- session handling updated; save all data in cachefile, only save session_id in session cookie
 - setup: add comments to .htaccess, at beginning and end of our block
 - bugfixes & enhancements
 

@@ -3,20 +3,52 @@
 
 class User {
 
-	private $user_id;
+	private $session_id = false;
+	private $user_id = false;
 	private $fields = [];
 
 	function __construct() {
 
-		if( empty($_SESSION['user_id']) ) return;
+		if( empty($_SESSION['session_id']) ) return;
 
-		$user_id = $_SESSION['user_id'];
-		$this->user_id = $user_id;
+		$session_id = $_SESSION['session_id'];
+
+		if( ! $session_id ) {
+			return;
+		}
+
+		$this->session_id = $session_id;
+
+		if( ! $this->load_session_data() ) {
+			return;
+		}
+
+	}
+
+
+	function load_session_data() {
+
+		$session_cache = new Cache( 'session', $this->session_id, true );
+		$session_data = $session_cache->get_data();
+
+		$session_cache->refresh_lifetime();
+
+
+		if( ! $session_data ) {
+			return false;
+		}
+
+		$session_data = json_decode($session_data, true);
+
+		if( empty($session_data['me']) ) {
+			return false;
+		}
+
+		$this->user_id = $session_data['me'];
 
 
 		global $core;
-
-		if( ! isset($_SESSION['_version']) || $_SESSION['_version'] != $core->version() ) {
+		if( ! isset($session_data['_version']) || $session_data['_version'] != $core->version() ) {
 			// was logged in in an old version, reset session
 			$this->logout();
 		}
@@ -37,27 +69,9 @@ class User {
 		}
 
 
-		$fields = [];
-		// TODO: get info from session cache file instead of $_SESSION variable; $_SESSION variable should only contain the user id and session id in the future
-		// TODO: $fields['me'] & $fields['user_id'] are the same values, do we need both fields?
-		$fields['user_id'] = $_SESSION['user_id'];
-		$fields['me'] = $_SESSION['me'];
-		$fields['name'] = $_SESSION['name'];
-		if( ! empty($_SESSION['access_token']) ) {
-			$fields['access_token'] = $_SESSION['access_token'];
-		}
-		if( ! empty($_SESSION['scope']) ) {
-			$fields['scope'] = $_SESSION['scope'];
-		}
-		if( ! empty($_SESSION['microsub_endpoint']) ) {
-			$fields['microsub_endpoint'] = $_SESSION['microsub_endpoint'];
-		}
-		if( ! empty($_SESSION['micropub_endpoint']) ) {
-			$fields['micropub_endpoint'] = $_SESSION['micropub_endpoint'];
-		}
-		$this->fields = $fields;
+		$this->fields = $session_data;
 
-
+		return true;
 	}
 
 
@@ -118,6 +132,7 @@ class User {
 		exit;
 	}
 
+
 	function login() {
 
 		$indieauth = new IndieAuth();
@@ -133,52 +148,60 @@ class User {
 			exit;
 		}
 
+
+		$session_data = [];
+
 		if( ! empty($response['response']['access_token']) ) {
-			$_SESSION['access_token'] = $response['response']['access_token'];
+			$session_data['access_token'] = $response['response']['access_token'];
 		}
 		if( ! empty($response['response']['scope']) ) {
-			$_SESSION['scope'] = $response['response']['scope'];
+			$session_data['scope'] = $response['response']['scope'];
 		}
 		if( ! empty($response['microsub_endpoint']) ) {
-			$_SESSION['microsub_endpoint'] = $response['microsub_endpoint'];
+			$session_data['microsub_endpoint'] = $response['microsub_endpoint'];
 		}
 		if( ! empty($response['micropub_endpoint']) ) {
-			$_SESSION['micropub_endpoint'] = $response['micropub_endpoint'];
+			$session_data['micropub_endpoint'] = $response['micropub_endpoint'];
 		}
 
 		$this->user_id = $response['me'];
-		$_SESSION['user_id'] = $response['me'];
+		$session_data['user_id'] = $response['me'];
 
-		$_SESSION['me'] = $response['me'];
-		$_SESSION['name'] = $this->create_short_name( $response['me'] );
+		$session_data['me'] = $response['me'];
+		$session_data['name'] = $this->create_short_name( $response['me'] );
 
 
 		global $core;
-		$_SESSION['_version'] = $core->version();
+		$session_data['_version'] = $core->version();
 
+
+		$session_id = get_hash( uniqid() );
+
+
+		$session_data['autologin'] = false;
 
 		if( $autologin ) {
 
-			$cookie_session_id = uniqid();
-
-			global $core;
-
-			$session_data = $_SESSION;
-			unset($session_data['login_redirect_path']);
-			$session_data['autologin'] = true; // TODO: use this, to determine the length of the cache lifetime (also use this for the cache lifetime, when reseting the cache time on autologin)
-			$session_data = json_encode($session_data);
-
-			$cookie = new Cache( 'session', $cookie_session_id, true );
-			$cookie->add_data( $session_data );
+			$session_data['autologin'] = true;
 
 			$cookie_lifetime = $core->config->get('cookie_lifetime');
 
-			setcookie( 'sekretaer-session', $cookie_session_id, array(
+			// this is the cookie for the autologin
+			setcookie( 'sekretaer-session', $session_id, array(
 				'expires' => time()+$cookie_lifetime,
 				'path' => $core->basefolder
 			));
 
 		}
+
+
+		$session_lifetime = $core->config->get('session_lifetime');
+		$session_cache = new Cache( 'session', $session_id, true, $session_lifetime );
+		$session_cache->add_data( json_encode($session_data) );
+
+
+		$_SESSION['session_id'] = $session_id;
+
 
 		return $this;
 	}
@@ -192,14 +215,12 @@ class User {
 
 		if( empty($_COOKIE['sekretaer-session']) ) return false;
 
-		// TODO: check additional safety options, like browser and location ? -- to make session cloning harder
+		$session_id = $_COOKIE['sekretaer-session'];
 
-		$cookie_session_id = $_COOKIE['sekretaer-session'];
+		$this->session_id = $session_id;
 
-		$cache = new Cache( 'session', $cookie_session_id, true );
-		$session_data = trim($cache->get_data());
+		if( ! $this->load_session_data() ) {
 
-		if( ! $session_data ) {
 			// session expired, delete cookie
 			setcookie( 'sekretaer-session', false, array(
 				'expires' => -1,
@@ -210,18 +231,15 @@ class User {
 		}
 
 
-		$session_data = json_decode($session_data, true);
+		// TODO: check additional safety options, like browser and location ? -- to make session cloning harder
 
-		// restore session data:
-		// TODO: only save session id / user id in the $_SESSION variable, and create the user object from a session cache file instead
-		$_SESSION = $session_data;
 
-		$cache->refresh_lifetime();
+		$_SESSION['session_id'] = $session_id;
 
 		$cookie_lifetime = $core->config->get('cookie_lifetime');
 
 		// refresh session cookie lifetime:
-		setcookie( 'sekretaer-session', $cookie_session_id, array(
+		setcookie( 'sekretaer-session', $session_id, array(
 			'expires' => time()+$cookie_lifetime,
 			'path' => $core->basefolder
 		));
@@ -258,13 +276,12 @@ class User {
 
 	function logout() {
 
-		global $core;
+		$session_id = $this->session_id;
+
 
 		if( ! empty($_COOKIE['sekretaer-session']) ) {
-			$cookie_session_id = $_COOKIE['sekretaer-session'];
-
-			$cache = new Cache( 'session', $cookie_session_id, true, 20 );
-			$cache->remove();
+			// remove autologin cookie
+			global $core;
 
 			setcookie( 'sekretaer-session', null, array(
 				'expires' => -1,
@@ -272,9 +289,16 @@ class User {
 			));
 		}
 
+		// remove session cache
+		$session_cache = new Cache( 'session', $session_id, true );
+		$session_cache->remove();
+
+
 		session_destroy();
 
+		$this->session_id = false;
 		$this->user_id = false;
+
 
 		return $this;
 	}
