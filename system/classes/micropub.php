@@ -140,7 +140,7 @@ class Micropub {
 		$request = new Request( $url );
 		$request->set_headers( array( $this->authorization ) );
 		$request->set_post_data( $data );
-		$request->curl_request( false );
+		$request->curl_request();
 
 		$httpcode = $request->get_status_code();
 		$headers = $request->get_headers();
