@@ -73,7 +73,9 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 		$paging = $items->paging;
 		if( ! empty($items_args['before']) || ! empty($items_args['after']) ) {
-			echo '<a class="button" href="'.url('microsub/'.$active_channel.'/', false).'">go to first page</a>';
+			$link = 'microsub/'.$active_channel.'/';
+			if( $active_source ) $link .= $active_source;
+			echo '<a class="button" href="'.url($link).'">go to first page</a>';
 		}
 
 	}
