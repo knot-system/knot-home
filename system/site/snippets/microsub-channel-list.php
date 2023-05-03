@@ -67,16 +67,16 @@ if( $items && isset($items->items) && count($items->items) ) {
 
 
 } else {
-	echo '<p>- no posts found -</p>';
-	echo '<p><a class="button" href="'.url('microsub/'.$active_channel.'/', false).'">refresh</a></p>';
-	if( ! empty($items->paging) ) {
 
+	echo '<p>- no posts found -</p>';
+	
+	if( ! empty($items->paging) ) {
 		$paging = $items->paging;
 		if( ! empty($items_args['before']) || ! empty($items_args['after']) ) {
 			$link = 'microsub/'.$active_channel.'/';
 			if( $active_source ) $link .= $active_source;
 			echo '<a class="button" href="'.url($link).'">go to first page</a>';
 		}
-
 	}
+
 }
