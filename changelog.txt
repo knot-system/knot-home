@@ -1,3 +1,8 @@
+v.0.1.4
+
+- bugfixes & enhancements
+
+
 v.0.1.3
 
 - you can now set the default page after login via the new config option 'homepage' (can be set to 'microsub' or 'micropub', defaults to 'dashboard')
