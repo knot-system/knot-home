@@ -57,6 +57,7 @@ class Core {
 
 		$this->theme->add_stylesheet( 'css/sekretaer.css', 'global' );
 		
+		$this->theme->add_metatag( 'script_sekretaer', '<script type="text/javascript">const Sekretaer = { API: { url: "'.url(api_get_endpoint()).'" } };</script>', 'footer' );
 		$this->theme->add_script( 'js/sekretaer.js', 'global', 'async', true );
 
 		$this->theme->add_metatag( 'charset', '<meta charset="utf-8">' );

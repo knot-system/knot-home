@@ -48,6 +48,57 @@ ul.tag-selector {
 		opacity: 0;
 		pointer-events: none;
 	}
+	
+sup.footnote a {
+	text-decoration: none;
+	color: inherit;
+	font-size: 0.8em;
+}
+
+a.inline-link {
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+
+	-ms-word-break: break-all;
+	word-break: break-word;
+
+	-ms-hyphens: auto;
+	-moz-hyphens: auto;
+	-webkit-hyphens: auto;
+	hyphens: auto;
+}
+
+a.link-preview {
+	position: relative;
+}
+
+	a.link-preview .link-preview-refresh {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 20px;
+		height: 20px;
+		cursor: pointer;
+		z-index: 100;
+	}
+
+		a.link-preview .link-preview-refresh:after {
+			content: "↺";
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			position: absolute;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			font-size: 16px;
+			opacity: 0.6;
+		}
+
+			a.link-preview .link-preview-refresh:hover:after {
+				opacity: 1;
+			}
 
 .debugmessage {
 	border: 1px solid red;

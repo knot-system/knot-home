@@ -1,6 +1,6 @@
 <?php
 
-// Version: 0.1.3
+// Version: 0.1.4
 
 if( ! $core ) exit;
 
@@ -27,13 +27,20 @@ if( ! empty($item->author->url) ) {
 
 $content = false;
 if( ! empty($item->content->html) ) {
-	$html = $item->content->html;
-	$html = str_replace(array("\r\n", "\r", "\n"), ' ', $html );
-	$text = new Text( $html );
-	$text = $text->remove_html_elements()->auto_p();
-	$content = $text->get();
+	$content = $item->content->html;
 } elseif( ! empty($item->content->text) ) {
 	$content = $item->content->text;
+}
+
+$content = str_replace(array("\r\n", "\r", "\n"), ' ', $content );
+
+$text = new Text( $content );
+$content = $text->cleanup()->get();
+
+$link_preview = $text->get_link_preview();
+
+if( $link_preview ) {
+	$link_preview = '<div class="link-preview-container">'.$link_preview.'</div>';
 }
 
 
@@ -80,8 +87,11 @@ if( ! empty($item->_source) ) {
 			<?= $content ?>
 		</p>
 
+
 	</span>
 
+	<?= $link_preview ?>
+	
 	<p class="item-meta">
 		<small>
 			<?php

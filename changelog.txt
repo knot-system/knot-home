@@ -1,5 +1,6 @@
 v.0.1.4
 
+- link previews
 - bugfixes & enhancements
 
 

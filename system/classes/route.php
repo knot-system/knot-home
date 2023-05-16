@@ -85,6 +85,34 @@ class Route {
 
 				$this->redirect($homepage);
 
+			} elseif( ! empty($request[0]) && $request[0] == api_get_endpoint() ) {
+				// api
+				// NOTE: this is subject to change!
+
+				if( api_check_request() ) {
+					exit;
+				}
+
+				$this->route = array(
+					'template' => '404'
+				);
+
+			} elseif( ! empty($request[0]) && $request[0] == 'remote-image' ) {
+				// maybe cached remote image
+
+				$hash = $request[1];
+
+				if( file_exists($core->abspath.'cache/remote-image/'.$hash) ) {
+					$image = new Image( $hash, 'remote' );
+					$image->display();
+					exit;
+				}
+				
+
+				$this->route = array(
+					'template' => '404'
+				);
+
 			} else {
 
 				$template = $request[0];

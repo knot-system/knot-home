@@ -20,4 +20,9 @@ return [
 	'allowed_html_elements' => [ 'del', 'pre', 'blockquote', 'code', 'b', 'strong', 'u', 'i', 'em', 'ul', 'ol', 'li', 'p', 'br', 'span', 'a', 'img', 'video', 'audio' ], // allowed html elements for post content (in read mode), everything else (like <script> or <iframe> tags) gets stripped
 	'allowed_urls' => [], // an array with urls of allowed users ('me' parameters)
 	'user_agent' => 'maxhaesslein/sekretaer/', // version will be automatically appended
+	'image_target_width' => 800,
+	'preview_target_width' => 800,
+	'image_jpg_quality' => 70, // quality of jpg images; you neeed to empty the cache when changing this option
+	'image_png_to_jpg' => true, // convert png images to jpg (faster, but looses transparency); you need to empty the cache when changing this option
+	'image_background_color' => [ 255, 255, 255 ], // backgroundcolor for transparent images, when 'image_png_to_jpg' option is set to true; you need to empty the cache when changing this option
 ];
