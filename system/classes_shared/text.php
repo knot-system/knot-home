@@ -140,7 +140,8 @@ class Text {
 		}
 
 		$links = array_map( 'trim', $links );
-		$links = array_filter($links); // remove empty elements
+		$links = array_filter( $links ); // remove empty elements
+		$links = array_unique( $links );
 
 		$this->links = $links;
 
