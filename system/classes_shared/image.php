@@ -127,6 +127,8 @@ class Image {
 
 	function display() {
 
+		if( ! $this->mime_type ) return false;
+
 		global $core;
 
 		$target_width = $core->config->get( 'image_target_width' );
@@ -340,7 +342,7 @@ class Image {
 
 		if( ! $image ) {
 			$core->debug( 'could not load image with mime-type '.$this->image_type );
-			exit;
+			return false;
 		}
 
 		return $image;
