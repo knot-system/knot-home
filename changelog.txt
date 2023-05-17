@@ -1,6 +1,7 @@
 v.0.1.4
 
 - link previews
+- updater now correctly deletes the session cookie and cache files
 - bugfixes & enhancements
 
 
