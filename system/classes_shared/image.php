@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-16
+// update: 2023-05-17
 
 
 class Image {
@@ -31,7 +31,6 @@ class Image {
 		}
 
 		if( ! file_exists( $this->local_file_path) ) {
-			var_dump('not exists');
 			$core->debug("local image file does not exist", $this->local_file_path);
 			return false;
 		}
@@ -76,7 +75,6 @@ class Image {
 		} else {
 
 			$core->debug( 'unknown image type '.$this->image_type);
-			exit;
 
 		}
 
@@ -84,6 +82,8 @@ class Image {
 
 
 	function get_html_embed( $target_width = false ) {
+
+		if( ! $this->mime_type ) return false;
 
 		global $core;
 
