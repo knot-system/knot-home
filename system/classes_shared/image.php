@@ -72,6 +72,10 @@ class Image {
 
 			$this->mime_type = 'image/png';
 
+		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+
+			$this->mime_type = 'image/webp';
+
 		} else {
 
 			$core->debug( 'unknown image type '.$this->image_type);
@@ -166,7 +170,9 @@ class Image {
 
 			$target_image = imagecreatetruecolor( $width, $height );
 
-			if( ! $png_to_jpg && $this->image_type == IMAGETYPE_PNG ) {
+			if( ( ! $png_to_jpg && $this->image_type == IMAGETYPE_PNG ) 
+				|| $this->image_type == IMAGETYPE_WEBP 
+			) {
 				// handle alpha channel
 				imageAlphaBlending( $target_image, false );
 				imageSaveAlpha( $target_image, true );
@@ -201,6 +207,17 @@ class Image {
 
 			ob_start();
 			imagepng( $target_image );
+			$data = ob_get_contents();
+			ob_end_clean();
+			$cache->add_data( $data );
+
+			header( 'Content-Type: '.$this->mime_type );
+			echo $data;
+
+		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+
+			ob_start();
+			imagewebp( $target_image );
 			$data = ob_get_contents();
 			ob_end_clean();
 			$cache->add_data( $data );
@@ -298,25 +315,25 @@ class Image {
 
 			$image = imagecreatefrompng( $this->local_file_path );
 
-			if( ! $image ) {
-				$core->debug( 'could not load png image' );
-				exit;
-			}
-
 			// handle transparency loading:
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
 		
 			if( $core->config->get( 'image_png_to_jpg' ) ) {
 				// set transparent background to specific color, when converting to jpg:
-				$transparent_color = $core->config->get( 'image_background_color' );
-				$background_image = imagecreatetruecolor( $this->src_width, $this->src_height );
-				$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
-				imagefill( $background_image, 0, 0, $background_color );
-				imagecopy( $background_image, $image, 0, 0, 0, 0, $this->src_width, $this->src_height );
-				$image = $background_image;
-				imagedestroy( $background_image );
+				$image = $this->fill_with_backgroundcolor( $image );
 			}
+
+		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+
+			$image = imagecreatefromwebp( $this->local_file_path );
+
+			// handle transparency loading:
+			imageAlphaBlending( $image, false );
+			imageSaveAlpha( $image, true );
+		
+			// set transparent background to specific color, because for now we don't support transparent png
+			$image = $this->fill_with_backgroundcolor( $image );
 
 		}
 
@@ -325,6 +342,22 @@ class Image {
 			$core->debug( 'could not load image with mime-type '.$this->image_type );
 			exit;
 		}
+
+		return $image;
+	}
+
+
+	function fill_with_backgroundcolor( $image ) {
+
+		global $core;
+
+		$transparent_color = $core->config->get( 'image_background_color' );
+		$background_image = imagecreatetruecolor( $this->src_width, $this->src_height );
+		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
+		imagefill( $background_image, 0, 0, $background_color );
+		imagecopy( $background_image, $image, 0, 0, 0, 0, $this->src_width, $this->src_height );
+		$image = $background_image;
+		imagedestroy( $background_image );
 
 		return $image;
 	}
