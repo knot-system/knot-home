@@ -197,18 +197,28 @@ var Micropub = {
 
 var LinkPreview = {
 
+	elements: [],
+
 	init: function(){
 
-		var linkPreviews = document.querySelectorAll( 'a.link-preview-needs-refresh' );
+		var elements = document.querySelectorAll( 'a.link-preview-needs-refresh' );
 
-		if( ! linkPreviews || ! linkPreviews.length ) return;
+		if( ! elements || ! elements.length ) return;
 
-		var timeout = 700;
-		for( var linkPreview of linkPreviews ) {
-			var id = linkPreview.id.replace('link-','');
-			setTimeout( LinkPreview.refresh, timeout, id);
-			timeout += 300;
-		}
+		LinkPreview.elements = Array.from(elements);
+
+		setTimeout( LinkPreview.loadNextLink, 1000 );
+
+	},
+
+	loadNextLink: function(){
+
+		if( LinkPreview.elements.length <= 0 ) return;
+
+		var link = LinkPreview.elements.shift(),
+			id = link.id.replace('link-', '');
+
+		LinkPreview.refresh( id );
 
 	},
 
@@ -219,22 +229,31 @@ var LinkPreview = {
 			mode: 'same-origin'
 		}).then( response => response.json() ).then(function(response){
 
-			if( ! response.success ) return;
+			if( ! response.success ) {
+				LinkPreview.loadNextLink();
+				return;
+			}
 
 			var data = response.data;
 
-			if( ! data.url || ! data.id ) return;
+			if( ! data.url || ! data.id ) {
+				LinkPreview.loadNextLink();
+				return;
+			}
 
-			if( data.id != id ) return;
+			if( data.id != id ) {
+				LinkPreview.loadNextLink();
+				return;
+			}
 
 			var linkPreview = document.getElementById('link-'+data.id);
 
 			var previewHash = linkPreview.dataset.previewHash;
 
 			if( previewHash && data.preview_html_hash == previewHash ) {
+				LinkPreview.loadNextLink();
 				return;
 			}
-
 
 			var refreshButton = document.createElement('div');
 			refreshButton.classList.add('link-preview-refresh');
@@ -246,6 +265,8 @@ var LinkPreview = {
 
 			linkPreview.appendChild(refreshButton);
 			linkPreview.classList.remove('link-preview-needs-refresh');
+
+			LinkPreview.loadNextLink();
 
 		}).catch(function(error){
 			console.warn('AJAX error', error); // DEBUG
