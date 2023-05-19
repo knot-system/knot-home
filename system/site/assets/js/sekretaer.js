@@ -246,25 +246,45 @@ var LinkPreview = {
 				return;
 			}
 
-			var linkPreview = document.getElementById('link-'+data.id);
+			var linkPreviewElement = document.getElementById('link-'+data.id);
 
-			var previewHash = linkPreview.dataset.previewHash;
+			var previewHash = linkPreviewElement.dataset.previewHash;
 
 			if( previewHash && data.preview_html_hash == previewHash ) {
 				LinkPreview.loadNextLink();
 				return;
 			}
 
-			var refreshButton = document.createElement('div');
-			refreshButton.classList.add('link-preview-refresh');
+			// NOTE: check if element is below viewport; if so, replace the HTML directly, if not, show a refresh button. We do this so that we don't have a layout shift above or in the viewport.
 
-			refreshButton.addEventListener( 'click', function(e){
-				e.preventDefault();
-				this.parentNode.innerHTML = data.preview_html;
-			});
+			var bounding = linkPreviewElement.getBoundingClientRect(),
+				linkPreviewElementTopOffset = bounding.top,
+				viewportHeight = window.innerHeight,
+				refreshInline = false;
 
-			linkPreview.appendChild(refreshButton);
-			linkPreview.classList.remove('link-preview-needs-refresh');
+			if( linkPreviewElementTopOffset > viewportHeight ) {
+				refreshInline = true;
+			}
+
+			if( refreshInline ) {
+
+				linkPreviewElement.innerHTML = data.preview_html;
+				
+			} else {
+
+				var refreshButton = document.createElement('div');
+				refreshButton.classList.add('link-preview-refresh');
+
+				refreshButton.addEventListener( 'click', function(e){
+					e.preventDefault();
+					this.parentNode.innerHTML = data.preview_html;
+				});
+
+				linkPreviewElement.appendChild(refreshButton);
+
+			}
+
+			linkPreviewElement.classList.remove('link-preview-needs-refresh');
 
 			LinkPreview.loadNextLink();
 
