@@ -28,7 +28,7 @@ class Cookie {
 		global $core;
 
 		if( ! $lifetime ) {
-			$lifetime = $core->config->get('cookie_lifetime');
+			$lifetime = get_config('cookie_lifetime');
 		}
 
 		$lifetime += time();

@@ -10,7 +10,7 @@ $active_channel = $args['active_channel'];
 
 $date = new DateTimeImmutable($item->published);
 
-$datetime_format = $core->config->get('datetime_format');
+$datetime_format = get_config('datetime_format');
 $datetime = $date->format( $datetime_format );
 
 $author_name = false;
@@ -26,7 +26,7 @@ if( ! empty($item->author->url) ) {
 }
 
 
-$show_item_content = $core->config->get('show_item_content');
+$show_item_content = get_config('show_item_content');
 
 
 $link_previews = false;
@@ -62,13 +62,13 @@ if( $show_item_content ) {
 
 	$classes = array( 'link-preview' );
 
-	$max_age = $core->config->get('link_preview_max_age');
+	$max_age = get_config('link_preview_max_age');
 
 	if( empty($link_info['last_refresh']) || time()-$link_info['last_refresh'] > $max_age ) {
 
 		$classes[] = 'link-preview-needs-refresh';
 
-		$nojs_refresh = $core->config->get('link_preview_nojs_refresh');
+		$nojs_refresh = get_config('link_preview_nojs_refresh');
 		if( $nojs_refresh && ! isset($core->is_link_refreshing) ) {
 			// NOTE: we refresh only on link for every request, because this can take a few seconds,
 			// depending on the url and how fast the other server is.

@@ -25,7 +25,7 @@ class Text {
 	function remove_html_elements() {
 		global $core;
 
-		$allowed_html_elements = $core->config->get('allowed_html_elements');
+		$allowed_html_elements = get_config('allowed_html_elements');
 
 		$this->content = strip_tags( $this->content, $allowed_html_elements );
 
@@ -101,7 +101,7 @@ class Text {
 
 		$replace = '<a class="inline-link" href="$1://$2.$3$4" target="_blank" rel="noopener" title="$1://$2.$3$4">$2.$3$4</a>';
 
-		$add_footnote_to_links = $core->config->get('add_footnote_to_links');
+		$add_footnote_to_links = get_config('add_footnote_to_links');
 
 		if( $hide_anchors ) $add_footnote_to_links = false;
 
@@ -166,13 +166,13 @@ class Text {
 
 			$classes = array( 'link-preview' );
 
-			$max_age = $core->config->get('link_preview_max_age');
+			$max_age = get_config('link_preview_max_age');
 
 			if( empty($link_info['last_refresh']) || time()-$link_info['last_refresh'] > $max_age ) {
 
 				$classes[] = 'link-preview-needs-refresh';
 
-				$nojs_refresh = $core->config->get('link_preview_nojs_refresh');
+				$nojs_refresh = get_config('link_preview_nojs_refresh');
 				if( $nojs_refresh && ! isset($core->is_link_refreshing) ) {
 					// NOTE: we refresh only on link for every request, because this can take a few seconds,
 					// depending on the url and how fast the other server is.

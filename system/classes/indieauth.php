@@ -46,14 +46,14 @@ class IndieAuth {
 		global $core;
 
 
-		if( $core->config->get('microsub') ) {
+		if( get_config('microsub') ) {
 			$microsub_endpoint = $this->discover_endpoint( 'microsub', $url );
 			if( $microsub_endpoint ) {
 				$_SESSION['indieauth_microsub_endpoint'] = $microsub_endpoint;
 			}
 		}
 
-		if( $core->config->get('micropub') ) {
+		if( get_config('micropub') ) {
 			$micropub_endpoint = $this->discover_endpoint( 'micropub', $url );
 			if( $micropub_endpoint ) {
 				$_SESSION['indieauth_micropub_endpoint'] = $micropub_endpoint;

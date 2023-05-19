@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-04-18
+// update: 2023-05-19
 
 
 class Theme {
@@ -19,7 +19,7 @@ class Theme {
 
 		global $core;
 
-		$theme_name = $core->config->get('theme');
+		$theme_name = get_config('theme');
 
 		if( ! file_exists( $core->abspath.'theme/'.$theme_name.'/theme.php' ) ) {
 			$theme_name = 'default';
@@ -118,7 +118,7 @@ class Theme {
 				$version = $this->get('version');
 			}
 
-			if( $core->config->get('debug') ) {
+			if( get_config('debug') ) {
 				$version .= '.'.time();
 			}
 
@@ -187,7 +187,7 @@ class Theme {
 				$version = $this->get('version');
 			}
 
-			if( $core->config->get('debug') ) {
+			if( get_config('debug') ) {
 				$version .= '.'.time();
 			}
 

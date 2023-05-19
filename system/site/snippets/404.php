@@ -1,10 +1,10 @@
 <?php
 
-// Version: 0.1.3
+// Version: 0.1.4
 
 if( ! $core ) exit;
 
-$homepage = trailing_slash_it($core->config->get('homepage'));
+$homepage = trailing_slash_it(get_config('homepage'));
 
 ?>
 <article>

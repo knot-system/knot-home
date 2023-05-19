@@ -55,7 +55,7 @@ class User {
 
 
 		// check, if me is allowed
-		$allowed_user_ids = $core->config->get('allowed_urls');
+		$allowed_user_ids = get_config('allowed_urls');
 		if( is_array($allowed_user_ids) && count($allowed_user_ids) ) {
 			$canonical_user_id = un_trailing_slash_it($user_id);
 
@@ -106,7 +106,7 @@ class User {
 
 		global $core;
 
-		$scope = $core->config->get( 'scope' );
+		$scope = get_config( 'scope' );
 
 		$authorization_url = $indieauth->login( $url, $scope );
 
@@ -185,7 +185,7 @@ class User {
 		}
 
 
-		$session_lifetime = $core->config->get('session_lifetime');
+		$session_lifetime = get_config('session_lifetime');
 		$session_cache = new Cache( 'session', $session_id, true, $session_lifetime );
 		$session_cache->add_data( json_encode($session_data) );
 

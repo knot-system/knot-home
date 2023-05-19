@@ -81,7 +81,7 @@ class Route {
 
 			if( empty($request[0]) ) {
 				
-				$homepage = trailing_slash_it($core->config->get('homepage'));
+				$homepage = trailing_slash_it(get_config('homepage'));
 
 				$this->redirect($homepage);
 
@@ -122,9 +122,9 @@ class Route {
 				}
 
 				// make sure that microsub/micropub is enabled, when using it as a template
-				if( $template == 'microsub' && ! $core->config->get('microsub') ) {
+				if( $template == 'microsub' && ! get_config('microsub') ) {
 					$template = '404';
-				} elseif( $template == 'micropub' && ! $core->config->get('micropub') ) {
+				} elseif( $template == 'micropub' && ! get_config('micropub') ) {
 					$template = '404';
 				}
 

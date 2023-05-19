@@ -7,7 +7,7 @@ function head_html(){
 
 	$body_classes = array();
 
-	$color_scheme = $core->config->get('theme-color-scheme');
+	$color_scheme = get_config('theme-color-scheme');
 	if( $color_scheme ) $body_classes[] = 'theme-color-scheme-'.$color_scheme;
 
 ?><!DOCTYPE html>
@@ -84,7 +84,7 @@ function get_navigation(){
 		'active' => ( $template == 'dashboard' )
 	);
 
-	if( $core->config->get('microsub') ) {
+	if( get_config('microsub') ) {
 		$navigation[] = array(
 			'name' => 'Read',
 			'title' => 'read feeds',
@@ -93,7 +93,7 @@ function get_navigation(){
 		);
 	}
 
-	if( $core->config->get('micropub') ) {
+	if( get_config('micropub') ) {
 		$navigation[] = array(
 			'name' => 'Write',
 			'title' => 'write a new post',

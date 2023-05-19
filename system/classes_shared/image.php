@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-17
+// update: 2023-05-19
 
 
 class Image {
@@ -64,7 +64,7 @@ class Image {
 
 
 		if( $this->image_type == IMAGETYPE_JPEG
-		 || ($core->config->get('image_png_to_jpg') && $this->image_type == IMAGETYPE_PNG) ) {
+		 || (get_config('image_png_to_jpg') && $this->image_type == IMAGETYPE_PNG) ) {
 
 			$this->mime_type = 'image/jpeg';
 
@@ -92,7 +92,7 @@ class Image {
 		global $core;
 
 		if( ! $target_width ) {
-			$target_width = $core->config->get( 'image_target_width' );
+			$target_width = get_config( 'image_target_width' );
 		}
 
 		$image_url = $this->image_url;
@@ -131,12 +131,12 @@ class Image {
 
 		global $core;
 
-		$target_width = $core->config->get( 'image_target_width' );
+		$target_width = get_config( 'image_target_width' );
 
 		if( isset($_GET['width']) ) $target_width = (int) $_GET['width'];
 		if( $target_width < 1 ) $target_width = 10;
 
-		$jpg_quality = $core->config->get( 'image_jpg_quality' );
+		$jpg_quality = get_config( 'image_jpg_quality' );
 		$filesize = filesize( $this->local_file_path );
 
 		$cache_string = $this->local_file_path.$filesize.$target_width.$jpg_quality;
@@ -158,7 +158,7 @@ class Image {
 
 		list( $src_image, $src_width, $src_height ) = $this->image_rotate( $src_image, $src_width, $src_height );
 
-		$png_to_jpg = $core->config->get( 'image_png_to_jpg' );
+		$png_to_jpg = get_config( 'image_png_to_jpg' );
 		
 		if( $src_width > $target_width ) {
 			
@@ -239,7 +239,7 @@ class Image {
 
 		global $core;
 
-		if( ! $core->config->get( 'image_png_to_jpg' ) ) {
+		if( ! get_config( 'image_png_to_jpg' ) ) {
 			// NOTE: when we use png files directly (and don't convert them to jpg), they could contain transparency. if they do, we cannot add a blurry preview base64 encoded image beneath it, because it would still be visible when the actual image (with transparency) is loaded.
 			return false;
 		}
@@ -321,7 +321,7 @@ class Image {
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
 		
-			if( $core->config->get( 'image_png_to_jpg' ) ) {
+			if( get_config( 'image_png_to_jpg' ) ) {
 				// set transparent background to specific color, when converting to jpg:
 				$image = $this->fill_with_backgroundcolor( $image );
 			}
@@ -353,7 +353,7 @@ class Image {
 
 		global $core;
 
-		$transparent_color = $core->config->get( 'image_background_color' );
+		$transparent_color = get_config( 'image_background_color' );
 		$background_image = imagecreatetruecolor( $this->src_width, $this->src_height );
 		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
 		imagefill( $background_image, 0, 0, $background_color );

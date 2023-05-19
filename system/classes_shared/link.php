@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-16
+// update: 2023-05-19
 
 
 class Link {
@@ -131,7 +131,7 @@ class Link {
 			$cache_file_name = $this->get_remote_image( $preview_image );
 
 			global $core;
-			$target_width = $core->config->get('preview_target_width' );
+			$target_width = get_config('preview_target_width' );
 
 			$image = new Image( $cache_file_name, 'remote' );
 			$preview_image = $image->get_html_embed( $target_width );
