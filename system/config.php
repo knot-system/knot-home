@@ -25,4 +25,6 @@ return [
 	'image_jpg_quality' => 70, // quality of jpg images; you neeed to empty the cache when changing this option
 	'image_png_to_jpg' => true, // convert png images to jpg (faster, but looses transparency); you need to empty the cache when changing this option
 	'image_background_color' => [ 255, 255, 255 ], // backgroundcolor for transparent images, when 'image_png_to_jpg' option is set to true; you need to empty the cache when changing this option
+	'link_preview_max_age' => 60*60*6, // refresh link previews after x seconds
+	'link_preview_nojs_refresh' => false, // refresh link previews via PHP; this makes pageloading with preview links slower, but does not rely on JavaScript to fetch link previews in the background
 ];

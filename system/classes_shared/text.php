@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-17
+// update: 2023-05-19
 
 
 class Text {
@@ -152,6 +152,8 @@ class Text {
 	function get_link_preview() {
 
 		if( ! count($this->links ) ) return '';
+		
+		global $core;
 
 		$html = '<ol class="link-preview-list">
 		';
@@ -164,14 +166,14 @@ class Text {
 
 			$classes = array( 'link-preview' );
 
-			$max_age = 60*60*6; // we currently refresh links after 6 hours - TODO: finetune this value
+			$max_age = $core->config->get('link_preview_max_age');
 
 			if( empty($link_info['last_refresh']) || time()-$link_info['last_refresh'] > $max_age ) {
 
 				$classes[] = 'link-preview-needs-refresh';
 
-				global $core;
-				if( ! isset($core->is_link_refreshing) ) {
+				$nojs_refresh = $core->config->get('link_preview_nojs_refresh');
+				if( $nojs_refresh && ! isset($core->is_link_refreshing) ) {
 					// NOTE: we refresh only on link for every request, because this can take a few seconds,
 					// depending on the url and how fast the other server is.
 					// by default, the link refresh also happens async via js, so all the links that don't get
