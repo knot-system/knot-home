@@ -25,23 +25,70 @@ if( ! empty($item->author->url) ) {
 	$author_url = $item->author->url;
 }
 
-$content = false;
-if( ! empty($item->content->html) ) {
-	$content = $item->content->html;
-} elseif( ! empty($item->content->text) ) {
-	$content = $item->content->text;
+
+$show_item_content = $core->config->get('show_item_content');
+
+
+$link_previews = false;
+
+if( $show_item_content ) {
+
+	$content = false;
+	if( ! empty($item->content->html) ) {
+		$content = $item->content->html;
+	} elseif( ! empty($item->content->text) ) {
+		$content = $item->content->text;
+	}
+
+	$content = str_replace(array("\r\n", "\r", "\n"), ' ', $content );
+
+	$text = new Text( $content );
+	$content = $text->cleanup()->get();
+
+	$link_previews = $text->get_link_preview();
+
+} else {
+
+	$link_url = $item->url;
+
+	global $core;
+
+	$content = '<div class="link-preview-container"><ol class="link-preview-list">';
+	
+	$link = new Link( $link_url );
+	$link_id = $link->id;
+
+	$link_info = $link->get_preview();
+
+	$classes = array( 'link-preview' );
+
+	$max_age = $core->config->get('link_preview_max_age');
+
+	if( empty($link_info['last_refresh']) || time()-$link_info['last_refresh'] > $max_age ) {
+
+		$classes[] = 'link-preview-needs-refresh';
+
+		$nojs_refresh = $core->config->get('link_preview_nojs_refresh');
+		if( $nojs_refresh && ! isset($core->is_link_refreshing) ) {
+			// NOTE: we refresh only on link for every request, because this can take a few seconds,
+			// depending on the url and how fast the other server is.
+			// by default, the link refresh also happens async via js, so all the links that don't get
+			// refreshed with this request, should be done by the time this page refreshes again.
+			// this is just a fallback, if js is not active, or doesn't get executed, or is removed by the theme
+			$core->is_link_refreshing = true;
+			$link_info = $link->get_info()->get_preview();
+		}
+		
+	}
+
+	$content .= '			<li>
+		<a id="'.$link_id.'" class="'.implode(' ', $classes).'" name="'.$link->short_url.'" href="'.$link->url.'" target="_blank" rel="noopener" data-preview-hash="'.$link_info['preview_html_hash'].'">'.$link_info['preview_html'].'</span></a>
+	</li>';
+
+	$content .= '</ol></div>';
+
 }
 
-$content = str_replace(array("\r\n", "\r", "\n"), ' ', $content );
-
-$text = new Text( $content );
-$content = $text->cleanup()->get();
-
-$link_preview = $text->get_link_preview();
-
-if( $link_preview ) {
-	$link_preview = '<div class="link-preview-container">'.$link_preview.'</div>';
-}
 
 
 $source = false;
@@ -55,31 +102,35 @@ if( ! empty($item->_source) ) {
 	<span class="item-content">
 		<?php
 
-		if( $source && ! empty($source->_id) && ! empty($source->name) ) {
+		if( $show_item_content ) {
 
-			$feed_title = $source->name;
-			$feed_link = url('microsub/'.$active_channel.'/'.$source->_id.'/#active-feed', false);
+			if( $source && ! empty($source->_id) && ! empty($source->name) ) {
 
-			?>
-			<span class="item-feed-title"><a href="<?= $feed_link ?>"><?= $feed_title ?></a></span>
-			<?php
-		}
+				$feed_title = $source->name;
+				$feed_link = url('microsub/'.$active_channel.'/'.$source->_id.'/#active-feed', false);
 
-		if( ! empty($item->category) ) {
-			$categories = $item->category;
-			$categories = array_map(function($c){return '#'.$c;}, $categories);
-			if( is_array($categories) ) $categories = implode(' ', $categories);
-			echo ' '.$categories;
-		}
-
-		if( ! empty($item->name) ) echo '<h3 class="item-title">'.$item->name.'</h3>';
-	
-		if( ! empty($item->photo) ) {
-			if( ! is_array($item->photo) ) $item->photo = array($item->photo);
-
-			foreach( $item->photo as $photo ) {
-				echo '<img src="'.$photo.'"><br>';
+				?>
+				<span class="item-feed-title"><a href="<?= $feed_link ?>"><?= $feed_title ?></a></span>
+				<?php
 			}
+
+			if( ! empty($item->category) ) {
+				$categories = $item->category;
+				$categories = array_map(function($c){return '#'.$c;}, $categories);
+				if( is_array($categories) ) $categories = implode(' ', $categories);
+				echo ' '.$categories;
+			}
+
+			if( ! empty($item->name) ) echo '<h3 class="item-title">'.$item->name.'</h3>';
+		
+			if( ! empty($item->photo) ) {
+				if( ! is_array($item->photo) ) $item->photo = array($item->photo);
+
+				foreach( $item->photo as $photo ) {
+					echo '<img src="'.$photo.'"><br>';
+				}
+			}
+
 		}
 
 		?>
@@ -87,10 +138,17 @@ if( ! empty($item->_source) ) {
 			<?= $content ?>
 		</p>
 
-
 	</span>
 
-	<?= $link_preview ?>
+	<?php
+	if( $link_previews ) {
+		?>
+		<div class="link-preview-container">
+			<?= $link_previews ?>
+		</div>
+		<?php
+	}
+	?>
 	
 	<p class="item-meta">
 		<small>
