@@ -66,6 +66,11 @@ class Core {
 
 		$this->theme->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
 
+		# pwa manifest
+		$this->theme->add_metatag( 'pwa-manifest', '<link rel="manifest" href="'.$this->baseurl.'system/site/assets/json/manifest.json">' );
+		# pwa service worker
+		$this->theme->add_metatag( 'pwa-serviceworker', '<script>if (navigator.serviceWorker != null) { navigator.serviceWorker.register("'.$this->baseurl.'system/site/assets/js/service-worker.js"); }</script>', 'footer' );
+
 
 		$this->route = new Route();
 
