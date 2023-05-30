@@ -27,6 +27,8 @@
 
 	--shortened-height: 500px;
 
+	--min-width: 340px;
+
 }
 
 	body.theme-color-scheme-blue {
@@ -87,6 +89,7 @@ body {
 	font-weight: var(--font-default-weight);
 	font-size: 16px;
 	line-height: 1.4;
+	min-width: var(--min-width);
 }
 
 	@media( max-width: 640px ) {
@@ -641,6 +644,14 @@ ul.pagination {
 		ul.pagination li + li {
 			margin-left: 20px;
 		}
+
+	@media ( max-width: 420px ) {
+
+		ul.pagination li + li {
+			margin-left: 2px;
+		}
+
+	}
 		
 ul.channels-list,
 ul.feeds-list {
