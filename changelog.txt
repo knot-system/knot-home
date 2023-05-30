@@ -4,6 +4,7 @@ v.0.1.4
 - updater now correctly deletes the session cookie and cache files
 - new config option, 'show_item_content' (defaults to true) - set it to false, to only show link previews instead of item content
 - get_config() helper function
+- added basic pwa manifest, so you can add Sekretär to your home screen
 - bugfixes & enhancements
 
 
