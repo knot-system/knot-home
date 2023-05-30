@@ -221,7 +221,7 @@ sub, sup {
 	}
 
 	.content-area {
-		width: calc(100% - var(--sidebar-width));
+		width: 100%;
 		padding: 20px 40px 20px calc(var(--sidebar-width) + 40px);
 		box-sizing: border-box;
 		min-height: 100vh;
