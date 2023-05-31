@@ -4,6 +4,7 @@
 class IndieAuth {
 
 	private $scope;
+	private $indieauth_metadata = false;
 	private $authorization_endpoint;
 	private $token_endpoint;
 
@@ -21,7 +22,27 @@ class IndieAuth {
 			return $this->error( 'invalid_url' );
 		}
 
-		$authorization_endpoint = $this->discover_endpoint( 'authorization_endpoint', $url );
+		# see https://indieauth.spec.indieweb.org/#discovery-by-clients
+
+		$metadata_endpoint = $this->discover_endpoint( 'indieauth-metadata', $url );
+		if( $metadata_endpoint ) {
+
+			$request = $this->request($metadata_endpoint);
+			$body = $request->get_body();
+
+			if( $body ) {
+				$json = json_decode($body, true);
+				if( is_array($json) ) {
+					$this->indieauth_metadata = $json;
+				}
+			}
+		}
+
+		$authorization_endpoint = $this->get_metadata( 'authorization_endpoint' );
+		if( ! $authorization_endpoint ) {
+			// old behavior, check for 'authorization_endpoint'
+			$authorization_endpoint = $this->discover_endpoint( 'authorization_endpoint', $url );
+		}
 
 		if( ! $authorization_endpoint ) {
 			return $this->error( 'no_authorization_endpoint' );
@@ -33,7 +54,11 @@ class IndieAuth {
 
 		if( count($this->scope) ) {
 
-			$token_endpoint = $this->discover_endpoint( 'token_endpoint', $url );
+			$token_endpoint = $this->get_metadata( 'token_endpoint' );
+			if( ! $token_endpoint ) {
+				// old behavior, check for 'token_endpoint' directly
+				$token_endpoint = $this->discover_endpoint( 'token_endpoint', $url );
+			}
 
 			if( ! $token_endpoint ) {
 				return $this->error( 'no_token_endpoint' );
@@ -186,6 +211,15 @@ class IndieAuth {
 	}
 
 
+	function get_metadata( $endpoint ) {
+		if( ! $this->indieauth_metadata ) return false;
+
+		if( ! array_key_exists( $endpoint, $this->indieauth_metadata ) ) return false;
+
+		return $this->indieauth_metadata[$endpoint];
+	}
+
+
 	function normalize_url( $url ) {
 
 		$url = parse_url($url);
@@ -247,6 +281,21 @@ class IndieAuth {
 		if( ! $this->url_is_valid($url) ) return false;
 
 		$request = $this->request($url);
+
+		$headers = $request->get_headers();
+		if( ! empty($headers['link']) ) {
+			// endpoint provided via http 'link' header
+			$links = explode(',', $headers['link']);
+			$links = array_map( 'trim', $links );
+
+			foreach( $links as $link ) {
+				if( preg_match( '/\<(.*?)\>.*?rel="'.$name.'"/i', $link, $matches ) ) {
+					return( $matches[1] );
+				}
+			}
+		}
+
+		// endpoint may be provided via <link rel=".." href=".."> metatag
 
 		$body = $request->get_body();
 
@@ -319,6 +368,7 @@ class IndieAuth {
 		if( isset($params['code_verifier']) ) {
 			$query['code_verifier'] = $params['code_verifier'];
 		}
+
 
 
 		$request = new Request();
