@@ -264,7 +264,20 @@ class Theme {
 
 	function add_header( $name, $header ) {
 
-		$this->headers[$name] = $header;
+		if( array_key_exists($name, $this->headers) ) {
+			global $core;
+			$core->debug('a header with this name already exists, it gets overwritten', $name, $header);
+		}
+
+		$header_parts = explode(':', $header);
+
+		$header_name = array_shift($header_parts);
+		$header_content = implode(':', $header_parts);
+
+		$this->headers[$name] = [
+			'name' => $header_name,
+			'content' => $header_content
+		];
 
 		return $this;
 	}
@@ -282,7 +295,21 @@ class Theme {
 
 		if( empty($this->headers) ) return $this;
 
-		foreach( $this->headers as $name => $header ) {
+		$print_headers = [];
+
+		foreach( $this->headers as $header ) {
+			$name = $header['name'];
+			$content = $header['content'];
+
+			if( array_key_exists($name, $print_headers) ) {
+				$print_headers[$name] .= ', '.trim($content);
+			} else {
+				$print_headers[$name] = $name.': '.trim($content);
+			}
+
+		}
+
+		foreach( $print_headers as $header ) {
 			header($header);
 		}
 
