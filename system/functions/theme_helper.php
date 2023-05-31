@@ -5,6 +5,8 @@ function head_html(){
 
 	global $core;
 
+	$core->theme->print_headers();
+
 	$body_classes = array();
 
 	$color_scheme = get_config('theme-color-scheme');

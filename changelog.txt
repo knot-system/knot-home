@@ -1,6 +1,6 @@
 v.0.1.5
 
-- 
+- add_header() & remove_header() functions, to set http headers
 
 
 v.0.1.4

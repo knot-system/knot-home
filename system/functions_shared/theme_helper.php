@@ -1,6 +1,6 @@
 <?php
 
-// 2023-03-22
+// update: 2023-05-31
 
 
 function add_stylesheet( $path, $type = 'theme' ) {
@@ -33,6 +33,17 @@ function add_metatag( $name, $string, $position = false ) {
 function remove_metatag( $name, $position = false ) {
 	global $core;
 	$core->theme->remove_metatag( $name, $position );
+}
+
+
+function add_header( $name, $string ) {
+	global $core;
+	$core->theme->add_header( $name, $string );
+}
+
+function remove_header( $name ) {
+	global $core;
+	$core->theme->remove_header( $name );
 }
 
 

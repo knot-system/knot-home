@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-19
+// update: 2023-05-31
 
 
 class Theme {
@@ -13,6 +13,7 @@ class Theme {
 	public $stylesheets = array();
 	public $scripts = array();
 	public $metatags = array();
+	public $headers = array();
 
 
 	function __construct() {
@@ -47,6 +48,8 @@ class Theme {
 	function load(){
 		global $core;
 		$core->include( $this->path.'functions.php' );
+
+		return $this;
 	}
 
 
@@ -89,7 +92,7 @@ class Theme {
 			$type = 'global';
 			$url = $global_url.$path;
 		} else {
-			return;
+			return $this;
 		}
 
 		$this->stylesheets[$path] = [
@@ -97,13 +100,17 @@ class Theme {
 			'url' => $url,
 			'type' => $type
 		];
+
+		return $this;
 	}
 
 
 	function remove_stylesheet( $path ) {
-		if( ! array_key_exists($path, $this->stylesheets) ) return;
+		if( ! array_key_exists($path, $this->stylesheets) ) return $this;
 
 		unset($this->stylesheets[$path]);
+
+		return $this;
 	}
 
 
@@ -133,6 +140,7 @@ class Theme {
 <?php
 		}
 
+		return $this;
 	}
 
 
@@ -152,7 +160,7 @@ class Theme {
 			$type = 'global';
 			$url = $global_url.$path;
 		} else {
-			return;
+			return $this;
 		}
 
 		$this->scripts[$path] = [
@@ -162,13 +170,17 @@ class Theme {
 			'loading' => $loading,
 			'footer' => $footer
 		];
+
+		return $this;
 	}
 
 
 	function remove_script( $path ) {
-		if( ! array_key_exists($path, $this->scripts) ) return;
+		if( ! array_key_exists($path, $this->scripts) ) return $this;
 
 		unset($this->scripts[$path]);
+
+		return $this;
 	}
 
 
@@ -205,6 +217,7 @@ class Theme {
 <?php
 		}
 
+		return $this;
 	}
 
 
@@ -220,15 +233,18 @@ class Theme {
 		}
 
 		$this->metatags[$position][$name] = $string;
+
+		return $this;
 	}
 
 
 	function remove_metatag( $name, $position ) {
 
-		if( ! empty($this->metatags[$position]) && ! array_key_exists($name, $this->metatags[$position]) ) return;
+		if( ! empty($this->metatags[$position]) && ! array_key_exists($name, $this->metatags[$position]) ) return $this;
 
 		unset($this->metatags[$position][$name]);
 
+		return $this;
 	}
 
 
@@ -236,12 +252,41 @@ class Theme {
 
 		if( ! $position ) $position = 'header';
 
-		if( empty($this->metatags[$position]) ) return;
+		if( empty($this->metatags[$position]) ) return $this;
 
 		foreach( $this->metatags[$position] as $name => $string ) {
 			echo "\n	".$string;
 		}
 
+		return $this;
+	}
+
+
+	function add_header( $name, $header ) {
+
+		$this->headers[$name] = $header;
+
+		return $this;
+	}
+
+	function remove_header( $name ) {
+
+		if( ! array_key_exists($name, $this->headers) ) return $this;
+
+		unset($this->headers[$name]);
+
+		return $this;
+	}
+
+	function print_headers() {
+
+		if( empty($this->headers) ) return $this;
+
+		foreach( $this->headers as $name => $header ) {
+			header($header);
+		}
+
+		return $this;
 	}
 
 
