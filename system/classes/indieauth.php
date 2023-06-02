@@ -4,7 +4,7 @@
 class IndieAuth {
 
 	private $scope;
-	private $indieauth_metadata = false;
+	private $indieauth_metadata = NULL;
 	private $authorization_endpoint;
 	private $token_endpoint;
 
@@ -24,25 +24,7 @@ class IndieAuth {
 
 		# see https://indieauth.spec.indieweb.org/#discovery-by-clients
 
-		$metadata_endpoint = $this->discover_endpoint( 'indieauth-metadata', $url );
-		if( $metadata_endpoint ) {
-
-			$request = $this->request($metadata_endpoint);
-			$body = $request->get_body();
-
-			if( $body ) {
-				$json = json_decode($body, true);
-				if( is_array($json) ) {
-					$this->indieauth_metadata = $json;
-				}
-			}
-		}
-
-		$authorization_endpoint = $this->get_metadata( 'authorization_endpoint' );
-		if( ! $authorization_endpoint ) {
-			// old behavior, check for 'authorization_endpoint'
-			$authorization_endpoint = $this->discover_endpoint( 'authorization_endpoint', $url );
-		}
+		$authorization_endpoint = $this->discover_endpoint( 'authorization_endpoint', $url );
 
 		if( ! $authorization_endpoint ) {
 			return $this->error( 'no_authorization_endpoint' );
@@ -54,11 +36,7 @@ class IndieAuth {
 
 		if( count($this->scope) ) {
 
-			$token_endpoint = $this->get_metadata( 'token_endpoint' );
-			if( ! $token_endpoint ) {
-				// old behavior, check for 'token_endpoint' directly
-				$token_endpoint = $this->discover_endpoint( 'token_endpoint', $url );
-			}
+			$token_endpoint = $this->discover_endpoint( 'token_endpoint', $url );
 
 			if( ! $token_endpoint ) {
 				return $this->error( 'no_token_endpoint' );
@@ -279,6 +257,30 @@ class IndieAuth {
 	function discover_endpoint( $name, $url ) {
 
 		if( ! $this->url_is_valid($url) ) return false;
+
+		if( $name != 'indieauth-metadata' && $this->indieauth_metadata === NULL ) {
+
+			$this->indieauth_metadata = false;
+
+			$indieauth_metadata = $this->discover_endpoint( 'indieauth-metadata', $url );
+			if( $indieauth_metadata ) {
+
+				$request = $this->request($indieauth_metadata);
+				$body = $request->get_body();
+
+				if( $body ) {
+					$json = json_decode($body, true);
+					if( is_array($json) ) {
+						$this->indieauth_metadata = $json;
+					}
+				}
+			}
+		}
+
+		if( $this->indieauth_metadata ) {
+			$metadata = $this->get_metadata( $name );
+			if( $metadata ) return $metadata;
+		}
 
 		$request = $this->request($url);
 
