@@ -3,6 +3,7 @@
 
 class IndieAuth {
 
+	private $url;
 	private $scope;
 	private $indieauth_metadata = NULL;
 	private $authorization_endpoint;
@@ -21,6 +22,8 @@ class IndieAuth {
 		if( ! $url ) {
 			return $this->error( 'invalid_url' );
 		}
+
+		$this->url = $url;
 
 		# see https://indieauth.spec.indieweb.org/#discovery-by-clients
 
@@ -278,8 +281,11 @@ class IndieAuth {
 		}
 
 		if( $this->indieauth_metadata ) {
-			$metadata = $this->get_metadata( $name );
-			if( $metadata ) return $metadata;
+			$url_from_metadata = $this->get_metadata( $name );
+			if( $url_from_metadata ) {
+				$url_from_metadata = $this->cleanup_relative_url($url_from_metadata);
+				return $url_from_metadata;
+			}
 		}
 
 		$request = $this->request($url);
@@ -292,7 +298,13 @@ class IndieAuth {
 
 			foreach( $links as $link ) {
 				if( preg_match( '/\<(.*?)\>.*?rel="'.$name.'"/i', $link, $matches ) ) {
-					return( $matches[1] );
+					$url_from_header = $matches[1];
+
+					if( $url_from_header ) {
+						$url_from_header = $this->cleanup_relative_url( $url_from_header );
+						return $url_from_header;
+					}
+
 				}
 			}
 		}
@@ -309,11 +321,13 @@ class IndieAuth {
 
 		if( empty($endpoints) ) return false;
 
-		$endpoint = $endpoints[0];
+		$url_from_link_tag = $endpoints[0];
 
-		if( ! $endpoint ) return false;
+		if( ! $url_from_link_tag ) return false;
 
-		return $endpoint;
+		$url_from_link_tag = $this->cleanup_relative_url( $url_from_link_tag );
+
+		return $url_from_link_tag;
 	}
 
 
@@ -339,6 +353,23 @@ class IndieAuth {
 		
 		return true;
 	}
+
+
+	function cleanup_relative_url( $maybe_relative_url ) {
+
+		if( $this->is_url_absolute($maybe_relative_url) ) {
+			return $maybe_relative_url;
+		}
+
+		$absolute_url = trailing_slash_it($this->url).ltrim( $maybe_relative_url, '/' );
+
+		return $absolute_url;
+	}
+
+	function is_url_absolute( $url ) {
+		return isset(parse_url($url)['host']);
+	}
+
 
 	function client_id() {
 		return url('');
