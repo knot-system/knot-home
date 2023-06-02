@@ -632,9 +632,10 @@ ul.posts {
 
 ul.pagination {
 	list-style-type: none;
-	margin: 40px auto 0;
+	margin: 40px 0;
 	text-align: center;
 	padding: 0;
+	max-width: 600px;
 }
 
 	ul.pagination li {
