@@ -254,12 +254,6 @@ if( $step == 'check' ) {
 	@unlink( $abspath.'update' );
 
 	$_SESSION = []; // destroy existing session
-
-	// delete session cookie:
-	setcookie( 'sekretaer-session', false, array(
-		'expires' => -1,
-		'path' => $basefolder
-	));
 	
 
 	deleteDirectory( $abspath.'cache/');
