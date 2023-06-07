@@ -94,6 +94,7 @@ class Micropub {
 	function post( $post, $files = false ) {
 
 		$data = array(
+			'me' => $this->get_me(),
 			'h' => 'entry',
 			'name' => $post['title'],
 			'content' => $post['content'],
