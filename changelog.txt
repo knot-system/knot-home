@@ -1,5 +1,6 @@
 v.0.1.5
 
+- default theme: only show 3 link previews, additional link previews are hidden behind a 'more' button
 - allow endpoint discovery via 'indieauth-metadata'
 - allow endpoint discovery via http header
 - better general compatibility with IndieAuth
