@@ -255,15 +255,23 @@ var LinkPreview = {
 				return;
 			}
 
-			// NOTE: check if element is below viewport; if so, replace the HTML directly, if not, show a refresh button. We do this so that we don't have a layout shift above or in the viewport.
+			if( Sekretaer.API.linkpreview_refresh ) {
 
-			var bounding = linkPreviewElement.getBoundingClientRect(),
-				linkPreviewElementTopOffset = bounding.top,
-				viewportHeight = window.innerHeight,
-				refreshInline = false;
-
-			if( linkPreviewElementTopOffset > viewportHeight ) {
 				refreshInline = true;
+
+			} else {
+
+				// NOTE: check if element is below viewport; if so, replace the HTML directly, if not, show a refresh button. We do this so that we don't have a layout shift above or in the viewport.
+
+				var bounding = linkPreviewElement.getBoundingClientRect(),
+					linkPreviewElementTopOffset = bounding.top,
+					viewportHeight = window.innerHeight,
+					refreshInline = false;
+
+				if( linkPreviewElementTopOffset > viewportHeight ) {
+					refreshInline = true;
+				}
+
 			}
 
 			if( refreshInline ) {

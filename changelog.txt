@@ -1,5 +1,7 @@
 v.0.1.6
 
+- new config option 'link_preview_autorefresh'; set to 'true' to allow automatic refreshing of link previews instead of showing a 'refresh'-icon; this will result in layout shifts after the page finished loading
+
 
 v.0.1.5
 
