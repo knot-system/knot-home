@@ -149,6 +149,8 @@ class Route {
 			
 		} else {
 
+			$core->user->logout();
+
 			$this->route = array(
 				'template' => 'login'
 			);

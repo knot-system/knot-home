@@ -26,6 +26,104 @@ class User {
 	}
 
 
+	function verify_access_token() {
+
+		$session_cache = new Cache( 'session', $this->session_id, true );
+		$session_data = $session_cache->get_data();
+
+		if( ! $session_data ) {
+			return false;
+		}
+
+		$session_data = json_decode($session_data, true);
+
+		if( empty($session_data['me']) || empty($session_data['access_token']) ) {
+			return false;
+		}
+
+		$me = $session_data['me'];
+		$access_token = $session_data['access_token'];
+
+		$refresh_token = false;
+		if( ! empty($session_data['refresh_token']) ) $refresh_token = $session_data['refresh_token'];
+
+
+		$indieauth = new IndieAuth();
+		$url = $indieauth->normalize_url( $me );
+		$token_endpoint = $indieauth->discover_endpoint( 'token_endpoint', $url );
+		if( ! $token_endpoint ) {
+			return false;
+		}
+
+		$this->token_endpoint = $token_endpoint;
+
+		$token_endpoint_request = new Request( $token_endpoint );
+		$token_endpoint_request->set_headers([
+			'Content-Type: application/json',
+			'Authorization: Bearer '.$access_token
+		]);
+		$token_endpoint_request->curl_request();
+
+		$status_code = $token_endpoint_request->get_status_code();
+		$headers = $token_endpoint_request->get_headers();
+		$token_response = $token_endpoint_request->get_body();
+
+		if( ! empty($headers['content-type']) && $headers['content-type'] == 'application/json' ) {
+			$token_response = json_decode( $token_response, true );
+		} else {
+			// fallback to x-www-form-urlencoded
+			$token_response = decode_formurlencoded( $token_response );
+		}
+
+		$access_token_valid = true;
+		
+		if( isset($token_response['active']) && ! $token_response['active'] ) {
+			$access_token_valid = false;
+		}
+
+		if( ! isset($token_response['me']) || ! isset($token_response['scope']) ) {
+			$access_token_valid = false;
+		}
+
+		if( ! $access_token_valid && $refresh_token ) {
+
+			// access_token is no longer valid, but we have a refresh_token;
+			// use the refresh_token to get a new access_token (& new refresh_token):
+
+			$refresh_token_request = new Request( $token_endpoint );
+			$refresh_token_request->set_post_data([
+				'grant_type' => 'refresh_token',
+				'refresh_token' => $refresh_token,
+				'client_id' => $indieauth->client_id(),
+			]);
+			$refresh_token_request->curl_request();
+
+			$refresh_token_response = $refresh_token_request->get_body();
+
+			if( $refresh_token_response ) {
+				$refresh_token_response = json_decode($refresh_token_response, true);
+
+				if( ! empty($refresh_token_response['access_token']) && $refresh_token_response['access_token'] == true ) {
+					
+					// update current session with new access_token
+					$session_data['access_token'] = $refresh_token_response['access_token'];
+					if( ! empty($session_data['refresh_token']) ) $session_data['refresh_token'] = $refresh_token_response['refresh_token'];
+					$session_data['scope'] = $refresh_token_response['scope'];
+					$session_data['me'] = $refresh_token_response['me'];
+
+					$session_cache->add_data( json_encode($session_data) );
+
+					$access_token_valid = true;
+				}
+			}
+
+
+		}
+
+		return $access_token_valid;
+	}
+
+
 	function load_session_data() {
 
 		$session_cache = new Cache( 'session', $this->session_id, true );
@@ -43,6 +141,28 @@ class User {
 		if( empty($session_data['me']) ) {
 			return false;
 		}
+
+
+		// every X minutes check if access_token is still valid
+		$access_token_stale_threshold = 60*5; // 1 minute in seconds
+		if( empty($session_data['last_access_token_check']) || $session_data['last_access_token_check'] - time() > $access_token_stale_threshold ) {
+
+			if( $this->verify_access_token() ) {
+
+				// refresh session data, because refresh_token could have been used:
+				$session_data = $session_cache->get_data();
+				$session_data = json_decode($session_data, true);
+
+				$session_data['last_access_token_check'] = time();
+				$session_cache->add_data( json_encode($session_data) );
+
+			} else {
+				$this->logout();
+				return false;
+			}
+
+		}
+
 
 		$this->user_id = $session_data['me'];
 
@@ -76,6 +196,7 @@ class User {
 
 
 	function authorized() {
+
 		if( $this->user_id ) {
 			return true;
 		}
@@ -147,6 +268,9 @@ class User {
 
 		if( ! empty($response['response']['access_token']) ) {
 			$session_data['access_token'] = $response['response']['access_token'];
+		}
+		if( ! empty($response['response']['refresh_token']) ) {
+			$session_data['refresh_token'] = $response['response']['refresh_token'];
 		}
 		if( ! empty($response['response']['scope']) ) {
 			$session_data['scope'] = $response['response']['scope'];
@@ -257,19 +381,19 @@ class User {
 
 	function logout() {
 
-		$session_id = $this->session_id;
-
-
 		// remove autologin cookie, if it exists
 		$cookie = new Cookie( 'sekretaer-session' );
 		$cookie->remove();
 
-		// remove session cache
-		$session_cache = new Cache( 'session', $session_id, true );
-		$session_cache->remove();
+		$session_id = $this->session_id;
 
+		if( $session_id ) {
+			// remove session cache
+			$session_cache = new Cache( 'session', $session_id, true );
+			$session_cache->remove();
+		}
 
-		session_destroy();
+		@session_destroy();
 
 		$this->session_id = false;
 		$this->user_id = false;
