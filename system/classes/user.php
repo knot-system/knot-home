@@ -143,9 +143,10 @@ class User {
 		}
 
 
+
 		// every X minutes check if access_token is still valid
 		$access_token_stale_threshold = 60*5; // 1 minute in seconds
-		if( empty($session_data['last_access_token_check']) || $session_data['last_access_token_check'] - time() > $access_token_stale_threshold ) {
+		if( empty($session_data['last_access_token_check']) || (time() - $session_data['last_access_token_check']) > $access_token_stale_threshold ) {
 
 			if( $this->verify_access_token() ) {
 
