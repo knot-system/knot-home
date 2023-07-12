@@ -394,11 +394,23 @@ class User {
 			$session_cache->remove();
 		}
 
+		if( ! empty($this->fields['me']) && ! empty($this->fields['access_token']) ) {
+			// try to revoke the access_token
+			$indieauth = new IndieAuth();
+			$revocation_endpoint = $indieauth->discover_endpoint( 'revocation_endpoint', $this->fields['me'] );
+			if( $revocation_endpoint ) {
+				$revocation_request = new Request( $revocation_endpoint );
+				$revocation_request->set_post_data( [ 'token' => $this->fields['access_token'] ] );
+				$revocation_request->curl_request();
+			}
+
+		}
+
 		@session_destroy();
 
 		$this->session_id = false;
 		$this->user_id = false;
-
+		$this->fields = [];
 
 		return $this;
 	}
