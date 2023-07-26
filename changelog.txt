@@ -4,6 +4,7 @@ v.0.1.6
 - periodically check, if the access_token is still valid, if not log out the user; this makes sure to not show the user as logged in without the ability to interact with the read or write screen
 - if the access_token is no longer valid, but a refresh_token was provided, we now automatically get a new access_token via the refresh_token
 - try to revoke access_token when logging out
+- bugfix for remote preview images from YouTube
 
 
 v.0.1.5

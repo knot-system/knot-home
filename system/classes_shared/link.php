@@ -154,12 +154,7 @@ class Link {
 
 	function get_remote_image( $preview_image ) {
 
-		$preview_image_name = explode('/', $preview_image);
-		$preview_image_name = end($preview_image_name);
-		$preview_image_name = explode("?", $preview_image_name);
-		$preview_image_name = $preview_image_name[0];
-
-		$preview_image_cache = new Cache( 'remote-image', $preview_image_name );
+		$preview_image_cache = new Cache( 'remote-image', $preview_image );
 		$preview_image_cache->get_remote_file( $preview_image );
 
 		return $preview_image_cache->cache_file_name;
