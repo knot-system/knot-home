@@ -1,5 +1,7 @@
 <?php
 
+// update: 2023-07-26
+
 
 class Cookie {
 	
