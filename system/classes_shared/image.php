@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-19
+// update: 2023-08-01
 
 
 class Image {
@@ -180,7 +180,7 @@ class Image {
 				imageSaveAlpha( $target_image, true );
 			}
 
-			imagecopyresized( $target_image, $src_image, 0, 0, 0, 0, $width, $height, $src_width, $src_height );
+			imagecopyresampled( $target_image, $src_image, 0, 0, 0, 0, $width, $height, $src_width, $src_height );
 
 		} else {
 
@@ -280,7 +280,7 @@ class Image {
 		}
 
 		$target_image = imagecreatetruecolor($width, $height);
-		imagecopyresized($target_image, $src_image, 0, 0, 0, 0, $width, $height, $this->src_width, $this->src_height);
+		imagecopyresampled($target_image, $src_image, 0, 0, 0, 0, $width, $height, $this->src_width, $this->src_height);
 
 		for( $i = 0; $i < 5; $i++ ) {
 			imagefilter( $target_image, IMG_FILTER_GAUSSIAN_BLUR );

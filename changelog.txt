@@ -5,6 +5,7 @@ v.0.1.6
 - if the access_token is no longer valid, but a refresh_token was provided, we now automatically get a new access_token via the refresh_token
 - try to revoke access_token when logging out
 - bugfix for remote preview images from YouTube
+- use 'imagecopyresampled' instead of 'imagecopyresized' for better image quality
 
 
 v.0.1.5
