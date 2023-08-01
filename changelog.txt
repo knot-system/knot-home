@@ -6,6 +6,7 @@ v.0.1.6
 - try to revoke access_token when logging out
 - bugfix for remote preview images from YouTube
 - use 'imagecopyresampled' instead of 'imagecopyresized' for better image quality
+- handle link previews with UTF-8 correctly (this fixes YouTube Link Previews)
 
 
 v.0.1.5

@@ -1,6 +1,6 @@
 <?php
 
-// update: 2023-05-19
+// update: 2023-08-01
 
 
 class Link {
@@ -103,6 +103,8 @@ class Link {
 		$html = request_get_remote( $url );
 
 		// TODO: maybe we want to get information from other meta tags as well. revisit this in the future
+
+		$html = mb_convert_encoding($html, 'HTML-ENTITIES', "UTF-8");  // force convert to UTF-8, this helps with YouTube Links
 
 		$dom = new Dom( $html );
 
