@@ -14,26 +14,26 @@ return [
 	],
 	'microsub' => [
 		'type' => 'bool',
-		'description' => '',
+		'description' => 'set to <code>false</code> to disable the <code>read</code> tab',
 	],
 	'micropub' => [
 		'type' => 'bool',
-		'description' => '',
+		'description' => 'set to <code>false</code> to disable the <code>write</code> tab',
 	],
 	'datetime_format' => [
 		'type' => 'string',
-		'description' => '',
+		'description' => 'the format for date and time; see <a href="https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters" target="_blank">this list</a> for possible parameters',
 	],
 	'link_preview_nojs_refresh' => [
 		'type' => 'bool',
-		'description' => '',
+		'description' => 'refresh link previews via PHP; this makes pageloading with preview links slower, but does not rely on JavaScript to fetch link previews in the background',
 	],
 	'link_preview_autorefresh' => [
 		'type' => 'bool',
-		'description' => '',
+		'description' => 'set to <code>true</code> to automatically refresh link previews instead of showing a <em>refresh</em> icon; this will result in layout shifts after the site is loaded',
 	],
 	'show_item_content' => [
 		'type' => 'bool',
-		'description' => '',
+		'description' => 'if set to <code>true</code>, show the content of feed items; or if set to <code>false</code>, show only preview-links without the content',
 	],
 ];
