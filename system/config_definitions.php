@@ -24,6 +24,10 @@ return [
 		'type' => 'string',
 		'description' => 'the format for date and time; see <a href="https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters" target="_blank">this list</a> for possible parameters',
 	],
+	'allowed_urls' => [
+		'type' => 'complex',
+		'description' => 'an array with urls of allowed users (<em>me</em> parameters)',
+	],
 	'link_preview_nojs_refresh' => [
 		'type' => 'bool',
 		'description' => 'refresh link previews via PHP; this makes pageloading with preview links slower, but does not rely on JavaScript to fetch link previews in the background',
