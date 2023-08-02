@@ -9,7 +9,7 @@ return [
 	'logging' => true, // write logfiles into the /log directory
 	'theme' => 'default',
 	'theme-color-scheme' => 'default', // depends on the theme; the default theme supports 'blue' (default), 'green', 'red', 'lilac'
-	'scope' => array( 'read', 'create', 'follow', 'channels', 'follow', 'mute', 'block' ),
+	'scope' => [ 'read', 'create', 'follow', 'channels', 'follow', 'mute', 'block' ],
 	'microsub' => true, // set to false to disable the 'read' tab
 	'micropub' => true, // set to false to disable the 'write' tab
 	'homepage' => 'dashboard', // can be 'dashboard', 'microsub' or 'micropub'
