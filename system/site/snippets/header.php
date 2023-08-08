@@ -1,6 +1,6 @@
 <?php
 
-// Version: 0.1.0
+// Version: 0.2.1
 
 if( ! $core ) exit;
 
@@ -55,7 +55,7 @@ $navigation = get_navigation();
 					</li>
 				</ul>
 
-				<span class="generator"><a href="https://github.com/maxhaesslein/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?></span>
+				<span class="generator"><a href="https://github.com/knot-system/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?></span>
 
 			</footer>
 

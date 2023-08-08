@@ -54,7 +54,7 @@ if( isset($_GET['login_url']) ) {
 </main>
 
 <footer>
-	<a href="https://github.com/maxhaesslein/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?>
+	<a href="https://github.com/knot-system/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?>
 </footer>
 
 <?php
