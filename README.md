@@ -1,14 +1,14 @@
-# Sekretär
+# Knot Home
 
-A small micropub and microsub client and feed reader, which is part of a larger system called [Homestead](https://github.com/maxhaesslein/homestead). You can install it as a standalone service, or use the Homestead installer, which also installs other modules alongside it.
+A small micropub and microsub client and feed reader, which is part of a larger system called **Knot System**. You can install it as a standalone service, or use the [Knot Installer](https://github.com/maxhaesslein/knot-installer), which also installs other modules alongside it.
 
-This is currently in beta stage. **Things may break, and are likely to change in the future!**
+**This is an early beta version!** Some things may break, or change in the future!
 
 ## Initial Setup
 
 Your server needs to run at least PHP 8.0 or later.
 
-Copy all the files into a directory on your webserver, then open the url to this path in a webbrowser. The first time setup will run automatically. If you see no output, try adding `?debug` to the url, for example `https://www.example.com/sekretaer/?debug`, this should show more information about what happens during setup.
+Copy all the files into a directory on your webserver, then open the url to this path in a webbrowser. The first time setup will run automatically. If you see no output, try adding `?debug` to the url, for example `https://www.example.com/knot-home/?debug`, this should show more information about what happens during setup.
 
 The first time setup will create a `config.php` in the root folder that will hold the configuration of your system. This file is unique to your website and very important - keep a backup around, if you want to make sure to not lose anything.
 
@@ -70,7 +70,9 @@ The `theme/{themename}/config.php` can overwrite config options from `system/con
 
 ## Updating
 
-**Important:** Before updating, backup your `config.php` (and your custom theme inside the `theme/` folder, if you have any). Better be safe than sorry.
+**Important:** Befre updating, backup your `config.php` (and your custom theme inside the `theme/` folder, if you have any). Better be safe than sorry.
+
+You can use [Knot Control](https://github.com/maxhaesslein/knot-control) to update this module automatically. Or you use the following instructions:
 
 Create a new empty file called `update` (or `update.txt`) in the root folder of your installation. Then open the website, and append `?update` to the URL to trigger the update process. **Important:** if you don't finish the update, manually delete the `update` (or `update.txt`) file (if the update process finishes, this file gets deleted automatically).
 

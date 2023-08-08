@@ -213,7 +213,7 @@ class User {
 		if( ! empty($post['url']) ) $url = $post['url'];
 
 
-		$cookie = new Cookie( 'sekretaer-url' );
+		$cookie = new Cookie( 'knot-home-url' );
 		if( ! empty($post['rememberurl']) && $post['rememberurl'] == 'true' ) {
 
 			$cookie->set($url);
@@ -304,7 +304,7 @@ class User {
 			$session_data['autologin'] = true;
 
 			// this is the cookie for the autologin
-			$cookie = new Cookie( 'sekretaer-session' );
+			$cookie = new Cookie( 'knot-home-session' );
 			$cookie->set( $session_id );
 
 		}
@@ -328,7 +328,7 @@ class User {
 
 		if( $this->authorized() ) return false;
 
-		$cookie = new Cookie( 'sekretaer-session' );
+		$cookie = new Cookie( 'knot-home-session' );
 
 		if( ! $cookie->exists() ) {
 			return false;
@@ -356,7 +356,7 @@ class User {
 		$cookie->refresh();
 
 		// refresh url cookie lifetime
-		$url_cookie = new Cookie( 'sekretaer-url' );
+		$url_cookie = new Cookie( 'knot-home-url' );
 		$url_cookie->refresh();
 
 		return true;
@@ -383,7 +383,7 @@ class User {
 	function logout() {
 
 		// remove autologin cookie, if it exists
-		$cookie = new Cookie( 'sekretaer-session' );
+		$cookie = new Cookie( 'knot-home-session' );
 		$cookie->remove();
 
 		$session_id = $this->session_id;

@@ -6,7 +6,7 @@ head_html();
 
 
 $prefill_url = '';
-$cookie = new Cookie('sekretaer-url');
+$cookie = new Cookie('knot-home-url');
 if( $cookie->exists() ) {
 	$cookie->refresh();
 	$prefill_url = $cookie->get();
@@ -45,8 +45,6 @@ if( isset($_GET['login_url']) ) {
 			<span class="spacer"></span> <button>Login</button> <span id="login-loader" class="loading hidden"></span>
 
 			<input type="hidden" name="path" value="<?= implode('/', $core->route->request) ?>">
-		
-			<br><span class="spacer"></span> <span class="alpha-warning">this is an early release. things may break.</span>
 
 		</form>
 		
@@ -56,7 +54,7 @@ if( isset($_GET['login_url']) ) {
 </main>
 
 <footer>
-	<a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $core->version() ?>
+	<a href="https://github.com/maxhaesslein/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?>
 </footer>
 
 <?php

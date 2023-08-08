@@ -55,21 +55,21 @@ class Core {
 
 		$this->theme = new Theme();
 
-		$this->theme->add_stylesheet( 'css/sekretaer.css', 'global' );
+		$this->theme->add_stylesheet( 'css/knot-home.css', 'global' );
 		
 		$link_preview_refresh = 'false'; // this is meant to be a string instead of a bool!
 		if( $this->config->get('link_preview_autorefresh') ) {
 			$link_preview_refresh = 'true'; // this is meant to be a string instead of a bool!
 		}
 
-		$this->theme->add_metatag( 'script_sekretaer', '<script type="text/javascript">const Sekretaer = { API: { url: "'.url(api_get_endpoint()).'", linkpreview_refresh: '.$link_preview_refresh.' } };</script>', 'footer' );
-		$this->theme->add_script( 'js/sekretaer.js', 'global', 'async', true );
+		$this->theme->add_metatag( 'script_knot-home', '<script type="text/javascript">const Knot = { API: { url: "'.url(api_get_endpoint()).'", linkpreview_refresh: '.$link_preview_refresh.' } };</script>', 'footer' );
+		$this->theme->add_script( 'js/knot-home.js', 'global', 'async', true );
 
 		$this->theme->add_metatag( 'charset', '<meta charset="utf-8">' );
 		$this->theme->add_metatag( 'viewport', '<meta name="viewport" content="width=device-width,initial-scale=1.0">' );
-		$this->theme->add_metatag( 'title', '<title>Sekretär</title>' );
+		$this->theme->add_metatag( 'title', '<title>Knot Home</title>' );
 
-		$this->theme->add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().'">' );
+		$this->theme->add_metatag( 'generator', '<meta tag="generator" content="Knot Home v.'.$core->version().'">' );
 
 		# pwa manifest
 		$this->theme->add_metatag( 'pwa-manifest', '<link rel="manifest" href="'.$this->baseurl.'system/site/assets/json/manifest.json">' );

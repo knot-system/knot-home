@@ -1,6 +1,6 @@
 /*
 NOTE: you can remove this file in your custom themes functions.php via:
-remove_script('js/sekretaer.js');
+remove_script('js/knot-home.js');
 */
 (function(){
 
@@ -224,7 +224,7 @@ var LinkPreview = {
 
 	refresh: function( id ) {
 		
-		var url = Sekretaer.API.url+'?link_preview='+id;
+		var url = Knot.API.url+'?link_preview='+id;
 		fetch( url, {
 			mode: 'same-origin'
 		}).then( response => response.json() ).then(function(response){
@@ -255,7 +255,7 @@ var LinkPreview = {
 				return;
 			}
 
-			if( Sekretaer.API.linkpreview_refresh ) {
+			if( Knot.API.linkpreview_refresh ) {
 
 				refreshInline = true;
 

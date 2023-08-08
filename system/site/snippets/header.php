@@ -55,7 +55,7 @@ $navigation = get_navigation();
 					</li>
 				</ul>
 
-				<span class="generator"><a href="https://github.com/maxhaesslein/sekretaer" target="_blank" rel="noopener">Sekretär</a> v.<?= $core->version() ?></span>
+				<span class="generator"><a href="https://github.com/maxhaesslein/knot-home" target="_blank" rel="noopener">Knot Home</a> v.<?= $core->version() ?></span>
 
 			</footer>
 

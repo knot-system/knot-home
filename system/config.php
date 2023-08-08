@@ -19,7 +19,7 @@ return [
 	'datetime_format' => 'Y-m-d H:i', // see this list for possible parameters: https://www.php.net/manual/en/datetime.format.php#refsect1-datetime.format-parameters
 	'allowed_html_elements' => [ 'del', 'pre', 'blockquote', 'code', 'b', 'strong', 'u', 'i', 'em', 'ul', 'ol', 'li', 'p', 'br', 'span', 'a', 'img', 'video', 'audio' ], // allowed html elements for post content (in read mode), everything else (like <script> or <iframe> tags) gets stripped
 	'allowed_urls' => [], // an array with urls of allowed users ('me' parameters)
-	'user_agent' => 'maxhaesslein/sekretaer/', // version will be automatically appended
+	'user_agent' => 'knot/home/', // version will be automatically appended
 	'image_target_width' => 800,
 	'preview_target_width' => 800,
 	'image_jpg_quality' => 70, // quality of jpg images; you neeed to empty the cache when changing this option

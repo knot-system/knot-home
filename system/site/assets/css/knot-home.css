@@ -3,7 +3,7 @@ NOTE: this css file adds some basic styles for images and their
 previews, and link-previews. it gets included before the theme
 css, so it can be overwritten very easily. if you want to remove
 it completely, you can do so in your themes functions.php via:
-remove_stylesheet('css/sekretaer.css');
+remove_stylesheet('css/knot-home.css');
 */
 
 

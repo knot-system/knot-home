@@ -17,7 +17,7 @@ add_metatag( 'font_preload_patua-one-400', '<link rel="preload" href="'.$baseurl
 
 // change the 'generator' meta-tag to include the current theme:
 remove_metatag( 'generator' );
-add_metatag( 'generator', '<meta tag="generator" content="Sekretär v.'.$core->version().' with '.$core->theme->get('name').' v.'.$core->theme->get('version').'">' );
+add_metatag( 'generator', '<meta tag="generator" content="Knot Home v.'.$core->version().' with '.$core->theme->get('name').' v.'.$core->theme->get('version').'">' );
 
 
 // add favicon

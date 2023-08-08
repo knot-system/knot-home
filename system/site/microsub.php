@@ -51,7 +51,7 @@ if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 	$channel_name = $channel->name;
 	$channel_name_sanitized = sanitize_string_for_url($channel_name);
 
-	$filename = date('Y-m-d_H-i-s', time()).'_sekretaer_'.$channel_name_sanitized.'_feedlist';
+	$filename = date('Y-m-d_H-i-s', time()).'_knot-home_'.$channel_name_sanitized.'_feedlist';
 
 	$content = false;
 	if( $type == 'opml' ) {
@@ -64,7 +64,7 @@ if( $active_channel && $action == 'export' && ! empty($_GET['type']) ) {
 		$content[] = '<?xml version="1.0" encoding="ISO-8859-1"?>';
 		$content[] = '<opml version="2.0">';
 		$content[] = '<head>';
-		$content[] = '<title>Sekretaer Feed List</title>';
+		$content[] = '<title>Knot Home Feed List</title>';
 		$content[] = '<dateCreated>'.$date_time.'</dateCreated>';
 		$content[] = '<dateModified>'.$date_time.'</dateModified>';
 		$content[] = '<docs>http://opml.org/spec2.opml</docs>';
