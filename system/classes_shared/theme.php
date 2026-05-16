@@ -6,6 +6,7 @@
 class Theme {
 
 	public $folder_path;
+	public $folder_name;
 	public $path;
 	public $url;
 	public $config;
